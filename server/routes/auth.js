@@ -1,0 +1,174 @@
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const passport = require("passport");
+const User = require('../models/User');
+const Cycle = require('../models/Cycle');
+const DailyLog = require('../models/DailyLog');
+const Medication = require('../models/Medication');
+const DoctorVisit = require('../models/DoctorVisit');
+const { sendVerificationEmail } = require('../utils/emailService');
+const { protect } = require('../middleware/auth'); // Ensure this path is correct
+
+const router = express.Router();
+
+// 🔐 Helper: Generate JWT Token
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE || '24h'
+    });
+};
+
+// 🌐 [GET] GOOGLE LOGIN 
+// Redirects user to Google Consent Screen
+router.get(
+    "/google",
+    passport.authenticate("google", {
+        scope: ["profile", "email"],
+    })
+);
+
+// 🌐 [GET] GOOGLE CALLBACK 
+// Google redirects back here after login
+router.get(
+    "/google/callback",
+    passport.authenticate("google", { session: false }),
+    (req, res) => {
+        const token = generateToken(req.user._id);
+        // Redirects to frontend with token in URL for initial storage
+        res.redirect(`http://localhost:3000/login-success?token=${token}`);
+    }
+);
+
+// 📝 [POST] REGISTER 
+// Creates user and sends verification email
+router.post('/register', async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ success: false, error: 'User already exists' });
+        }
+
+        // Create verification token
+        const verificationToken = crypto.randomBytes(32).toString('hex');
+        const verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000; 
+
+        const user = await User.create({
+            name,
+            email,
+            password,
+            verificationToken,
+            verificationTokenExpiry,
+            isVerified: false
+        });
+
+        // Send verification email
+        sendVerificationEmail(email, name, verificationToken).catch(err => 
+            console.error("Email Error:", err)
+        );
+
+        res.status(201).json({
+            success: true,
+            message: 'Registration successful! Please check your email to verify your account.',
+            user: { id: user._id, name: user.name, email: user.email }
+        });
+    } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+// 🔑 [POST] LOGIN 
+// Standard email/password login
+router.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email }).select('+password');
+        if (!user) {
+            return res.status(401).json({ success: false, error: 'Invalid credentials' });
+        }
+
+        if (!user.isVerified) {
+            return res.status(401).json({
+                success: false,
+                error: 'Please verify your email first.'
+            });
+        }
+
+        const isMatch = await user.matchPassword(password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, error: 'Invalid credentials' });
+        }
+
+        res.json({
+            success: true,
+            token: generateToken(user._id),
+            user: { id: user._id, name: user.name, email: user.email }
+        });
+    } catch (error) {
+        res.status(400).json({ success: false, error: error.message });
+    }
+});
+
+// ✅ [GET] VERIFY EMAIL 
+// Triggered when user clicks link in their email
+router.get('/verify-email', async (req, res) => {
+    const { token } = req.query;
+
+    if (!token) return res.status(400).send('Verification token missing.');
+
+    try {
+        const user = await User.findOne({
+            verificationToken: token,
+            verificationTokenExpiry: { $gt: Date.now() }
+        });
+
+        if (!user) return res.status(400).send('Invalid or expired link.');
+
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        user.verificationTokenExpiry = undefined;
+        await user.save();
+
+        res.redirect('http://localhost:3000/login?verified=true');
+    } catch (err) {
+        res.status(500).send('Server error during verification.');
+    }
+});
+
+// 🔐 [GET] GET CURRENT USER 
+// Uses 'protect' middleware to identify the user via token
+router.get('/me', protect, async (req, res) => {
+    try {
+        // 'protect' middleware puts the user object in req.user
+        res.json({ success: true, user: req.user });
+    } catch (err) {
+        res.status(500).json({ success: false, error: 'Server Error' });
+    }
+});
+
+// 🗑️ [DELETE] DELETE ACCOUNT 
+// Permanently removes user and all their tracked data
+router.delete('/delete-account', protect, async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        // Clean up all data associated with this user
+        await Promise.all([
+            Cycle.deleteMany({ user: userId }),
+            DailyLog.deleteMany({ user: userId }),
+            Medication.deleteMany({ user: userId }),
+            DoctorVisit.deleteMany({ user: userId }),
+            User.findByIdAndDelete(userId)
+        ]);
+
+        res.json({ success: true, message: 'Account and all data permanently deleted' });
+    } catch (err) {
+        console.error('Delete account error:', err);
+        res.status(500).json({ success: false, error: 'Could not delete account. Please try again.' });
+    }
+});
+
+module.exports = router;
