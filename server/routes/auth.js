@@ -30,10 +30,17 @@ router.get(
 
 // 🌐 [GET] GOOGLE CALLBACK 
 // Google redirects back here after login
-// Change the redirect line to this:
-const frontendUrl = process.env.CLIENT_URL || "http://localhost:3000";
-res.redirect(`${frontendUrl}/login-success?token=${token}`);
-
+router.get(
+    "/google/callback",
+    passport.authenticate("google", { session: false }),
+    (req, res) => {
+        const token = generateToken(req.user._id);
+        const frontendUrl = process.env.CLIENT_URL || "http://localhost:3000";
+        
+        // This MUST be inside these curly braces:
+        res.redirect(`${frontendUrl}/login-success?token=${token}`);
+    }
+);
 // 📝 [POST] REGISTER 
 // Creates user and sends verification email
 router.post('/register', async (req, res) => {
