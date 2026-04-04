@@ -35,9 +35,7 @@ router.get(
     passport.authenticate("google", { session: false }),
     (req, res) => {
         const token = generateToken(req.user._id);
-        const frontendUrl = process.env.CLIENT_URL || "http://localhost:3000";
-        
-        // This MUST be inside these curly braces:
+        const frontendUrl = "https://thecyclecare.vercel.app";        // This MUST be inside these curly braces:
         res.redirect(`${frontendUrl}/login-success?token=${token}`);
     }
 );
