@@ -133,7 +133,7 @@ router.get('/verify-email', async (req, res) => {
         user.verificationTokenExpiry = undefined;
         await user.save();
 
-        res.redirect('http://localhost:3000/login?verified=true');
+        res.redirect('https://thecyclecare.vercel.app/login-success?token=${token}');
     } catch (err) {
         res.status(500).send('Server error during verification.');
     }
