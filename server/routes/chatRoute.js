@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const OpenAI = require("openai");
+const HF_API_KEY = require("openai");
 
 const hf = new OpenAI({
   baseURL: "https://router.huggingface.co/v1",
