@@ -46,8 +46,11 @@ app.get("/", (req, res) => {
 });
 
 // MongoDB Connection
+// It will try each one until it finds the one that's defined in Render
+const dbURI = process.env.MONGODB_URI || process.env.MONGO_URI || process.env.CHATBOT_URI;
+
 mongoose
-  .connect(process.env.MONGODB_URI || process.env.MONGO_URI)
+  .connect(dbURI)
   .then(() => console.log("✅ MongoDB Atlas Connected"))
   .catch((err) => console.log("❌ MongoDB Error:", err));
 

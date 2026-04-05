@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const OpenAI = require("openai");
 
+// 🛡️ Safety Check: This will show in your Render Logs if the key is missing
+if (!process.env.HF_API_KEY) {
+  console.error("❌ ERROR: HF_API_KEY is not defined in Environment Variables!");
+}
+
 const hf = new OpenAI({
   baseURL: "https://router.huggingface.co/v1",
   apiKey: process.env.HF_API_KEY,
@@ -10,57 +15,26 @@ const hf = new OpenAI({
 // Decide if question needs AI
 function shouldUseAI(message) {
   const text = message.toLowerCase();
-
   return (
-    text.includes("how") ||
-    text.includes("why") ||
-    text.includes("can i") ||
-    text.includes("should i") ||
-    text.includes("what should") ||
-    text.includes("recommend") ||
-    text.includes("safe") ||
-    text.includes("normal") ||
-    text.includes("sex") ||
-    text.includes("medicine") ||
-    text.includes("beginner") ||
-    text.includes("comfortable")
+    text.includes("how") || text.includes("why") ||
+    text.includes("can i") || text.includes("should i") ||
+    text.includes("what should") || text.includes("recommend") ||
+    text.includes("safe") || text.includes("normal") ||
+    text.includes("sex") || text.includes("medicine") ||
+    text.includes("beginner") || text.includes("comfortable") ||
+    text.length > 20 // If it's a long sentence, use AI
   );
 }
 
 // Simple rule-based replies
 function getRuleBasedReply(message) {
   const text = message.toLowerCase().trim();
-
   if (["hi", "hello", "hey"].includes(text)) {
     return "Hello! I’m CycleCare support bot. How can I help you today?";
   }
-
-  if (text === "how are you") {
+  if (text.includes("how are you")) {
     return "I’m doing well 😊 I’m here to help you with menstrual health and support-related questions.";
   }
-
-  if (
-    text === "tampon" ||
-    text === "tampons" ||
-    text === "what are tampons"
-  ) {
-    return "Tampons are menstrual products inserted into the vagina to absorb menstrual flow. They are convenient and allow more freedom of movement.";
-  }
-
-  if (
-    text === "pads" ||
-    text === "what are pads"
-  ) {
-    return "Pads are absorbent products worn in underwear to absorb menstrual blood. They are easy to use and widely preferred.";
-  }
-
-  if (
-    text === "what is menstruation" ||
-    text === "what are periods"
-  ) {
-    return "Menstruation is the monthly shedding of the uterine lining, released as blood through the vagina. It is a natural biological process.";
-  }
-
   return null;
 }
 
@@ -73,87 +47,57 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ reply: "Please type a message." });
     }
 
-    console.log("User:", userMessage);
+    console.log("📩 User Message:", userMessage);
 
     // Convert history → AI format
     const formattedHistory = history.map((msg) => ({
       role: msg.sender === "user" ? "user" : "assistant",
-      content: msg.text,
+      content: msg.text || "",
     }));
 
-    // 🔥 AI-FIRST for complex queries
-    if (shouldUseAI(userMessage)) {
-      try {
-        const completion = await hf.chat.completions.create({
-          model: "katanemo/Arch-Router-1.5B:hf-inference",
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are CycleCare, a supportive menstrual health chatbot. Give clear, safe, respectful answers. Do not diagnose diseases. Suggest doctor if needed.",
-            },
-            ...formattedHistory,
-            { role: "user", content: userMessage },
-          ],
-          temperature: 0.6,
-          max_tokens: 200,
-        });
-
-        const aiReply =
-          completion.choices?.[0]?.message?.content?.trim();
-
-        if (aiReply) {
-          console.log("Reply: AI");
-          return res.json({ reply: aiReply });
-        }
-      } catch (err) {
-        console.log("AI failed, fallback to rules");
-      }
-    }
-
-    // 🔹 RULE-BASED fallback
+    // 1. Try Rule-Based first for simple greetings
     const ruleReply = getRuleBasedReply(userMessage);
-    if (ruleReply) {
-      console.log("Reply: Rule");
+    if (ruleReply && !shouldUseAI(userMessage)) {
+      console.log("✅ Reply: Rule-based");
       return res.json({ reply: ruleReply });
     }
 
-    // 🔥 FINAL AI fallback
+    // 2. Try AI (Llama 3.2)
     try {
+      console.log("🤖 Calling AI...");
       const completion = await hf.chat.completions.create({
-        model: "katanemo/Arch-Router-1.5B:hf-inference",
+        model: "meta-llama/Llama-3.2-3B-Instruct", // ✨ STABLE MODEL
         messages: [
           {
             role: "system",
-            content:
-              "You are CycleCare, a menstrual health chatbot. Answer clearly and safely.",
+            content: "You are CycleCare, a supportive menstrual health chatbot. Give clear, safe, respectful answers. Do not diagnose diseases. Suggest a doctor if symptoms are severe.",
           },
           ...formattedHistory,
           { role: "user", content: userMessage },
         ],
+        max_tokens: 250,
+        temperature: 0.7,
       });
 
-      const aiReply =
-        completion.choices?.[0]?.message?.content?.trim();
+      const aiReply = completion.choices?.[0]?.message?.content?.trim();
 
       if (aiReply) {
-        console.log("Reply: AI fallback");
+        console.log("✅ Reply: AI Success");
         return res.json({ reply: aiReply });
       }
-    } catch (err) {
-      console.error(err.message);
+    } catch (aiErr) {
+      console.error("⚠️ AI Error:", aiErr.message);
+      // Fallback if AI fails
     }
 
-    // Last fallback
+    // 3. Final Fallback
     return res.json({
-      reply:
-        "I can help with periods, cramps, hygiene, mood changes, and support-related questions. Please ask something more specific.",
+      reply: "I'm here to help! Could you please tell me a bit more about what you're looking for (periods, cramps, hygiene, etc.)?"
     });
+
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      reply: "Server error. Please try again.",
-    });
+    console.error("❌ Server Error:", error);
+    return res.status(500).json({ reply: "Server error. Please try again later." });
   }
 });
 
