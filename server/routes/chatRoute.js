@@ -59,7 +59,7 @@ router.post("/", async (req, res) => {
     const ruleReply = getRuleBasedReply(userMessage);
     if (ruleReply && !shouldUseAI(userMessage)) {
       console.log("✅ Reply: Rule-based");
-      return res.json({ reply: ruleReply });
+      return res.json({ text: ruleReply });
     }
 
     // 2. Try AI (Llama 3.2)
@@ -83,7 +83,7 @@ router.post("/", async (req, res) => {
 
       if (aiReply) {
         console.log("✅ Reply: AI Success");
-        return res.json({ reply: aiReply });
+        return res.json({ text: aiReply });
       }
     } catch (aiErr) {
       console.error("⚠️ AI Error:", aiErr.message);
