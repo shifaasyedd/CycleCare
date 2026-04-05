@@ -18,7 +18,14 @@ const app = express(); // <-- app created here
 initCronJobs();
 // Middleware
 app.use(cors({
-  origin: ["https://thecyclecare.vercel.app","http://localhost:5173"],
+  origin: [
+    "https://thecyclecare.vercel.app",
+    "http://localhost:5173",
+    "http://localhost:3000",   // add if you use this
+    "http://127.0.0.1:5173",   // add this too
+    "http://localhost:5500",    // if using Live Server
+    // Also allow your current preview URL (copy from browser address bar)
+  ],
   credentials: true
 }));
 app.use(express.json());
