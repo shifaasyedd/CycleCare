@@ -28,60 +28,49 @@ function getFallbackReply(message) {
 
 // 4. Main Route
 router.post("/", async (req, res) => {
-  const startTime = Date.now();
-  
   try {
     const userMessage = req.body?.message?.trim();
     const history = Array.isArray(req.body?.history) ? req.body.history : [];
-
+    
     if (!userMessage) return res.status(400).json({ reply: "Please send a message. 💬" });
 
-    // Step A: If it's a simple greeting, don't even waste an AI call
+    // 1. Instant Greeting (Saves API calls)
     if (["hi", "hello", "hey"].includes(userMessage.toLowerCase())) {
       return res.json({ reply: getFallbackReply("hi") });
     }
 
-    // Step B: AI Call with "Wait for Model" and "Timeout"
+    // 2. The AI Call
     try {
-      const aiPromise = hf.chat.completions.create({
+      // We increase the timeout here to 30 seconds for the "cold start"
+      const completion = await hf.chat.completions.create({
         model: "google/gemma-2-2b-it",
         messages: [
-          { role: "system", content: "You are CycleCare, a supportive menstrual health expert. Provide empathetic, concise, and accurate advice (max 2 sentences)." },
+          { role: "system", content: "You are CycleCare, a supportive menstrual health expert. Provide empathetic, concise advice in 2 sentences." },
           ...history.map(msg => ({ role: msg.sender === "user" ? "user" : "assistant", content: msg.text || "" })),
           { role: "user", content: userMessage }
         ],
-        max_tokens: 250,
+        max_tokens: 300,
         temperature: 0.7,
-        // CRITICAL: Tells Hugging Face to wake up the model
+        // 🔥 THIS IS THE KEY: It forces the API to wake up the model instead of erroring
         extra_body: {
           "options": { "wait_for_model": true }
         }
       });
 
-      // Timeout after 25 seconds (Free tier models need time to wake up!)
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error("AI_TIMEOUT")), 25000);
-      });
-
-      const completion = await Promise.race([aiPromise, timeoutPromise]);
       const aiReply = completion.choices?.[0]?.message?.content;
-
       if (aiReply && aiReply.trim()) {
-        console.log(`AI Success: ${Date.now() - startTime}ms`);
         return res.json({ reply: aiReply });
       }
-
     } catch (aiError) {
-      console.error("AI Error:", aiError.message);
-      // Fall through to the final fallback below
+      console.error("AI API Error:", aiError.message);
+      // If the API fails, it moves to the fallback below
     }
 
-    // Step C: Final Fallback if AI fails or times out
+    // 3. The Fallback (What you are seeing now)
     return res.json({ reply: getFallbackReply(userMessage) });
 
   } catch (error) {
-    console.error("Server Error:", error.message);
-    res.status(500).json({ reply: "Server error. Please try again later." });
+    res.status(500).json({ reply: "Server error. Please try again." });
   }
 });
 
