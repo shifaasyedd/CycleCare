@@ -19,7 +19,7 @@ import Terms from "./pages/Terms";
 function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+  const API_URL = "https://cyclecare-j2yz.onrender.com";
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
