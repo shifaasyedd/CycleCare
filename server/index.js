@@ -5,13 +5,14 @@ require('dotenv').config();
 
 const app = express();
 
+FRONTEND_URL = 'https://thecyclecare.vercel.app';
 // Middleware
 app.use(cors({
-  origin: ["https://thecyclecare.vercel.app", "http://localhost:3000"],
+  origin: process.env.FRONTEND_UR,
   credentials: true
 }));
-app.use(express.json());
 
+app.use(express.json());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
