@@ -18,16 +18,13 @@ router.post("/", async (req, res) => {
     const userMessage = req.body?.message?.trim();
     const history = Array.isArray(req.body?.history) ? req.body.history : [];
 
-    // 1. Instant Greeting Reply
     if (["hi", "hello", "hey"].includes(userMessage.toLowerCase())) {
       return res.json({ reply: "Hello! I'm CycleCare. How can I help you with your menstrual health today? 😊" });
     }
 
-    // 2. The AI Call
     try {
       const completion = await hf.chat.completions.create({
-        // Switching to Google Gemma - very stable for free accounts
-        model: "google/gemma-1.1-7b-it", 
+        model: "meta-llama/Meta-Llama-3.1-8B-Instruct",
         messages: [
           { role: "system", content: "You are CycleCare, a supportive menstrual health expert. Give clear, empathetic advice." },
           ...history.map(m => ({ role: m.sender === "user" ? "user" : "assistant", content: m.text || "" })),
@@ -41,7 +38,6 @@ router.post("/", async (req, res) => {
 
     } catch (aiError) {
       console.error("AI Error:", aiError.message);
-      // If AI fails, we give a factual answer manually so the user isn't disappointed
       if (userMessage.toLowerCase().includes("period")) {
         return res.json({ reply: "A period is your body's way of releasing the lining of the uterus. It's a natural part of the reproductive cycle! Do you have questions about pain or tracking?" });
       }
@@ -49,6 +45,7 @@ router.post("/", async (req, res) => {
     }
 
   } catch (error) {
+    console.error("Server error:", error);
     res.status(500).json({ reply: "Server error. Please try again." });
   }
 });
