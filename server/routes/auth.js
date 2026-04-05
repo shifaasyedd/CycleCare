@@ -7,7 +7,7 @@ const Cycle = require('../models/Cycle');
 const DailyLog = require('../models/DailyLog');
 const Medication = require('../models/Medication');
 const DoctorVisit = require('../models/DoctorVisit');
-const { sendVerificationEmail } = require('../utils/emailService');
+const { sendWelcomeEmail, sendPeriodReminder } = require('../utils/emailService');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
@@ -38,7 +38,6 @@ router.get(
             }
             const token = generateToken(req.user._id);
             const frontendUrl = "https://thecyclecare.vercel.app";
-            // ✅ Fixed: Ensure backticks are used for dynamic URL
             res.redirect(`${frontendUrl}/login-success?token=${token}`);
         } catch (error) {
             console.error("Google Auth Error:", error);
@@ -47,7 +46,7 @@ router.get(
     }
 );
 
-// 📝 [POST] REGISTER 
+// 📝 [POST] REGISTER – NO EMAIL VERIFICATION, returns token
 router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -57,25 +56,24 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ success: false, error: 'User already exists' });
         }
 
-        const verificationToken = crypto.randomBytes(32).toString('hex');
-        const verificationTokenExpiry = Date.now() + 24 * 60 * 60 * 1000; 
-
+        // Create user with isVerified = true (no verification needed)
         const user = await User.create({
             name,
             email,
             password,
-            verificationToken,
-            verificationTokenExpiry,
-            isVerified: false
+            isVerified: true,
         });
 
-        sendVerificationEmail(email, name, verificationToken).catch(err => 
-            console.error("Email Error:", err)
-        );
+        // Generate JWT token for immediate login
+        const token = generateToken(user._id);
+
+        // Send welcome email (optional – if email fails, user still can log in)
+        sendWelcomeEmail(email, name).catch(err => console.error("Welcome email error:", err));
 
         res.status(201).json({
             success: true,
-            message: 'Registration successful! Please check your email to verify your account.',
+            message: 'Registration successful! You are now logged in.',
+            token,
             user: { id: user._id, name: user.name, email: user.email }
         });
     } catch (error) {
@@ -83,7 +81,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// 🔑 [POST] LOGIN 
+// 🔑 [POST] LOGIN – removed verification check
 router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -93,13 +91,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ success: false, error: 'Invalid credentials' });
         }
 
-        if (!user.isVerified) {
-            return res.status(401).json({
-                success: false,
-                error: 'Please verify your email first.'
-            });
-        }
-
+        // No verification check – all users are verified
         const isMatch = await user.matchPassword(password);
         if (!isMatch) {
             return res.status(401).json({ success: false, error: 'Invalid credentials' });
@@ -115,32 +107,11 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// ✅ [GET] VERIFY EMAIL 
+// ✅ [GET] VERIFY EMAIL – removed (optional, keep if you want to handle old links)
 router.get('/verify-email', async (req, res) => {
-    const { token } = req.query;
-
-    if (!token) return res.status(400).send('Verification token missing.');
-
-    try {
-        const user = await User.findOne({
-            verificationToken: token,
-            verificationTokenExpiry: { $gt: Date.now() }
-        });
-
-        if (!user) return res.status(400).send('Invalid or expired link.');
-
-        user.isVerified = true;
-        user.verificationToken = undefined;
-        user.verificationTokenExpiry = undefined;
-        await user.save();
-
-        const tokenForLogin = generateToken(user._id);
-        // ✅ Fixed: Changed single quotes to backticks and passed the correct login token
-        res.redirect(`https://thecyclecare.vercel.app/login-success?token=${tokenForLogin}`);
-    } catch (err) {
-        console.error("Verification error:", err);
-        res.status(500).send('Server error during verification.');
-    }
+    // This endpoint is no longer used but kept for backward compatibility.
+    // Redirect to login with a message.
+    res.redirect("https://thecyclecare.vercel.app/login?message=Email+verification+no+longer+required");
 });
 
 // 🔐 [GET] GET CURRENT USER 

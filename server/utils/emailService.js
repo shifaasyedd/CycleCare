@@ -8,20 +8,23 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendVerificationEmail = async (email, name, token) => {
-  const verificationLink = `https://cyclecare-j2yz.onrender.com/api/auth/verify-email?token=${token}`;
-
+// ✅ Welcome email sent after registration
+const sendWelcomeEmail = async (email, name) => {
   const mailOptions = {
     from: `"CycleCare" <${process.env.EMAIL_USER}>`,
     to: email,
-    subject: 'Verify your CycleCare account',
+    subject: '🎉 Welcome to CycleCare!',
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #FFF9FB; border-radius: 16px;">
-        <h2 style="color: #E54C6F;">Welcome to CycleCare, ${name}!</h2>
-        <p>Please verify your email address by clicking the link below:</p>
-        <a href="${verificationLink}" style="display: inline-block; padding: 10px 20px; background-color: #E54C6F; color: white; text-decoration: none; border-radius: 25px;">Verify Email</a>
-        <p>This link expires in <strong>24 hours</strong>.</p>
-        <p>If you didn't create an account, you can ignore this email.</p>
+        <h2 style="color: #E54C6F;">Hi ${name}, welcome to CycleCare! 💜</h2>
+        <p>You've successfully logged into your account. We're here to support your menstrual health journey.</p>
+        <p>You can now:</p>
+        <ul>
+          <li>📆 Track your periods and symptoms</li>
+          <li>💬 Chat with our AI assistant</li>
+          <li>📧 Receive period reminders (2 days before)</li>
+        </ul>
+        <a href="https://thecyclecare.vercel.app/category" style="display: inline-block; padding: 10px 20px; background-color: #E54C6F; color: white; text-decoration: none; border-radius: 25px;">Go to Dashboard</a>
         <hr style="margin: 20px 0; border-color: #FFD4DF;" />
         <p style="font-size: 12px; color: #999;">CycleCare – For Those Who Experience & Care</p>
       </div>
@@ -30,12 +33,13 @@ const sendVerificationEmail = async (email, name, token) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`✅ Verification email sent to ${email}`);
+    console.log(`✅ Welcome email sent to ${email}`);
   } catch (err) {
-    console.error("❌ Nodemailer Error:", err);
+    console.error("❌ Welcome email error:", err);
   }
 };
 
+// 🌸 Period reminder email (2 days before expected period)
 const sendPeriodReminder = async (email, name, daysUntil) => {
   const mailOptions = {
     from: `"CycleCare" <${process.env.EMAIL_USER}>`,
@@ -63,8 +67,8 @@ const sendPeriodReminder = async (email, name, daysUntil) => {
     await transporter.sendMail(mailOptions);
     console.log(`✅ Period reminder sent to ${email}`);
   } catch (err) {
-    console.error("❌ Reminder Error:", err);
+    console.error("❌ Period reminder error:", err);
   }
 };
 
-module.exports = { sendVerificationEmail, sendPeriodReminder };
+module.exports = { sendWelcomeEmail, sendPeriodReminder };

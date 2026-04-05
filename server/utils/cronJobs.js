@@ -1,48 +1,56 @@
 const cron = require('node-cron');
-const Cycle = require('../models/Cycle'); // [cite: 1]
-const User = require('../models/User'); 
+const Cycle = require('../models/Cycle');
+const User = require('../models/User');
 const { sendPeriodReminder } = require('./emailService');
 
 const initCronJobs = () => {
-  // Runs every day at 09:00 AM
-// Inside cronJobs.js
-cron.schedule('0 9 * * *', async () => {
-    console.log('--- Checking for upcoming periods ---');
+  cron.schedule('0 9 * * *', async () => {
+    console.log('--- Checking for upcoming periods (predicted) ---');
     try {
-        const today = new Date();
-        // Set target to exactly 2 days from now
-        const targetDate = new Date();
-        targetDate.setDate(today.getDate() + 2);
-        
-        // Create a range for the WHOLE day of the target
-        const startOfTargetDay = new Date(targetDate.setHours(0, 0, 0, 0));
-        const endOfTargetDay = new Date(targetDate.setHours(23, 59, 59, 999));
+      // Get all users who have at least one cycle logged
+      const usersWithCycles = await Cycle.distinct('user');
+      
+      for (const userId of usersWithCycles) {
+        const user = await User.findById(userId);
+        if (!user || !user.email) continue;
 
-        console.log(`Searching for cycles between: ${startOfTargetDay} and ${endOfTargetDay}`);
+        // Get user's cycles sorted by startDate
+        const cycles = await Cycle.find({ user: userId }).sort({ startDate: -1 });
+        if (cycles.length === 0) continue;
 
-        const upcomingCycles = await Cycle.find({
-            startDate: {
-                $gte: startOfTargetDay,
-                $lte: endOfTargetDay
-            }
-        }).populate('user'); // Crucial: This links the cycle to the user email [cite: 20, 108]
+        const latestCycle = cycles[0];
+        if (!latestCycle.startDate) continue;
 
-        console.log(`Found ${upcomingCycles.length} matching cycles.`);
-
-        for (const cycle of upcomingCycles) {
-            // Check if the user object exists and has an email
-            if (cycle.user && cycle.user.email) {
-                await sendPeriodReminder(cycle.user.email, cycle.user.name, 2);
-            } else {
-                console.log(`⚠️ No user email found for cycle: ${cycle._id}`);
-            }
+        // Calculate average cycle length
+        let avgCycleLength = 28; // default
+        if (cycles.length > 1) {
+          let totalLength = 0;
+          for (let i = 0; i < cycles.length - 1; i++) {
+            const diff = (cycles[i].startDate - cycles[i+1].startDate) / (1000 * 60 * 60 * 24);
+            totalLength += diff;
+          }
+          avgCycleLength = totalLength / (cycles.length - 1);
         }
+
+        const nextPeriodStart = new Date(latestCycle.startDate);
+        nextPeriodStart.setDate(nextPeriodStart.getDate() + avgCycleLength);
         
-        console.log('✅ Period reminder check completed');
-        console.log(`--- Finished: ${upcomingCycles.length} reminders processed ---`);
+        const today = new Date();
+        const daysUntil = Math.ceil((nextPeriodStart - today) / (1000 * 60 * 60 * 24));
+        
+        if (daysUntil === 2) {
+          await sendPeriodReminder(user.email, user.name, 2);
+          console.log(`✅ Reminder sent to ${user.email}`);
+        }
+      }
+      
+      console.log('✅ Period reminder check completed');
     } catch (error) {
-        console.error('❌ Error in Period Reminder Cron:', error);
+      console.error('❌ Error in Period Reminder Cron:', error);
     }
-});
-}
+  });
+
+  console.log('⏰ Period reminder cron job initialized (runs daily at 9 AM)');
+};
+
 module.exports = initCronJobs;
