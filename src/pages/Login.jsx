@@ -97,7 +97,7 @@ export default function Login() {
     }
 
     // Regular user login via backend
-    fetch(`${API_URL}/api/auth/login`, {
+    fetch(`${API_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: formData.email, password: formData.password }),
