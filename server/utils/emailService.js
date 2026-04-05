@@ -11,7 +11,8 @@ const transporter = nodemailer.createTransport({
 
 // Send verification email
 const sendVerificationEmail = async (email, name, token) => {
-  const verificationLink = `http://localhost:5000/api/auth/verify-email?token=${token}`;
+  // FIX: Points to your RENDER backend
+  const verificationLink = `https://cyclecare-j2yz.onrender.com/api/auth/verify-email?token=${token}`;
 
   const mailOptions = {
     from: `"CycleCare" <${process.env.EMAIL_USER}>`,
@@ -41,7 +42,7 @@ const sendPeriodReminder = async (email, name, daysUntil) => {
     to: email,
     subject: `🌸 Your period is approaching in ${daysUntil} days!`,
     html: `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #FFF9FB; borderRadius: 16px;">
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #FFF9FB; border-radius: 16px;">
         <h2 style="color: #E54C6F;">Hello ${name}!</h2>
         <p>We noticed your period is expected to start in <strong>${daysUntil} days</strong>.</p>
         <p>Here are some tips to help you prepare:</p>
@@ -52,7 +53,7 @@ const sendPeriodReminder = async (email, name, daysUntil) => {
           <li>💧 Stay hydrated</li>
         </ul>
         <p>Log in to CycleCare to track your symptoms and get more personalized insights!</p>
-        <a href="http://localhost:3000/tracker" style="display: inline-block; padding: 10px 20px; background-color: #E54C6F; color: white; text-decoration: none; border-radius: 25px;">Go to Tracker</a>
+        <a href="https://thecyclecare.vercel.app/tracker" style="display: inline-block; padding: 10px 20px; background-color: #E54C6F; color: white; text-decoration: none; border-radius: 25px;">Go to Tracker</a>
         <hr style="margin: 20px 0; border-color: #FFD4DF;" />
         <p style="font-size: 12px; color: #999;">CycleCare – For Those Who Experience & Care</p>
       </div>
