@@ -7,38 +7,33 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const passport = require("passport");
 require("./config/passport");
+
 // Import routes
 const chatRoute = require("./routes/chatRoute");
 const authRoute = require("./routes/auth");
 const cyclesRoute = require("./routes/cycles");
 const dailyLogsRoute = require("./routes/dailyLogs");
-const trackerRoutes = require('./routes/tracker'); // <-- import
-const adminRoutes = require('./routes/admin');
-app.use('/api/admin', adminRoutes);
+const trackerRoutes = require('./routes/tracker');
+const adminRoutes = require('./routes/admin');   // ✅ Import admin routes
 
-const app = express(); // <-- app created here
+const app = express();   // ✅ app is created HERE
 initCronJobs();
+
 // Middleware
 app.use(cors({
-  origin: [
-    "https://thecyclecare.vercel.app",
-    "http://localhost:5173",
-    "http://localhost:3000",   // add if you use this
-    "http://127.0.0.1:5173",   // add this too
-    "http://localhost:5500",    // if using Live Server
-    // Also allow your current preview URL (copy from browser address bar)
-  ],
+  origin: ["https://thecyclecare.vercel.app","http://localhost:5173"],
   credentials: true
 }));
 app.use(express.json());
 app.use(passport.initialize());
 
 // Register routes AFTER app is created
-app.use('/api/tracker', trackerRoutes);   // <-- moved here
+app.use('/api/tracker', trackerRoutes);
 app.use("/api/chat", chatRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/cycles", cyclesRoute);
 app.use("/api/daily-logs", dailyLogsRoute);
+app.use('/api/admin', adminRoutes);   // ✅ Move admin routes HERE (after app)
 
 // Test route
 app.get("/", (req, res) => {
@@ -49,13 +44,13 @@ app.get("/", (req, res) => {
       cycles: "/api/cycles",
       dailyLogs: "/api/daily-logs",
       chat: "/api/chat",
-      tracker: "/api/tracker"
+      tracker: "/api/tracker",
+      admin: "/api/admin"
     }
   });
 });
 
 // MongoDB Connection
-// It will try each one until it finds the one that's defined in Render
 const dbURI = process.env.MONGODB_URI || process.env.MONGO_URI || process.env.CHATBOT_URI;
 
 mongoose
@@ -69,5 +64,5 @@ app.listen(PORT, () => {
   console.log(`📡 Chatbot endpoint: https://cyclecare-j2yz.onrender.com/api/chat`);
   console.log(`🔐 Auth endpoint: https://cyclecare-j2yz.onrender.com/api/auth`);
   console.log(`📊 Tracker endpoint: https://cyclecare-j2yz.onrender.com/api/tracker`);
-  console.log(`📅 Period reminder cron job initialized`)
+  console.log(`📅 Period reminder cron job initialized`);
 });
