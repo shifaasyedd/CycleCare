@@ -14,15 +14,18 @@ const protect = async (req, res, next) => {
       if (!req.user) {
         return res.status(401).json({ success: false, error: 'User not found' });
       }
+
+      // ✅ Update lastActive timestamp (real-time tracking)
+      req.user.lastActive = new Date();
+      await req.user.save().catch(err => console.error("Failed to update lastActive:", err));
       
-      return next(); // Use return here to stop execution
+      return next();
     } catch (error) {
       console.error('Auth middleware error:', error);
       return res.status(401).json({ success: false, error: 'Not authorized, token failed' });
     }
   }
 
-  // If we get here, it means no token was found at all
   if (!token) {
     return res.status(401).json({ success: false, error: 'Not authorized, no token' });
   }

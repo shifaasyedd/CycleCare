@@ -1,78 +1,76 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please add a name'],
-    trim: true,
-    maxlength: 50
+    required: true,
   },
   email: {
     type: String,
-    required: [true, 'Please add an email'],
+    required: true,
     unique: true,
-    name: String,
     lowercase: true,
-    match: [
-      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-      'Please add a valid email'
-    ]
+    trim: true,
   },
   password: {
     type: String,
-    minlength: 6,
+    required: true,
     select: false,
-    default: null
   },
   googleId: {
     type: String,
-    default: null
+    default: null,
   },
   role: {
     type: String,
-    enum: ['men', 'girls', 'women'],
-    default: null
+    enum: ['men', 'girls', 'women', 'not_selected'],
+    default: 'not_selected',
   },
   isAdmin: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  // Email verification fields
   isVerified: {
     type: Boolean,
-    default: false
+    default: true, // changed to true by default (no email verification)
   },
-  verificationToken: {
-    type: String,
-    default: null
-  },
-  verificationTokenExpiry: {
+  verificationToken: String,
+  verificationTokenExpiry: Date,
+  lastActive: {
     type: Date,
-    default: null
-  }
-}, {
-  timestamps: true
+    default: Date.now,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-UserSchema.pre('save', async function () {
-  if (!this.password) return;
-  if (!this.isModified('password')) return;
+// Hash password before saving
+userSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
+  this.updatedAt = Date.now();
+  next();
 });
 
-UserSchema.methods.matchPassword = async function (enteredPassword) {
-  if (!this.password) return false;
+// Compare entered password with hashed password
+userSchema.methods.matchPassword = async function(enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
-UserSchema.methods.toJSON = function () {
-  const obj = this.toObject();
-  delete obj.password;
-  delete obj.verificationToken;
-  delete obj.verificationTokenExpiry;
-  return obj;
-};
+// Update updatedAt on findOneAndUpdate etc.
+userSchema.pre('findOneAndUpdate', function(next) {
+  this.set({ updatedAt: Date.now() });
+  next();
+});
 
-module.exports = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;

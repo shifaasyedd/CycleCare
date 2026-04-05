@@ -13,6 +13,8 @@ const authRoute = require("./routes/auth");
 const cyclesRoute = require("./routes/cycles");
 const dailyLogsRoute = require("./routes/dailyLogs");
 const trackerRoutes = require('./routes/tracker'); // <-- import
+const adminRoutes = require('./routes/admin');
+app.use('/api/admin', adminRoutes);
 
 const app = express(); // <-- app created here
 initCronJobs();
