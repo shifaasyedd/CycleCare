@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
 
     try {
       const completion = await hf.chat.completions.create({
-        model: "meta-llama/Meta-Llama-3.1-8B-Instruct",
+        model: "google/gemma-2-2b-it",
         messages: [
           { role: "system", content: "You are CycleCare, a supportive menstrual health expert. Give clear, empathetic advice." },
           ...history.map(m => ({ role: m.sender === "user" ? "user" : "assistant", content: m.text || "" })),
