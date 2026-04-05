@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const OpenAI = require("openai");
 
-// 🛡️ Safety Check: This will show in your Render Logs if the key is missing
+// 🛡️ Safety Check for Render Environment Variables
 if (!process.env.HF_API_KEY) {
-  console.error("❌ ERROR: HF_API_KEY is not defined in Environment Variables!");
+  console.error("❌ ERROR: HF_API_KEY is missing in Render Settings!");
 }
 
 const hf = new OpenAI({
@@ -12,29 +12,18 @@ const hf = new OpenAI({
   apiKey: process.env.HF_API_KEY,
 });
 
-// Decide if question needs AI
+// Helper: Decide if question needs AI
 function shouldUseAI(message) {
   const text = message.toLowerCase();
-  return (
-    text.includes("how") || text.includes("why") ||
-    text.includes("can i") || text.includes("should i") ||
-    text.includes("what should") || text.includes("recommend") ||
-    text.includes("safe") || text.includes("normal") ||
-    text.includes("sex") || text.includes("medicine") ||
-    text.includes("beginner") || text.includes("comfortable") ||
-    text.length > 20 // If it's a long sentence, use AI
-  );
+  const triggers = ["how", "why", "can i", "should i", "normal", "safe", "symptom", "period", "cramp"];
+  return triggers.some(word => text.includes(word)) || text.length > 20;
 }
 
-// Simple rule-based replies
+// Helper: Fast replies for greetings
 function getRuleBasedReply(message) {
   const text = message.toLowerCase().trim();
-  if (["hi", "hello", "hey"].includes(text)) {
-    return "Hello! I’m CycleCare support bot. How can I help you today?";
-  }
-  if (text.includes("how are you")) {
-    return "I’m doing well 😊 I’m here to help you with menstrual health and support-related questions.";
-  }
+  if (["hi", "hello", "hey"].includes(text)) return "Hello! I’m your CycleCare assistant. How can I help you today? 😊";
+  if (text.includes("how are you")) return "I'm doing great, thank you for asking! Ready to help with any menstrual health questions.";
   return null;
 }
 
@@ -43,34 +32,29 @@ router.post("/", async (req, res) => {
     const userMessage = req.body?.message?.trim();
     const history = Array.isArray(req.body?.history) ? req.body.history : [];
 
-    if (!userMessage) {
-      return res.status(400).json({ reply: "Please type a message." });
-    }
+    if (!userMessage) return res.status(400).json({ reply: "Please type a message." });
 
-    console.log("📩 User Message:", userMessage);
+    console.log("📩 Incoming:", userMessage);
 
-    // Convert history → AI format
-    const formattedHistory = history.map((msg) => ({
-      role: msg.sender === "user" ? "user" : "assistant",
-      content: msg.text || "",
-    }));
-
-    // 1. Try Rule-Based first for simple greetings
+    // 1. Check Rule-Based First
     const ruleReply = getRuleBasedReply(userMessage);
     if (ruleReply && !shouldUseAI(userMessage)) {
-      console.log("✅ Reply: Rule-based");
-      return res.json({ text: ruleReply });
+      return res.json({ reply: ruleReply });
     }
 
-    // 2. Try AI (Llama 3.2)
+    // 2. Call AI (Llama 3.2)
     try {
-      console.log("🤖 Calling AI...");
+      const formattedHistory = history.map((msg) => ({
+        role: msg.sender === "user" ? "user" : "assistant",
+        content: msg.text || "",
+      }));
+
       const completion = await hf.chat.completions.create({
-        model: "meta-llama/Llama-3.2-3B-Instruct", // ✨ STABLE MODEL
+        model: "meta-llama/Llama-3.2-3B-Instruct",
         messages: [
-          {
-            role: "system",
-            content: "You are CycleCare, a supportive menstrual health chatbot. Give clear, safe, respectful answers. Do not diagnose diseases. Suggest a doctor if symptoms are severe.",
+          { 
+            role: "system", 
+            content: "You are CycleCare, a supportive menstrual health chatbot. Provide safe, empathetic, and clear advice. Do not provide medical diagnoses. Suggest seeing a doctor for severe symptoms." 
           },
           ...formattedHistory,
           { role: "user", content: userMessage },
@@ -80,24 +64,18 @@ router.post("/", async (req, res) => {
       });
 
       const aiReply = completion.choices?.[0]?.message?.content?.trim();
+      if (aiReply) return res.json({ reply: aiReply });
 
-      if (aiReply) {
-        console.log("✅ Reply: AI Success");
-        return res.json({ text: aiReply });
-      }
     } catch (aiErr) {
       console.error("⚠️ AI Error:", aiErr.message);
-      // Fallback if AI fails
     }
 
-    // 3. Final Fallback
-    return res.json({
-      reply: "I'm here to help! Could you please tell me a bit more about what you're looking for (periods, cramps, hygiene, etc.)?"
-    });
+    // 3. Fallback
+    return res.json({ reply: "I'm here to support you. Could you tell me a bit more about what's on your mind regarding your cycle or health?" });
 
   } catch (error) {
     console.error("❌ Server Error:", error);
-    return res.status(500).json({ reply: "Server error. Please try again later." });
+    return res.status(500).json({ reply: "Internal server error. Please try again later." });
   }
 });
 
