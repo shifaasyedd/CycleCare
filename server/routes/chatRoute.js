@@ -3,7 +3,7 @@ const router = express.Router();
 const OpenAI = require("openai");
 
 const hf = new OpenAI({
-  baseURL: "https://api-inference.huggingface.co/v1/", 
+  baseURL: "https://router.huggingface.co/v1/",
   apiKey: process.env.HF_API_KEY,
 });
 
