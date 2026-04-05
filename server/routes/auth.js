@@ -131,7 +131,8 @@ router.get('/verify-email', async (req, res) => {
         user.verificationTokenExpiry = undefined;
         await user.save();
 
-        res.redirect('https://thecyclecare.vercel.app/login-success?token=${token}');
+      const tokenForLogin = generateToken(user._id);
+      res.redirect('https://thecyclecare.vercel.app/login-success?token=${token}');
     } catch (err) {
         res.status(500).send('Server error during verification.');
     }
