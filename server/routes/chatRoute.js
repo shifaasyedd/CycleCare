@@ -51,7 +51,7 @@ router.post("/", async (req, res) => {
     // 2. Call AI (Llama 3.2)
     try {
       const completion = await hf.chat.completions.create({
-        model: "mistralai/Mistral-7B-Instruct-v0.2",
+        model: "api-inference.huggingface.co/v1/",
         messages: [
           { 
             role: "system", 
