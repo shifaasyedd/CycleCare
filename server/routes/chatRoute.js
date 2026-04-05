@@ -10,6 +10,9 @@ if (!process.env.HF_API_KEY) {
 const hf = new OpenAI({
   baseURL: "https://router.huggingface.co/v1",
   apiKey: process.env.HF_API_KEY,
+  defaultHeaders: {
+    "x-wait-for-model": "true" // This tells Hugging Face: "Wait for the server to wake up, don't just error out!"
+  }
 });
 
 // Helper: Decide if question needs AI
@@ -48,7 +51,7 @@ router.post("/", async (req, res) => {
     // 2. Call AI (Llama 3.2)
     try {
       const completion = await hf.chat.completions.create({
-        model: "HuggingFaceH4/zephyr-7b-beta",
+        model: "mistralai/Mistral-7B-Instruct-v0.2",
         messages: [
           { 
             role: "system", 
