@@ -1,3 +1,4 @@
+const crypto = require('crypto');           // ✅ ADD THIS LINE
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
@@ -13,29 +14,28 @@ passport.use(
       try {
         const userEmail = profile.emails[0].value;
 
-        // 1. Look for the user by email (the most reliable way)
+        // 1. Look for the user by email
         let user = await User.findOne({ email: userEmail });
 
         if (user) {
-          // ✅ PREVENT CRASH: If user exists but doesn't have a googleId, link it now
+          // If user exists but doesn't have a googleId, link it now
           if (!user.googleId) {
             user.googleId = profile.id;
-            user.isVerified = true; // They logged in via Google, so email is verified
+            user.isVerified = true;
             await user.save();
             console.log(`🔗 Linked Google account to existing email: ${userEmail}`);
           }
           return done(null, user);
         }
 
-        // 2. If NO user exists at all, create a new one
+        // 2. No user exists – create a new one
         console.log(`✨ Creating new user via Google: ${userEmail}`);
         user = await User.create({
           name: profile.displayName,
           email: userEmail,
           googleId: profile.id,
           isVerified: true,
-          // We set a random password so the 'required' check passes but no one can guess it
-          password: crypto.randomBytes(20).toString('hex'), 
+          password: crypto.randomBytes(20).toString('hex'),
         });
 
         return done(null, user);
@@ -46,3 +46,5 @@ passport.use(
     }
   )
 );
+
+module.exports = passport;
