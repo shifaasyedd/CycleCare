@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
     // 2. Call AI (Llama 3.2)
     try {
       const completion = await hf.chat.completions.create({
-        model: "mistralai/Mistral-7B-Instruct-v0.3",
+        model: "HuggingFaceH4/zephyr-7b-beta",
         messages: [
           { 
             role: "system", 
@@ -68,7 +68,7 @@ router.post("/", async (req, res) => {
       console.error("⚠️ AI Error Details:", aiError.message);
       // Specific fallback for medical topics if AI is down
       if (userMessage.toLowerCase().includes("period")) {
-        return res.json({ reply: "I'm having a little trouble connecting to my AI, but a period is a natural monthly cycle where the body sheds the uterine lining. Do you have questions about symptoms or tracking?" });
+        return res.json({ reply: "Sorry! I'm having a little trouble connecting to my AI brain" });
       }
     }
 
