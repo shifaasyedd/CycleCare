@@ -111,7 +111,7 @@ export default function Tracker() {
 
   // API setup
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("cyclecare_token");
   // Load all data from database
   useEffect(() => {
     const savedTheme = localStorage.getItem("cyclecare_theme");
