@@ -1,6 +1,5 @@
 const nodemailer = require('nodemailer');
 
-// Configure transporter (Gmail example)
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -9,9 +8,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Send verification email
 const sendVerificationEmail = async (email, name, token) => {
-  // FIX: Points to your RENDER backend
   const verificationLink = `https://cyclecare-j2yz.onrender.com/api/auth/verify-email?token=${token}`;
 
   const mailOptions = {
@@ -31,11 +28,14 @@ const sendVerificationEmail = async (email, name, token) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
-  console.log(`✅ Verification email sent to ${email}`);
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Verification email sent to ${email}`);
+  } catch (err) {
+    console.error("❌ Nodemailer Error:", err);
+  }
 };
 
-// Send period reminder email
 const sendPeriodReminder = async (email, name, daysUntil) => {
   const mailOptions = {
     from: `"CycleCare" <${process.env.EMAIL_USER}>`,
@@ -52,7 +52,6 @@ const sendPeriodReminder = async (email, name, daysUntil) => {
           <li>🍫 Stock up on your favorite snacks</li>
           <li>💧 Stay hydrated</li>
         </ul>
-        <p>Log in to CycleCare to track your symptoms and get more personalized insights!</p>
         <a href="https://thecyclecare.vercel.app/tracker" style="display: inline-block; padding: 10px 20px; background-color: #E54C6F; color: white; text-decoration: none; border-radius: 25px;">Go to Tracker</a>
         <hr style="margin: 20px 0; border-color: #FFD4DF;" />
         <p style="font-size: 12px; color: #999;">CycleCare – For Those Who Experience & Care</p>
@@ -60,8 +59,12 @@ const sendPeriodReminder = async (email, name, daysUntil) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
-  console.log(`✅ Period reminder sent to ${email}`);
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`✅ Period reminder sent to ${email}`);
+  } catch (err) {
+    console.error("❌ Reminder Error:", err);
+  }
 };
 
 module.exports = { sendVerificationEmail, sendPeriodReminder };

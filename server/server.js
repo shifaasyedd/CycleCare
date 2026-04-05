@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const passport = require("passport");
 require("./config/passport");
-
 // Import routes
 const chatRoute = require("./routes/chatRoute");
 const authRoute = require("./routes/auth");
@@ -18,7 +17,10 @@ const trackerRoutes = require('./routes/tracker'); // <-- import
 const app = express(); // <-- app created here
 initCronJobs();
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "https://thecyclecare.vercel.app",
+  credentials: true
+}));
 app.use(express.json());
 app.use(passport.initialize());
 
@@ -52,8 +54,8 @@ mongoose
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📡 Chatbot endpoint: http://localhost:${PORT}/api/chat`);
-  console.log(`🔐 Auth endpoint: http://localhost:${PORT}/api/auth`);
-  console.log(`📊 Tracker endpoint: http://localhost:${PORT}/api/tracker`);
+  console.log(`📡 Chatbot endpoint: https://cyclecare-j2yz.onrender.com/api/chat`);
+  console.log(`🔐 Auth endpoint: https://cyclecare-j2yz.onrender.com/api/auth`);
+  console.log(`📊 Tracker endpoint: https://cyclecare-j2yz.onrender.com/api/tracker`);
   console.log(`📅 Period reminder cron job initialized`)
 });
