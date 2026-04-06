@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/cyclecare-logo.png";
 
 export default function Profile() {
+  console.log("PROFILE COMPONENT IS RENDERING");
   const navigate = useNavigate();
   const [dark, setDark] = useState(false);
   const [user, setUser] = useState(null);
@@ -18,6 +19,7 @@ export default function Profile() {
 
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
+  // ---------- Theme & User Load ----------
   useEffect(() => {
     const saved = localStorage.getItem("cyclecare_theme");
     if (saved === "dark") setDark(true);
@@ -35,6 +37,22 @@ export default function Profile() {
     localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
   }, [dark]);
 
+  // ---------- Logout (clears session, keeps data) ----------
+  const handleLogout = () => {
+    const confirmLogout = window.confirm("Are you sure you want to logout?");
+    if (confirmLogout) {
+      localStorage.removeItem("cyclecare_logged_in");
+      localStorage.removeItem("cyclecare_token");
+      localStorage.removeItem("cyclecare_user");
+      localStorage.removeItem("cyclecare_is_admin");
+      localStorage.removeItem("cyclecare_role");
+      localStorage.removeItem("cyclecare_created_at");
+      // Keep theme preference (optional)
+      navigate("/login");
+    }
+  };
+
+  // ---------- Theme styles ----------
   const theme = useMemo(
     () =>
       dark
@@ -74,21 +92,17 @@ export default function Profile() {
   );
 
   const getRoleName = (role) => {
-    // Check if user is admin first
     const isAdmin = localStorage.getItem("cyclecare_is_admin") === "true";
     if (isAdmin) return "Admin";
-    
-    // Otherwise show category
     if (role === "men") return "Men (Support Guide)";
-    if (role === "girls") return " Non-Menstruators (Awareness)";
+    if (role === "girls") return "Non-Menstruators (Awareness)";
     if (role === "women") return "Menstruators (Tracker)";
     return "Not selected";
   };
 
   const getRoleIcon = (role) => {
     const isAdmin = localStorage.getItem("cyclecare_is_admin") === "true";
-    if (isAdmin) return "";
-    
+    if (isAdmin) return "👑";
     if (role === "men") return "👨";
     if (role === "girls") return "👧";
     if (role === "women") return "👩";
@@ -96,15 +110,19 @@ export default function Profile() {
   };
 
   const selectedRole = localStorage.getItem("cyclecare_role");
-  const accountCreated = localStorage.getItem("cyclecare_created_at") ||
-                         (user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "Not available");
+  const accountCreated =
+    localStorage.getItem("cyclecare_created_at") ||
+    (user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "Not available");
 
+  // ---------- Change Password Logic (placeholder) ----------
   const handleChangePassword = () => {
     const newErrors = {};
     if (!passwordForm.currentPassword) newErrors.currentPassword = "Current password is required";
     if (!passwordForm.newPassword) newErrors.newPassword = "New password is required";
-    else if (passwordForm.newPassword.length < 6) newErrors.newPassword = "Password must be at least 6 characters";
-    if (passwordForm.newPassword !== passwordForm.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+    else if (passwordForm.newPassword.length < 6)
+      newErrors.newPassword = "Password must be at least 6 characters";
+    if (passwordForm.newPassword !== passwordForm.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -114,11 +132,7 @@ export default function Profile() {
     setPasswordMessage("✅ Password change request sent! (Backend integration needed)");
     setTimeout(() => setPasswordMessage(""), 3000);
     setShowChangePassword(false);
-    setPasswordForm({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-    });
+    setPasswordForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     setErrors({});
   };
 
@@ -127,6 +141,7 @@ export default function Profile() {
     if (errors[e.target.name]) setErrors({ ...errors, [e.target.name]: "" });
   };
 
+  // ---------- Delete Account (permanent) ----------
   const handleDeleteAccount = () => {
     if (deleteConfirm !== "DELETE") {
       alert('Please type "DELETE" to confirm account deletion');
@@ -134,24 +149,22 @@ export default function Profile() {
     }
 
     const confirmDelete = window.confirm(
-      "⚠️ WARNING: This action is irreversible!\n\n"+
-      "All your data will be permanently deleted"
+      "⚠️ WARNING: This action is irreversible!\n\nAll your data will be permanently deleted."
     );
 
     if (confirmDelete) {
       const token = localStorage.getItem("cyclecare_token");
-      
+
       fetch(`${API_URL}/api/auth/delete-account`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
       })
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
           if (data.success) {
-            // Clear all localStorage
             localStorage.clear();
             alert("Your account has been permanently deleted. Goodbye! 👋");
             navigate("/signup");
@@ -159,7 +172,7 @@ export default function Profile() {
             alert("Error deleting account: " + data.error);
           }
         })
-        .catch(err => {
+        .catch((err) => {
           console.error("Delete error:", err);
           alert("Network error. Please try again.");
         });
@@ -182,6 +195,9 @@ export default function Profile() {
            ${theme.bg}`,
       color: theme.text,
     },
+
+      
+
     container: { maxWidth: 900, margin: "0 auto", padding: "0 24px", flex: 1 },
     nav: {
       position: "sticky",
@@ -278,6 +294,27 @@ export default function Profile() {
       fontSize: 12,
       fontWeight: 500,
     },
+    buttonRow: { display: "flex", gap: 12, flexWrap: "wrap", marginTop: 8 },
+    btnSecondary: {
+      padding: "10px 20px",
+      borderRadius: 100,
+      fontSize: 12,
+      fontWeight: 600,
+      cursor: "pointer",
+      background: "transparent",
+      border: `1px solid ${theme.border}`,
+      color: theme.text,
+    },
+    btnLogout: {
+      padding: "10px 20px",
+      borderRadius: 100,
+      fontSize: 12,
+      fontWeight: 600,
+      cursor: "pointer",
+      background: "transparent",
+      border: `1px solid ${theme.muted}`,
+      color: theme.text,
+    },
     section: {
       marginBottom: 28,
       padding: 24,
@@ -285,7 +322,14 @@ export default function Profile() {
       background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.02)",
       border: `1px solid ${theme.border}`,
     },
-    sectionTitle: { fontSize: 18, fontWeight: 700, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 700,
+      marginBottom: 16,
+      display: "flex",
+      alignItems: "center",
+      gap: 8,
+    },
     infoRow: {
       display: "flex",
       justifyContent: "space-between",
@@ -318,16 +362,6 @@ export default function Profile() {
       border: "none",
       color: "white",
     },
-    btnSecondary: {
-      padding: "10px 20px",
-      borderRadius: 100,
-      fontSize: 12,
-      fontWeight: 600,
-      cursor: "pointer",
-      background: "transparent",
-      border: `1px solid ${theme.border}`,
-      color: theme.text,
-    },
     btnDanger: {
       padding: "10px 20px",
       borderRadius: 100,
@@ -338,7 +372,6 @@ export default function Profile() {
       border: `1px solid ${theme.red}`,
       color: theme.red,
     },
-    buttonRow: { display: "flex", gap: 12, flexWrap: "wrap", marginTop: 10 },
     deleteConfirm: {
       marginTop: 16,
       padding: 16,
@@ -391,7 +424,7 @@ export default function Profile() {
             <Link to="/contact" style={styles.navLink}>Contact</Link>
             <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Profile</span>
           </div>
-          <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
+          <div style={styles.themeToggle} onClick={() => setDark((v) => !v)}>
             {dark ? "☀️" : "🌙"}
           </div>
         </nav>
@@ -404,9 +437,7 @@ export default function Profile() {
 
         <div style={styles.profileCard}>
           <div style={styles.profileHeader}>
-            <div style={styles.avatar}>
-              {getRoleIcon(selectedRole) || "👤"}
-            </div>
+            <div style={styles.avatar}>{getRoleIcon(selectedRole) || "👤"}</div>
             <div style={styles.profileInfo}>
               <div style={styles.profileName}>{user?.name || "User"}</div>
               <div style={styles.profileEmail}>{user?.email || "No email"}</div>
@@ -416,12 +447,44 @@ export default function Profile() {
               </div>
             </div>
           </div>
+
+          {/* Original button row */}
           <div style={styles.buttonRow}>
             <button style={styles.btnSecondary} onClick={() => setShowChangePassword(true)}>
               🔒 Change Password
             </button>
+            <button style={styles.btnLogout} onClick={handleLogout}>
+              🚪 Logout
+            </button>
           </div>
-        </div>
+
+          <button
+              onClick={handleLogout}
+              style={{
+                marginTop: 20,
+                width: "100%",
+                padding: "12px",
+                borderRadius: 100,
+                fontSize: 14,
+                fontWeight: 600,
+                background: "transparent",
+                border: `1.5px solid ${theme.accentLight}`,
+                color: theme.accent,
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = theme.accentLight;
+                e.target.style.color = "white";
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = "transparent";
+                e.target.style.color = theme.accent;
+              }}
+            >
+              🚪 Logout (Click to sign out)
+            </button>
+          </div>
 
         {showChangePassword && (
           <div style={styles.section}>
@@ -507,7 +570,8 @@ export default function Profile() {
             <span>⚠️</span> Danger Zone
           </div>
           <p style={{ fontSize: 12, color: theme.muted, marginBottom: 16 }}>
-            Once you delete your account, all your data will be permanently removed. This action cannot be undone.
+            Once you delete your account, all your data will be permanently removed. This action
+            cannot be undone.
           </p>
           <div style={styles.deleteConfirm}>
             <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8, color: theme.red }}>
@@ -528,7 +592,9 @@ export default function Profile() {
 
         <footer style={styles.footer}>
           <span style={{ fontSize: 10, color: theme.muted }}>© 2025 CycleCare • Your Profile</span>
-          <Link to="/category" style={{ ...styles.navLink, fontSize: 10 }}>← Back to Categories</Link>
+          <Link to="/category" style={{ ...styles.navLink, fontSize: 10 }}>
+            ← Back to Categories
+          </Link>
         </footer>
       </div>
     </div>

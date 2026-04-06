@@ -15,6 +15,7 @@ import PCOSPage from "./pages/PCOSPage";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import Terms from "./pages/Terms";
+import Shopping from "./pages/Shopping";
 
 function AppContent() {
   const location = useLocation();
@@ -77,6 +78,7 @@ function AppContent() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/shopping" element={<Shopping />} />
     </Routes>
   );
 }

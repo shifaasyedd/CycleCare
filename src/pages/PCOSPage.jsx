@@ -983,6 +983,45 @@ export default function PCOSPage() {
           </button>
         </div>
 
+        {/* Shopping Promo Section */}
+        <div
+          style={{
+            marginTop: 32,
+            marginBottom: 24,
+            padding: "28px 24px",
+            borderRadius: 28,
+            background: dark ? "rgba(25, 25, 35, 0.9)" : "rgba(255, 245, 248, 0.95)",
+            border: `1px solid ${theme.border}`,
+            textAlign: "center",
+            cursor: "pointer",
+            transition: "transform 0.2s",
+          }}
+          onClick={() => navigate("/shopping")}
+          onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+        >
+          <div style={{ fontSize: 48, marginBottom: 12 }}>🛍️</div>
+          <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Shop Period Care Essentials</div>
+          <div style={{ fontSize: 13, color: theme.muted, marginBottom: 16, maxWidth: 500, margin: "0 auto 16px auto" }}>
+            Find pads, cups, heating pads, chocolates, and more – all in one place.
+          </div>
+          <div
+            style={{
+              background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
+              border: "none",
+              color: "white",
+              padding: "10px 24px",
+              borderRadius: 100,
+              fontSize: 13,
+              fontWeight: 600,
+              cursor: "pointer",
+              display: "inline-block",
+            }}
+          >
+            Visit Shopping Guide →
+          </div>
+        </div>
+
         {/* Footer */}
         <footer style={styles.footer}>
           <span style={{ fontSize: 11, color: theme.muted }}>© 2025 CycleCare • PCOS/PCOD Tracker</span>
