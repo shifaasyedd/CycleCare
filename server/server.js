@@ -55,14 +55,20 @@ const dbURI = process.env.MONGODB_URI || process.env.MONGO_URI || process.env.CH
 
 mongoose
   .connect(dbURI)
-  .then(() => console.log("✅ MongoDB Atlas Connected"))
-  .catch((err) => console.log("❌ MongoDB Error:", err));
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📡 Chatbot endpoint: https://cyclecare-j2yz.onrender.com/api/chat`);
-  console.log(`🔐 Auth endpoint: https://cyclecare-j2yz.onrender.com/api/auth`);
-  console.log(`📊 Tracker endpoint: https://cyclecare-j2yz.onrender.com/api/tracker`);
-  console.log(`📅 Period reminder cron job initialized`);
-});
+  .then(() => {
+    console.log("✅ MongoDB Atlas Connected");
+    
+    // Start server ONLY after DB is connected
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`📡 Chatbot endpoint: https://cyclecare-j2yz.onrender.com/api/chat`);
+      console.log(`🔐 Auth endpoint: https://cyclecare-j2yz.onrender.com/api/auth`);
+      console.log(`📊 Tracker endpoint: https://cyclecare-j2yz.onrender.com/api/tracker`);
+      console.log(`📅 Period reminder cron job initialized`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB Error:", err);
+    process.exit(1); // Crash the server if DB fails (Render will restart it)
+  });
