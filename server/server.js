@@ -34,7 +34,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/cycles", cyclesRoute);
 app.use("/api/daily-logs", dailyLogsRoute);
 app.use('/api/admin', adminRoutes);   // ✅ Move admin routes HERE (after app)
-
+app.get('/api/health', (req, res) => res.status(200).send('OK'));
 // Test route
 app.get("/", (req, res) => {
   res.json({
