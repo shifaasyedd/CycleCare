@@ -536,10 +536,8 @@ export default function GirlsAwareness() {
           <div style={styles.navLinks}>
             <Link to="/" style={styles.navLink}>Home</Link>
             <Link to="/category" style={styles.navLink}>Categories</Link>
-            <Link to="/contact" style={styles.navLink}>Contact</Link>
-            <Link to="/about" style={styles.navLink}>About</Link>
+            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
             <Link to="/profile" style={styles.navLink}>Profile</Link>
-            
             <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Awareness</span>
           </div>
 

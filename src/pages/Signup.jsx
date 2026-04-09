@@ -14,7 +14,7 @@ export default function Signup() {
   });
   const [errors, setErrors] = useState({});
 
-  const API_URL = "https://cyclecare-j2yz.onrender.com/api";
+  const API_URL = `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api`;
 
   useEffect(() => {
     const saved = localStorage.getItem("cyclecare_theme");

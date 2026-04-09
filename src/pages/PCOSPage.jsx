@@ -908,6 +908,7 @@ export default function PCOSPage() {
             <Link to="/" style={styles.navLink}>Home</Link>
             <Link to="/category" style={styles.navLink}>Categories</Link>
             <Link to="/tracker" style={styles.navLink}>Period Tracker</Link>
+            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
             <span style={{ ...styles.navLink, ...styles.navLinkActive }}>PCOS/PCOD</span>
           </div>
           <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>

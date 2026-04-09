@@ -180,11 +180,14 @@ Provide:
 
 Keep responses concise, supportive, and medically appropriate. Format as JSON with keys: prediction, insights (array with type, title, message), recommendation.`;
 
-        const completion = await openai.chat.completions.create({
-          model: "minimax/minimax-m2.5:free",
-          messages: [{ role: "user", content: prompt }],
-          max_tokens: 300,
-        });
+        const completion = await openai.chat.completions.create(
+          {
+            model: "google/gemini-3-flash-preview",
+            messages: [{ role: "user", content: prompt }],
+            max_tokens: 300,
+          },
+          { timeout: 15000 }
+        );
 
         const aiResponse = completion.choices[0].message.content;
         let parsed;

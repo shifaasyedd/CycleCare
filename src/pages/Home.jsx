@@ -1,22 +1,31 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  BookOpen,
+  Activity,
+  Sparkles,
+  Heart,
+  Calendar,
+  ShieldCheck,
+  ArrowRight,
+  Sun,
+  Moon,
+  Droplet,
+  LineChart,
+  MessageCircle,
+} from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 
 export default function Home() {
   const [dark, setDark] = useState(false);
   const navigate = useNavigate();
 
-  // Handle Google OAuth callback token
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
-
     if (token) {
-      // Store token in localStorage
       localStorage.setItem("token", token);
-      // Remove token from URL to avoid re-processing on refresh
       window.history.replaceState({}, document.title, "/");
-      // Redirect to category page
       navigate("/category");
     }
   }, [navigate]);
@@ -30,294 +39,447 @@ export default function Home() {
     localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
   }, [dark]);
 
+  // ---------- Theme: soft pink + rose palette to match the rest of the site ----------
   const theme = useMemo(
     () =>
       dark
         ? {
             bg: "#0A0A0F",
-            card: "rgba(25, 25, 35, 0.75)",
+            bgSoft: "#15101A",
+            card: "#19131C",
+            cardElevated: "#22192A",
             border: "rgba(255, 105, 150, 0.25)",
+            borderSoft: "rgba(255, 255, 255, 0.06)",
             text: "#FDF2F8",
-            muted: "rgba(253, 242, 248, 0.7)",
+            textMuted: "rgba(253, 242, 248, 0.65)",
             accent: "#FF6B8B",
-            accentLight: "#FF8EAA",
-            accentDark: "#E54C6F",
-            glow: "rgba(255, 107, 139, 0.35)",
-            chip: "rgba(255, 107, 139, 0.2)",
-            shadow: "rgba(0, 0, 0, 0.4)",
-            gradientStart: "#FF6B8B",
-            gradientEnd: "#FF8EAA",
+            accentSoft: "#FF8EAA",
+            accentChip: "rgba(255, 107, 139, 0.18)",
+            accentBg: "rgba(255, 107, 139, 0.12)",
+            shadow: "0 12px 40px rgba(0, 0, 0, 0.35)",
+            shadowSoft: "0 4px 16px rgba(0, 0, 0, 0.2)",
           }
         : {
             bg: "#FFF9FB",
-            card: "rgba(255, 245, 248, 0.85)",
+            bgSoft: "#FFF0F5",
+            card: "#FFFFFF",
+            cardElevated: "#FFF5F8",
             border: "rgba(229, 76, 111, 0.2)",
+            borderSoft: "rgba(45, 27, 35, 0.06)",
             text: "#2D1B23",
-            muted: "rgba(45, 27, 35, 0.65)",
+            textMuted: "rgba(45, 27, 35, 0.65)",
             accent: "#E54C6F",
-            accentLight: "#FF6B8B",
-            accentDark: "#C73E5E",
-            glow: "rgba(229, 76, 111, 0.2)",
-            chip: "rgba(229, 76, 111, 0.12)",
-            shadow: "rgba(0, 0, 0, 0.08)",
-            gradientStart: "#E54C6F",
-            gradientEnd: "#FF8EAA",
+            accentSoft: "#FB7185",
+            accentChip: "rgba(229, 76, 111, 0.12)",
+            accentBg: "#FFF0F5",
+            shadow: "0 16px 48px rgba(229, 76, 111, 0.18)",
+            shadowSoft: "0 4px 16px rgba(229, 76, 111, 0.10)",
           },
     [dark]
   );
 
+  // ---------- Styles ----------
   const styles = {
     page: {
       minHeight: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      fontFamily: "'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
-      background: dark
-        ? `radial-gradient(circle at 10% 20%, rgba(255, 107, 139, 0.15), transparent 50%),
-           radial-gradient(circle at 90% 80%, rgba(255, 142, 170, 0.12), transparent 55%),
-           ${theme.bg}`
-        : `radial-gradient(circle at 0% 0%, rgba(229, 76, 111, 0.08), transparent 45%),
-           radial-gradient(circle at 100% 100%, rgba(255, 107, 139, 0.1), transparent 50%),
-           ${theme.bg}`,
+      background: theme.bg,
       color: theme.text,
+      fontFamily:
+        "'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+      WebkitFontSmoothing: "antialiased",
     },
-    content: { flex: 1 },
-    container: { maxWidth: 1280, margin: "0 auto", padding: "0 24px" },
+    container: { maxWidth: 1200, margin: "0 auto", padding: "0 32px" },
 
+    // ---- Nav ----
     nav: {
       position: "sticky",
-      top: 20,
+      top: 24,
       zIndex: 100,
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      gap: 20,
-      padding: "12px 24px",
-      marginTop: 20,
+      gap: 24,
+      padding: "14px 22px",
+      marginTop: 24,
       borderRadius: 100,
-      background: dark ? "rgba(20, 20, 28, 0.85)" : "rgba(255, 255, 255, 0.85)",
-      backdropFilter: "blur(12px)",
-      border: `1px solid ${theme.border}`,
-      boxShadow: `0 8px 32px ${theme.shadow}`,
+      background: theme.card,
+      border: `1px solid ${theme.borderSoft}`,
+      boxShadow: theme.shadowSoft,
     },
     brand: { display: "flex", alignItems: "center", gap: 12, cursor: "pointer" },
-    logo: {
-      height: 48,
-      width: "auto",
-      filter: dark ? "drop-shadow(0 4px 12px rgba(255,107,139,0.4))" : "none",
-    },
-    brandText: { display: "flex", flexDirection: "column" },
-    brandName: { fontSize: 20, fontWeight: 800, letterSpacing: -0.3 },
-    brandTagline: { fontSize: 11, color: theme.muted, fontWeight: 500, letterSpacing: 0.3 },
-    navLinks: { display: "flex", gap: 8, alignItems: "center" },
+    logo: { height: 38, width: "auto" },
+    brandText: { display: "flex", flexDirection: "column", lineHeight: 1.1 },
+    brandName: { fontSize: 17, fontWeight: 700, letterSpacing: -0.2, color: theme.text },
+    brandTagline: { fontSize: 10, color: theme.textMuted, fontWeight: 500, marginTop: 2 },
+    navLinks: { display: "flex", gap: 4, alignItems: "center" },
     navLink: {
       padding: "8px 16px",
       borderRadius: 100,
-      fontSize: 14,
-      fontWeight: 600,
-      cursor: "pointer",
-      color: theme.muted,
-      transition: "all 0.2s ease",
-      "&:hover": { color: theme.accent, background: theme.chip },
-    },
-    navLinkActive: {
-      color: theme.accent,
-      background: theme.chip,
-    },
-    navActions: { display: "flex", alignItems: "center", gap: 12 },
-    themeToggle: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      padding: "8px 14px",
-      borderRadius: 100,
-      background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)",
-      border: `1px solid ${theme.border}`,
-      cursor: "pointer",
-      fontSize: 14,
+      fontSize: 13,
       fontWeight: 500,
-    },
-    btnOutline: {
-      padding: "8px 20px",
-      borderRadius: 100,
-      fontSize: 14,
-      fontWeight: 600,
       cursor: "pointer",
-      background: "transparent",
-      border: `1px solid ${theme.border}`,
-      color: theme.text,
+      color: theme.textMuted,
       transition: "all 0.2s",
-      "&:hover": {
-        background: theme.chip,
-        borderColor: theme.accent,
-      },
-    },
-    btnPrimary: {
-      padding: "8px 24px",
-      borderRadius: 100,
-      fontSize: 14,
-      fontWeight: 600,
-      cursor: "pointer",
-      background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
+      background: "transparent",
       border: "none",
-      color: "white",
-      boxShadow: `0 4px 14px ${theme.glow}`,
-      transition: "transform 0.2s, box-shadow 0.2s",
-      "&:hover": {
-        transform: "translateY(-2px)",
-        boxShadow: `0 8px 20px ${theme.glow}`,
-      },
     },
-
-    hero: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      textAlign: "center",
-      marginTop: 80,
-      marginBottom: 100,
-    },
-    badge: {
-      display: "inline-flex",
-      padding: "6px 14px",
+    navLinkActive: { color: theme.accent, background: theme.accentChip, fontWeight: 600 },
+    navActions: { display: "flex", alignItems: "center", gap: 10 },
+    iconBtn: {
+      width: 38,
+      height: 38,
       borderRadius: 100,
-      background: theme.chip,
-      border: `1px solid ${theme.border}`,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: theme.accentChip,
+      color: theme.accent,
+      border: "none",
+      cursor: "pointer",
+      transition: "all 0.2s",
+    },
+    btnGhost: {
+      padding: "9px 18px",
+      borderRadius: 100,
       fontSize: 13,
       fontWeight: 600,
-      color: theme.accent,
-      marginBottom: 24,
-    },
-    title: {
-      fontSize: 64,
-      fontWeight: 800,
-      lineHeight: 1.1,
-      letterSpacing: -2,
-      margin: "0 0 20px 0",
-      maxWidth: 900,
-    },
-    highlight: {
-      color: theme.accent,
-      position: "relative",
-      display: "inline-block",
-    },
-    description: {
-      fontSize: 18,
-      lineHeight: 1.6,
-      color: theme.muted,
-      margin: "0 auto 40px",
-      maxWidth: 650,
-    },
-    heroButtons: {
-      display: "flex",
-      gap: 16,
-      justifyContent: "center",
-      marginBottom: 60,
-    },
-    btnLarge: {
-      padding: "14px 36px",
-      borderRadius: 100,
-      fontSize: 16,
-      fontWeight: 600,
       cursor: "pointer",
-      transition: "all 0.2s",
-    },
-    btnPrimaryLarge: {
-      background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
-      border: "none",
-      color: "white",
-      boxShadow: `0 8px 24px ${theme.glow}`,
-    },
-    btnOutlineLarge: {
       background: "transparent",
-      border: `1.5px solid ${theme.border}`,
+      border: "none",
       color: theme.text,
     },
+    btnPrimary: {
+      padding: "10px 22px",
+      borderRadius: 100,
+      fontSize: 13,
+      fontWeight: 600,
+      cursor: "pointer",
+      background: theme.accent,
+      border: "none",
+      color: "#FFFFFF",
+      boxShadow: `0 6px 18px ${dark ? "rgba(229,76,111,0.35)" : "rgba(229,76,111,0.32)"}`,
+      transition: "transform 0.2s, box-shadow 0.2s",
+    },
 
-    features: {
+    // ---- Hero ----
+    hero: {
       display: "grid",
-      gridTemplateColumns: "repeat(3, 1fr)",
-      gap: 32,
-      marginBottom: 100,
+      gridTemplateColumns: "1.05fr 0.95fr",
+      gap: 56,
+      alignItems: "center",
+      marginTop: 72,
+      marginBottom: 96,
     },
-    featureCard: {
-      padding: 28,
-      borderRadius: 28,
-      background: theme.card,
-      border: `1px solid ${theme.border}`,
-      backdropFilter: "blur(8px)",
-      textAlign: "center",
+    heroLeft: { display: "flex", flexDirection: "column" },
+    heroBadge: {
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 8,
+      padding: "7px 14px",
+      borderRadius: 100,
+      background: theme.accentChip,
+      fontSize: 12,
+      fontWeight: 600,
+      color: theme.accent,
+      width: "fit-content",
+      marginBottom: 24,
+    },
+    heroTitle: {
+      fontSize: 60,
+      fontWeight: 700,
+      lineHeight: 1.05,
+      letterSpacing: -2,
+      margin: "0 0 22px 0",
+      color: theme.text,
+    },
+    heroAccent: { color: theme.accent, fontStyle: "italic", fontWeight: 600 },
+    heroDesc: {
+      fontSize: 16,
+      lineHeight: 1.65,
+      color: theme.textMuted,
+      margin: "0 0 36px 0",
+      maxWidth: 520,
+      fontWeight: 400,
+    },
+    heroCtas: { display: "flex", gap: 14, alignItems: "center" },
+    btnLargePrimary: {
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 10,
+      padding: "16px 28px",
+      borderRadius: 100,
+      fontSize: 14,
+      fontWeight: 600,
+      cursor: "pointer",
+      background: theme.accent,
+      border: "none",
+      color: "#FFFFFF",
+      boxShadow: `0 12px 32px ${dark ? "rgba(229,76,111,0.4)" : "rgba(229,76,111,0.32)"}`,
       transition: "transform 0.2s",
-      "&:hover": {
-        transform: "translateY(-4px)",
-      },
     },
-    featureIcon: {
-      width: 64,
-      height: 64,
+    btnLargeGhost: {
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 8,
+      padding: "16px 28px",
+      borderRadius: 100,
+      fontSize: 14,
+      fontWeight: 600,
+      cursor: "pointer",
+      background: "transparent",
+      border: `1.5px solid ${theme.borderSoft}`,
+      color: theme.text,
+      transition: "all 0.2s",
+    },
+
+    // ---- Hero preview card (right side) ----
+    heroPreview: {
+      position: "relative",
+      background: theme.card,
       borderRadius: 32,
-      background: theme.chip,
+      padding: 28,
+      boxShadow: theme.shadow,
+      border: `1px solid ${theme.borderSoft}`,
+    },
+    previewHeader: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20,
+    },
+    previewDate: { fontSize: 11, color: theme.textMuted, fontWeight: 500 },
+    previewTitle: { fontSize: 18, fontWeight: 700, color: theme.accent, marginTop: 2 },
+    previewArrow: {
+      width: 36,
+      height: 36,
+      borderRadius: 12,
+      background: theme.accent,
+      color: "#FFFFFF",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      fontSize: 32,
-      margin: "0 auto 20px",
     },
-    featureTitle: { fontSize: 20, fontWeight: 700, marginBottom: 12 },
-    featureDesc: { fontSize: 14, color: theme.muted, lineHeight: 1.6 },
-
-    quoteSection: {
-      marginBottom: 100,
-      padding: "60px 48px",
-      borderRadius: 48,
-      background: theme.card,
-      border: `1px solid ${theme.border}`,
-      backdropFilter: "blur(8px)",
+    statsRow: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12, marginBottom: 22 },
+    miniStat: {
+      background: theme.cardElevated,
+      borderRadius: 18,
+      padding: "16px 12px",
       textAlign: "center",
+      border: `1px solid ${theme.borderSoft}`,
+    },
+    miniStatHighlight: {
+      background: theme.cardElevated,
+      borderRadius: 18,
+      padding: "16px 12px",
+      textAlign: "center",
+      border: `1.5px solid ${theme.accent}`,
+    },
+    miniStatIconWrap: {
+      width: 36,
+      height: 36,
+      borderRadius: 12,
+      background: theme.accentChip,
+      color: theme.accent,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 8,
+    },
+    miniStatLabel: { fontSize: 10, color: theme.textMuted, fontWeight: 500, marginBottom: 2 },
+    miniStatValue: { fontSize: 14, fontWeight: 700, color: theme.accent },
+    chartCard: {
+      background: theme.cardElevated,
+      borderRadius: 20,
+      padding: 18,
+      border: `1px solid ${theme.borderSoft}`,
+    },
+    chartHeader: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 14,
+    },
+    chartTitle: { fontSize: 13, fontWeight: 700, color: theme.accent },
+    chartTabs: { display: "flex", gap: 4 },
+    chartTab: (active) => ({
+      width: 22,
+      height: 22,
+      borderRadius: 100,
+      fontSize: 10,
+      fontWeight: 600,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      background: active ? theme.accent : theme.accentChip,
+      color: active ? "#FFFFFF" : theme.accent,
+      cursor: "pointer",
+    }),
+    sparkline: {
+      height: 70,
+      display: "flex",
+      alignItems: "flex-end",
+      justifyContent: "space-between",
+      gap: 4,
+      padding: "0 4px",
+    },
+    sparkBar: (h) => ({
+      flex: 1,
+      height: `${h}%`,
+      background: `linear-gradient(180deg, ${theme.accent}, ${theme.accentSoft})`,
+      borderRadius: 4,
+      minHeight: 4,
+    }),
+    chartFooter: { fontSize: 11, color: theme.textMuted, marginTop: 12 },
+    chartFooterValue: { color: theme.accent, fontWeight: 700 },
+
+    // ---- Section ----
+    section: { marginBottom: 96 },
+    sectionHeader: { textAlign: "center", marginBottom: 56 },
+    sectionLabel: {
+      display: "inline-block",
+      padding: "5px 13px",
+      borderRadius: 100,
+      background: theme.accentChip,
+      fontSize: 11,
+      fontWeight: 600,
+      color: theme.accent,
+      marginBottom: 14,
+      letterSpacing: 0.4,
+      textTransform: "uppercase",
+    },
+    sectionTitle: {
+      fontSize: 38,
+      fontWeight: 700,
+      letterSpacing: -1,
+      margin: "0 0 14px 0",
+      lineHeight: 1.15,
+    },
+    sectionDesc: { fontSize: 15, color: theme.textMuted, maxWidth: 560, margin: "0 auto", lineHeight: 1.6 },
+
+    // ---- Features ----
+    features: { display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24 },
+    featureCard: {
+      background: theme.card,
+      borderRadius: 28,
+      padding: 32,
+      border: `1px solid ${theme.borderSoft}`,
+      boxShadow: theme.shadowSoft,
+      transition: "transform 0.25s, box-shadow 0.25s",
+      cursor: "default",
+    },
+    featureIconWrap: {
+      width: 56,
+      height: 56,
+      borderRadius: 18,
+      background: theme.accentChip,
+      color: theme.accent,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 22,
+    },
+    featureTitle: { fontSize: 20, fontWeight: 700, marginBottom: 10, color: theme.text },
+    featureDesc: { fontSize: 14, color: theme.textMuted, lineHeight: 1.6 },
+
+    // ---- Pillars row ----
+    pillars: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20 },
+    pillar: {
+      background: theme.card,
+      borderRadius: 24,
+      padding: 24,
+      border: `1px solid ${theme.borderSoft}`,
+      display: "flex",
+      gap: 14,
+      alignItems: "flex-start",
+    },
+    pillarIcon: {
+      width: 44,
+      height: 44,
+      borderRadius: 14,
+      background: theme.accentChip,
+      color: theme.accent,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      flexShrink: 0,
+    },
+    pillarTitle: { fontSize: 14, fontWeight: 700, marginBottom: 4, color: theme.text },
+    pillarDesc: { fontSize: 12, color: theme.textMuted, lineHeight: 1.5 },
+
+    // ---- Quote ----
+    quoteCard: {
+      background: theme.card,
+      borderRadius: 36,
+      padding: "64px 56px",
+      border: `1px solid ${theme.borderSoft}`,
+      boxShadow: theme.shadowSoft,
+      textAlign: "center",
+    },
+    quoteIcon: {
+      width: 56,
+      height: 56,
+      borderRadius: 18,
+      background: theme.accentChip,
+      color: theme.accent,
+      display: "inline-flex",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 24,
     },
     quoteText: {
-      fontSize: 24,
+      fontSize: 22,
       fontWeight: 500,
-      lineHeight: 1.4,
-      maxWidth: 800,
-      margin: "0 auto 24px",
-      fontStyle: "italic",
+      lineHeight: 1.5,
+      maxWidth: 760,
+      margin: "0 auto 20px",
+      color: theme.text,
+      letterSpacing: -0.3,
     },
-    quoteAuthor: { fontSize: 14, color: theme.muted },
+    quoteAuthor: { fontSize: 12, color: theme.textMuted, fontWeight: 600, letterSpacing: 0.5 },
 
+    // ---- CTA ----
     cta: {
-      marginBottom: 80,
-      padding: "56px 48px",
-      borderRadius: 48,
-      background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
+      borderRadius: 36,
+      padding: "60px 48px",
+      background: `linear-gradient(135deg, ${theme.accent} 0%, #FB7185 100%)`,
       textAlign: "center",
+      boxShadow: `0 24px 56px ${dark ? "rgba(229,76,111,0.3)" : "rgba(229,76,111,0.28)"}`,
+      marginBottom: 80,
     },
-    ctaTitle: { fontSize: 36, fontWeight: 700, color: "white", marginBottom: 16 },
+    ctaTitle: {
+      fontSize: 36,
+      fontWeight: 700,
+      color: "#FFFFFF",
+      marginBottom: 14,
+      letterSpacing: -1,
+    },
     ctaDesc: {
-      fontSize: 16,
-      color: "rgba(255,255,255,0.9)",
+      fontSize: 15,
+      color: "rgba(255,255,255,0.92)",
       marginBottom: 32,
-      maxWidth: 500,
+      maxWidth: 520,
       margin: "0 auto 32px",
+      lineHeight: 1.6,
     },
     ctaButton: {
-      padding: "14px 40px",
+      display: "inline-flex",
+      alignItems: "center",
+      gap: 10,
+      padding: "16px 32px",
       borderRadius: 100,
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: 600,
       cursor: "pointer",
-      background: "white",
+      background: "#FFFFFF",
       border: "none",
       color: theme.accent,
-      transition: "transform 0.2s",
-      "&:hover": {
-        transform: "scale(1.02)",
-      },
+      boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
     },
 
+    // ---- Footer ----
     footer: {
-      padding: "40px 0 32px",
-      borderTop: `1px solid ${theme.border}`,
+      padding: "36px 0",
+      borderTop: `1px solid ${theme.borderSoft}`,
       display: "flex",
       justifyContent: "space-between",
       alignItems: "center",
@@ -325,38 +487,54 @@ export default function Home() {
       gap: 20,
     },
     footerLeft: { display: "flex", alignItems: "center", gap: 12 },
-    footerLogo: { height: 32, width: "auto" },
-    footerText: { fontSize: 12, color: theme.muted },
-    footerLinks: { display: "flex", gap: 24 },
+    footerLogo: { height: 28, width: "auto" },
+    footerText: { fontSize: 12, color: theme.textMuted },
+    footerLinks: { display: "flex", gap: 28 },
     footerLink: {
-      fontSize: 13,
-      color: theme.muted,
+      fontSize: 12,
+      color: theme.textMuted,
       cursor: "pointer",
-      "&:hover": { color: theme.accent },
-    },
-
-    "@media (max-width: 1024px)": {
-      features: { gridTemplateColumns: "1fr", gap: 24 },
-      title: { fontSize: 48 },
-      quoteText: { fontSize: 20 },
-      ctaTitle: { fontSize: 28 },
-    },
-    "@media (max-width: 640px)": {
-      title: { fontSize: 36 },
-      heroButtons: { flexDirection: "column", alignItems: "center" },
-      navLinks: { display: "none" },
-      footer: { flexDirection: "column", textAlign: "center" },
-      footerLinks: { justifyContent: "center" },
+      fontWeight: 500,
+      background: "none",
+      border: "none",
     },
   };
 
-  const FeatureCard = ({ icon, title, desc }) => (
-    <div style={styles.featureCard}>
-      <div style={styles.featureIcon}>{icon}</div>
+  // ---------- Sub-components ----------
+  const FeatureCard = ({ Icon, title, desc }) => (
+    <div
+      style={styles.featureCard}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-4px)";
+        e.currentTarget.style.boxShadow = theme.shadow;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = theme.shadowSoft;
+      }}
+    >
+      <div style={styles.featureIconWrap}>
+        <Icon size={26} strokeWidth={1.8} />
+      </div>
       <h3 style={styles.featureTitle}>{title}</h3>
       <p style={styles.featureDesc}>{desc}</p>
     </div>
   );
+
+  const Pillar = ({ Icon, title, desc }) => (
+    <div style={styles.pillar}>
+      <div style={styles.pillarIcon}>
+        <Icon size={22} strokeWidth={1.8} />
+      </div>
+      <div>
+        <div style={styles.pillarTitle}>{title}</div>
+        <div style={styles.pillarDesc}>{desc}</div>
+      </div>
+    </div>
+  );
+
+  // Sparkline data (decorative)
+  const sparkData = [40, 55, 35, 70, 50, 85, 65, 90, 60, 75, 45, 80];
 
   return (
     <div style={styles.page}>
@@ -367,22 +545,26 @@ export default function Home() {
             <img src={logo} alt="CycleCare" style={styles.logo} />
             <div style={styles.brandText}>
               <span style={styles.brandName}>CycleCare</span>
-              <span style={styles.brandTagline}>For those who experience and care</span>
+              <span style={styles.brandTagline}>Care, redefined.</span>
             </div>
           </div>
 
           <div style={styles.navLinks}>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Home</span>
-            <span style={styles.navLink} onClick={() => navigate("/about")}>About</span>
-            <span style={styles.navLink} onClick={() => navigate("/contact")}>Contact</span>
+            <button style={{ ...styles.navLink, ...styles.navLinkActive }}>Home</button>
+            <button style={styles.navLink} onClick={() => navigate("/about")}>About</button>
+            <button style={styles.navLink} onClick={() => navigate("/category")}>Features</button>
+            <button style={styles.navLink} onClick={() => navigate("/contact")}>Contact</button>
           </div>
 
           <div style={styles.navActions}>
-            <div style={styles.themeToggle} onClick={() => setDark((v) => !v)}>
-              <span>{dark ? "🌙" : "☀️"}</span>
-              <span style={{ fontSize: 13 }}>{dark ? "Dark" : "Light"}</span>
-            </div>
-            <button style={styles.btnOutline} onClick={() => navigate("/login")}>
+            <button
+              style={styles.iconBtn}
+              onClick={() => setDark((v) => !v)}
+              aria-label="Toggle theme"
+            >
+              {dark ? <Sun size={16} strokeWidth={2} /> : <Moon size={16} strokeWidth={2} />}
+            </button>
+            <button style={styles.btnGhost} onClick={() => navigate("/login")}>
               Log in
             </button>
             <button style={styles.btnPrimary} onClick={() => navigate("/signup")}>
@@ -391,91 +573,196 @@ export default function Home() {
           </div>
         </nav>
 
-        {/* Hero Section */}
-        <div style={styles.hero}>
-          <span style={styles.badge}>✨ Welcome to CycleCare</span>
-          <h1 style={styles.title}>
-            Your journey with
-            <br />
-            <span style={styles.highlight}>periods, understood.</span>
-          </h1>
-          <p style={styles.description}>
-            A safe, respectful space for everyone — whether you're tracking,
-            learning, or supporting. Get personalized insights and education
-            tailored to your needs.
-          </p>
-          <div style={styles.heroButtons}>
-            <button
-              style={{ ...styles.btnLarge, ...styles.btnPrimaryLarge }}
-              onClick={() => navigate("/signup")}
-            >
-              Get Started
-            </button>
-            <button
-              style={{ ...styles.btnLarge, ...styles.btnOutlineLarge }}
-              onClick={() => navigate("/about")}
-            >
-              Learn More
-            </button>
+        {/* Hero */}
+        <section style={styles.hero}>
+          <div style={styles.heroLeft}>
+            <div style={styles.heroBadge}>
+              <Sparkles size={13} strokeWidth={2.2} />
+              Welcome to CycleCare
+            </div>
+            <h1 style={styles.heroTitle}>
+              Your journey with
+              <br />
+              periods, <span style={styles.heroAccent}>understood.</span>
+            </h1>
+            <p style={styles.heroDesc}>
+              A safe, respectful space for everyone — whether you're tracking,
+              learning, or supporting. Personalized insights and education,
+              tailored to you.
+            </p>
+            <div style={styles.heroCtas}>
+              <button
+                style={styles.btnLargePrimary}
+                onClick={() => navigate("/signup")}
+                onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-2px)")}
+                onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
+              >
+                Get Started
+                <ArrowRight size={16} strokeWidth={2.2} />
+              </button>
+              <button style={styles.btnLargeGhost} onClick={() => navigate("/about")}>
+                Learn More
+              </button>
+            </div>
           </div>
-        </div>
+
+          {/* Hero preview card */}
+          <div style={styles.heroPreview}>
+            <div style={styles.previewHeader}>
+              <div>
+                <div style={styles.previewDate}>Today, April 9</div>
+                <div style={styles.previewTitle}>Cycle Overview</div>
+              </div>
+              <div style={styles.previewArrow}>
+                <ArrowRight size={16} strokeWidth={2.2} />
+              </div>
+            </div>
+
+            <div style={styles.statsRow}>
+              <div style={styles.miniStat}>
+                <div style={styles.miniStatIconWrap}>
+                  <Droplet size={16} strokeWidth={2} />
+                </div>
+                <div style={styles.miniStatLabel}>Cycle Day</div>
+                <div style={styles.miniStatValue}>14</div>
+              </div>
+              <div style={styles.miniStat}>
+                <div style={styles.miniStatIconWrap}>
+                  <Calendar size={16} strokeWidth={2} />
+                </div>
+                <div style={styles.miniStatLabel}>Next In</div>
+                <div style={styles.miniStatValue}>13 d</div>
+              </div>
+              <div style={styles.miniStatHighlight}>
+                <div style={styles.miniStatIconWrap}>
+                  <Heart size={16} strokeWidth={2} />
+                </div>
+                <div style={styles.miniStatLabel}>Wellness</div>
+                <div style={styles.miniStatValue}>92</div>
+              </div>
+            </div>
+
+            <div style={styles.chartCard}>
+              <div style={styles.chartHeader}>
+                <div style={styles.chartTitle}>Cycle Length</div>
+                <div style={styles.chartTabs}>
+                  <div style={styles.chartTab(true)}>D</div>
+                  <div style={styles.chartTab(false)}>W</div>
+                  <div style={styles.chartTab(false)}>M</div>
+                  <div style={styles.chartTab(false)}>Y</div>
+                </div>
+              </div>
+              <div style={styles.sparkline}>
+                {sparkData.map((h, i) => (
+                  <div key={i} style={styles.sparkBar(h)} />
+                ))}
+              </div>
+              <div style={styles.chartFooter}>
+                Average <span style={styles.chartFooterValue}>28 days</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Features */}
-        <div style={styles.features}>
-          <FeatureCard
-            icon="📚"
-            title="Learn & Understand"
-            desc="Age-appropriate education for every stage — from first period to cycle tracking."
-          />
-          <FeatureCard
-            icon="📱"
-            title="Track with Ease"
-            desc="Simple logging tools to monitor your cycle, symptoms, and overall wellness."
-          />
-          <FeatureCard
-            icon="💡"
-            title="Personalized Insights"
-            desc="Get predictions and insights based on your unique cycle patterns."
-          />
-        </div>
+        <section style={styles.section}>
+          <div style={styles.sectionHeader}>
+            <span style={styles.sectionLabel}>What we offer</span>
+            <h2 style={styles.sectionTitle}>Built for understanding</h2>
+            <p style={styles.sectionDesc}>
+              Three thoughtful tools designed to make cycle care simple, respectful,
+              and accessible to everyone.
+            </p>
+          </div>
+          <div style={styles.features}>
+            <FeatureCard
+              Icon={BookOpen}
+              title="Learn & Understand"
+              desc="Age-appropriate education for every stage — from first period to cycle tracking."
+            />
+            <FeatureCard
+              Icon={Activity}
+              title="Track with Ease"
+              desc="Simple logging tools to monitor your cycle, symptoms, and overall wellness."
+            />
+            <FeatureCard
+              Icon={LineChart}
+              title="Personalized Insights"
+              desc="Get predictions and insights based on your unique cycle patterns."
+            />
+          </div>
+        </section>
+
+        {/* Pillars */}
+        <section style={styles.section}>
+          <div style={styles.sectionHeader}>
+            <span style={styles.sectionLabel}>Our principles</span>
+            <h2 style={styles.sectionTitle}>Care that respects you</h2>
+            <p style={styles.sectionDesc}>
+              Every feature is built around four values that put people first.
+            </p>
+          </div>
+          <div style={styles.pillars}>
+            <Pillar
+              Icon={ShieldCheck}
+              title="Private by design"
+              desc="Your data is yours. Always encrypted, never sold."
+            />
+            <Pillar
+              Icon={Heart}
+              title="Inclusive"
+              desc="A safe space for menstruators, allies, and supporters."
+            />
+            <Pillar
+              Icon={Calendar}
+              title="Accurate"
+              desc="Smart predictions that learn from your unique patterns."
+            />
+            <Pillar
+              Icon={MessageCircle}
+              title="Supportive"
+              desc="AI guidance and resources whenever you need them."
+            />
+          </div>
+        </section>
 
         {/* Quote */}
-        <div style={styles.quoteSection}>
-          <p style={styles.quoteText}>
-            "Understanding our bodies shouldn't be complicated. CycleCare makes
-            period education and tracking simple, respectful, and accessible for
-            everyone."
-          </p>
-          <p style={styles.quoteAuthor}>— CycleCare Team</p>
-        </div>
+        <section style={styles.section}>
+          <div style={styles.quoteCard}>
+            <div style={styles.quoteIcon}>
+              <Sparkles size={26} strokeWidth={1.8} />
+            </div>
+            <p style={styles.quoteText}>
+              "Understanding our bodies shouldn't be complicated. CycleCare makes
+              period education and tracking simple, respectful, and accessible
+              for everyone."
+            </p>
+            <p style={styles.quoteAuthor}>— THE CYCLECARE TEAM</p>
+          </div>
+        </section>
 
         {/* CTA */}
-        <div style={styles.cta}>
+        <section style={styles.cta}>
           <h2 style={styles.ctaTitle}>Ready to begin?</h2>
           <p style={styles.ctaDesc}>
             Sign up today and choose the path that's right for you.
           </p>
           <button style={styles.ctaButton} onClick={() => navigate("/signup")}>
-            Create free account →
+            Create free account
+            <ArrowRight size={16} strokeWidth={2.2} />
           </button>
-        </div>
+        </section>
 
         {/* Footer */}
         <footer style={styles.footer}>
           <div style={styles.footerLeft}>
             <img src={logo} alt="CycleCare" style={styles.footerLogo} />
-            <span style={styles.footerText}>© 2025 CycleCare</span>
+            <span style={styles.footerText}>© 2025 CycleCare. All rights reserved.</span>
           </div>
           <div style={styles.footerLinks}>
-            <span style={styles.footerLink} onClick={() => navigate("/about")}>
-              About
-            </span>
-            <span style={styles.footerLink} onClick={() => navigate("/contact")}>
-              Contact
-            </span>
-            <span style={styles.footerLink} onClick={() => navigate("/terms")}>
-              Terms
-            </span>
+            <button style={styles.footerLink} onClick={() => navigate("/about")}>About</button>
+            <button style={styles.footerLink} onClick={() => navigate("/contact")}>Contact</button>
+            <button style={styles.footerLink} onClick={() => navigate("/terms")}>Terms</button>
           </div>
         </footer>
       </div>

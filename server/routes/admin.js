@@ -6,11 +6,16 @@ const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Hardcoded admin emails — kept in sync with the frontend bypass in src/pages/Admin.jsx
+const ADMIN_EMAILS = ['shifashoebsyed@gmail.com'];
+const isAdminUser = (user) =>
+  !!user && (user.isAdmin === true || ADMIN_EMAILS.includes((user.email || '').toLowerCase()));
+
 // Admin middleware
 const isAdmin = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
-    if (!user || !user.isAdmin) {
+    if (!isAdminUser(user)) {
       return res.status(403).json({ success: false, error: 'Admin access required' });
     }
     next();
@@ -23,7 +28,7 @@ const isAdmin = async (req, res, next) => {
 router.get('/verify', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    res.json({ isAdmin: user?.isAdmin === true });
+    res.json({ isAdmin: isAdminUser(user) });
   } catch (err) {
     res.status(500).json({ isAdmin: false });
   }

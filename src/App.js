@@ -14,6 +14,7 @@ import Chatbot from "./pages/Chatbot";
 import PCOSPage from "./pages/PCOSPage";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
+import Dashboard from "./pages/Dashboard";
 import Terms from "./pages/Terms";
 import Shopping from "./pages/Shopping";
 import Dashboard from "./pages/Dashboard";
@@ -21,7 +22,7 @@ import Dashboard from "./pages/Dashboard";
 function AppContent() {
   const location = useLocation();
   const navigate = useNavigate();
-  const API_URL = "https://cyclecare-j2yz.onrender.com";
+  const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -78,6 +79,7 @@ function AppContent() {
       <Route path="/pcos-tracker" element={<PCOSPage />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/shopping" element={<Shopping />} />
       <Route path="/dashboard" element={<Dashboard />} />

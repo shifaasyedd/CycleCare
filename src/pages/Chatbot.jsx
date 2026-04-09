@@ -99,12 +99,59 @@ export default function Chatbot() {
     [dark]
   );
 
+<<<<<<< HEAD
   const getBackPath = () => {
     switch(userRole) {
       case "men": return "/men-support";
       case "girls": return "/girls-awareness";
       case "women": return "/tracker";
       default: return "/category";
+=======
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chat, loading]);
+
+  const sendMessage = async () => {
+    if (!message.trim() || loading) return;
+
+    const currentMessage = message.trim();
+    const userMsg = { sender: "user", text: currentMessage };
+
+    setChat((prev) => [...prev, userMsg]);
+    setMessage("");
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: currentMessage,
+          history: chat,
+        }),
+      });
+
+      const data = await res.json();
+
+      const botMsg = {
+        sender: "bot",
+        text: data.reply,
+      };
+
+      setChat((prev) => [...prev, botMsg]);
+    } catch (error) {
+      setChat((prev) => [
+        ...prev,
+        {
+          sender: "bot",
+          text: "Something went wrong. Please try again.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+>>>>>>> 168d7c5cba798b3548c411062c06277c019d53dc
     }
   };
 
