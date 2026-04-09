@@ -1,12 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const OpenAI = require("openai");
+const axios = require("axios");
 
-// Initialize the client with the correct, live endpoint
-const hf = new OpenAI({
-  baseURL: "https://router.huggingface.co/v1/",
-  apiKey: process.env.HF_API_KEY,
-});
+const HF_API_KEY = process.env.HF_API_KEY;
+const HF_MODEL = "meta-llama/Llama-3.2-3B-Instruct";
 
 // Your existing fallback logic, which is good to keep
 function getFallbackReply(message) {
@@ -36,33 +33,31 @@ router.post("/", async (req, res) => {
       return res.json({ reply: getFallbackReply("hi") });
     }
 
-    // --- THE CORRECTED AI CALL ---
+    // --- Using HuggingFace Inference API ---
     try {
-      const completion = await hf.chat.completions.create({
-        // This model is confirmed to work with the chat endpoint
-        model: "google/gemma-4-31B-it",
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are CycleCare, a supportive menstrual health expert. Give empathetic, concise answers (1-2 sentences).",
+      const response = await axios.post(
+        `https://api-inference.huggingface.co/models/${HF_MODEL}`,
+        {
+          inputs: `You are CycleCare, a supportive menstrual health expert. Give empathetic, concise answers (1-2 sentences).\n\nUser: ${userMessage}\nAssistant:`,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${HF_API_KEY}`,
+            "Content-Type": "application/json",
           },
-          { role: "user", content: userMessage },
-        ],
-        max_tokens: 200,
-        temperature: 0.7,
-        extra_body: { options: { wait_for_model: true } },
-      });
+          timeout: 30000,
+        }
+      );
 
-      const aiReply = completion.choices?.[0]?.message?.content;
-      if (aiReply && aiReply.trim()) {
+      const aiReply = response.data?.[0]?.generated_text?.split("Assistant:")?.[1]?.trim();
+      if (aiReply && aiReply.length > 10) {
         return res.json({ reply: aiReply });
       } else {
-        throw new Error("Empty response from AI model");
+        throw new Error("Empty or too short response from AI model");
       }
     } catch (aiError) {
       console.error("AI API Error:", aiError.message);
-      // Fall through to your existing fallback
+      // Fall through to fallback
     }
 
     // Fallback if AI fails

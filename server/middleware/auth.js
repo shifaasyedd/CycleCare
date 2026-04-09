@@ -15,6 +15,8 @@ const protect = async (req, res, next) => {
         return res.status(401).json({ success: false, error: 'User not found' });
       }
 
+
+
       // ✅ Update lastActive timestamp (real-time tracking)
       req.user.lastActive = new Date();
       await req.user.save().catch(err => console.error("Failed to update lastActive:", err));
