@@ -39,41 +39,41 @@ export default function Home() {
     localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
   }, [dark]);
 
-  // ---------- Theme: soft peach + coral palette inspired by reference ----------
+  // ---------- Theme: soft pink + rose palette to match the rest of the site ----------
   const theme = useMemo(
     () =>
       dark
         ? {
-            bg: "#1A0F12",
-            bgSoft: "#22151A",
-            card: "#2A1A1F",
-            cardElevated: "#33202A",
-            border: "rgba(248, 133, 107, 0.18)",
+            bg: "#0A0A0F",
+            bgSoft: "#15101A",
+            card: "#19131C",
+            cardElevated: "#22192A",
+            border: "rgba(255, 105, 150, 0.25)",
             borderSoft: "rgba(255, 255, 255, 0.06)",
-            text: "#FFF5F0",
-            textMuted: "rgba(255, 245, 240, 0.62)",
-            accent: "#F8856B",
-            accentSoft: "#FFD4C7",
-            accentChip: "rgba(248, 133, 107, 0.18)",
-            accentBg: "rgba(248, 133, 107, 0.12)",
+            text: "#FDF2F8",
+            textMuted: "rgba(253, 242, 248, 0.65)",
+            accent: "#FF6B8B",
+            accentSoft: "#FF8EAA",
+            accentChip: "rgba(255, 107, 139, 0.18)",
+            accentBg: "rgba(255, 107, 139, 0.12)",
             shadow: "0 12px 40px rgba(0, 0, 0, 0.35)",
             shadowSoft: "0 4px 16px rgba(0, 0, 0, 0.2)",
           }
         : {
-            bg: "#FFF1EA",
-            bgSoft: "#FFE8E0",
+            bg: "#FFF9FB",
+            bgSoft: "#FFF0F5",
             card: "#FFFFFF",
-            cardElevated: "#FFF8F4",
-            border: "rgba(248, 133, 107, 0.18)",
+            cardElevated: "#FFF5F8",
+            border: "rgba(229, 76, 111, 0.2)",
             borderSoft: "rgba(45, 27, 35, 0.06)",
             text: "#2D1B23",
-            textMuted: "#8A7178",
-            accent: "#F8856B",
-            accentSoft: "#FFD4C7",
-            accentChip: "#FFE8E0",
-            accentBg: "#FFF1EA",
-            shadow: "0 16px 48px rgba(248, 133, 107, 0.18)",
-            shadowSoft: "0 4px 16px rgba(248, 133, 107, 0.10)",
+            textMuted: "rgba(45, 27, 35, 0.65)",
+            accent: "#E54C6F",
+            accentSoft: "#FB7185",
+            accentChip: "rgba(229, 76, 111, 0.12)",
+            accentBg: "#FFF0F5",
+            shadow: "0 16px 48px rgba(229, 76, 111, 0.18)",
+            shadowSoft: "0 4px 16px rgba(229, 76, 111, 0.10)",
           },
     [dark]
   );
@@ -157,7 +157,7 @@ export default function Home() {
       background: theme.accent,
       border: "none",
       color: "#FFFFFF",
-      boxShadow: `0 6px 18px ${dark ? "rgba(248,133,107,0.35)" : "rgba(248,133,107,0.32)"}`,
+      boxShadow: `0 6px 18px ${dark ? "rgba(229,76,111,0.35)" : "rgba(229,76,111,0.32)"}`,
       transition: "transform 0.2s, box-shadow 0.2s",
     },
 
@@ -214,7 +214,7 @@ export default function Home() {
       background: theme.accent,
       border: "none",
       color: "#FFFFFF",
-      boxShadow: `0 12px 32px ${dark ? "rgba(248,133,107,0.4)" : "rgba(248,133,107,0.32)"}`,
+      boxShadow: `0 12px 32px ${dark ? "rgba(229,76,111,0.4)" : "rgba(229,76,111,0.32)"}`,
       transition: "transform 0.2s",
     },
     btnLargeGhost: {
@@ -441,9 +441,9 @@ export default function Home() {
     cta: {
       borderRadius: 36,
       padding: "60px 48px",
-      background: `linear-gradient(135deg, ${theme.accent} 0%, #FFA38C 100%)`,
+      background: `linear-gradient(135deg, ${theme.accent} 0%, #FB7185 100%)`,
       textAlign: "center",
-      boxShadow: `0 24px 56px ${dark ? "rgba(248,133,107,0.3)" : "rgba(248,133,107,0.28)"}`,
+      boxShadow: `0 24px 56px ${dark ? "rgba(229,76,111,0.3)" : "rgba(229,76,111,0.28)"}`,
       marginBottom: 80,
     },
     ctaTitle: {
