@@ -15,6 +15,7 @@ const cyclesRoute = require("./routes/cycles");
 const dailyLogsRoute = require("./routes/dailyLogs");
 const trackerRoutes = require('./routes/tracker');
 const adminRoutes = require('./routes/admin');   // ✅ Import admin routes
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();   // ✅ app is created HERE
 initCronJobs();
@@ -34,6 +35,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/cycles", cyclesRoute);
 app.use("/api/daily-logs", dailyLogsRoute);
 app.use('/api/admin', adminRoutes);   // ✅ Move admin routes HERE (after app)
+app.use('/api/dashboard', dashboardRoutes);
 app.get('/api/health', (req, res) => res.status(200).send('OK'));
 // Test route
 app.get("/", (req, res) => {
