@@ -6,12 +6,13 @@ const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
   apiKey: process.env.OPENROUTER_API_KEY,
   defaultHeaders: {
-    "HTTP-Referer": "http://localhost:5000",
+    "HTTP-Referer": process.env.FRONTEND_URL || "http://localhost:3000",
     "X-Title": "CycleCare Chatbot",
   },
 });
 
-const MODEL = "minimax/minimax-m2.5:free";
+const MODEL = "google/gemini-3-flash-preview";
+const REQUEST_TIMEOUT_MS = 15000;
 
 // Your existing fallback logic, which is good to keep
 function getFallbackReply(message) {
@@ -32,6 +33,8 @@ function getFallbackReply(message) {
 router.post("/", async (req, res) => {
   try {
     const userMessage = req.body?.message?.trim();
+    const history = Array.isArray(req.body?.history) ? req.body.history : [];
+
     if (!userMessage) {
       return res.status(400).json({ reply: "Please send a message." });
     }
@@ -41,20 +44,35 @@ router.post("/", async (req, res) => {
       return res.json({ reply: getFallbackReply("hi") });
     }
 
-    // --- Using HuggingFace Inference Providers (OpenAI-compatible) ---
+    // Build messages with conversation history (last 8 turns for context)
+    const recentHistory = history
+      .slice(-8)
+      .filter((m) => m && m.text && (m.sender === "user" || m.sender === "bot"))
+      .map((m) => ({
+        role: m.sender === "user" ? "user" : "assistant",
+        content: m.text,
+      }));
+
+    const messages = [
+      {
+        role: "system",
+        content:
+          "You are CycleCare, a supportive menstrual health expert. Give empathetic, concise answers (1-2 sentences).",
+      },
+      ...recentHistory,
+      { role: "user", content: userMessage },
+    ];
+
     try {
-      const completion = await openai.chat.completions.create({
-        model: MODEL,
-        messages: [
-          {
-            role: "system",
-            content: "You are CycleCare, a supportive menstrual health expert. Give empathetic, concise answers (1-2 sentences).",
-          },
-          { role: "user", content: userMessage },
-        ],
-        max_tokens: 200,
-        temperature: 0.7,
-      });
+      const completion = await openai.chat.completions.create(
+        {
+          model: MODEL,
+          messages,
+          max_tokens: 200,
+          temperature: 0.7,
+        },
+        { timeout: REQUEST_TIMEOUT_MS }
+      );
 
       const aiReply = completion.choices?.[0]?.message?.content;
       if (aiReply && aiReply.trim()) {
