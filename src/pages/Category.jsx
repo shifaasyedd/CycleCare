@@ -558,6 +558,7 @@ export default function Category() {
             <Link to="/" style={styles.navLink}>Home</Link>
             <Link to="/about" style={styles.navLink}>About</Link>
             <Link to="/contact" style={styles.navLink}>Contact</Link>
+            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
             <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Categories</span>
           </div>
 

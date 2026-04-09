@@ -19,7 +19,9 @@ const generateToken = (id) => {
     });
 };
 
-// 🌐 [GET] GOOGLE LOGIN 
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://thecyclecare.vercel.app";
+
+// 🌐 [GET] GOOGLE LOGIN
 router.get(
     "/google",
     passport.authenticate("google", {
@@ -27,21 +29,20 @@ router.get(
     })
 );
 
-// 🌐 [GET] GOOGLE CALLBACK 
+// 🌐 [GET] GOOGLE CALLBACK
 router.get(
     "/google/callback",
-    passport.authenticate("google", { session: false, failureRedirect: "https://thecyclecare.vercel.app/login" }),
+    passport.authenticate("google", { session: false, failureRedirect: `${process.env.FRONTEND_URL || "https://thecyclecare.vercel.app"}/login` }),
     (req, res) => {
         try {
             if (!req.user) {
-                return res.redirect("https://thecyclecare.vercel.app/login?error=auth_failed");
+                return res.redirect(`${FRONTEND_URL}/login?error=auth_failed`);
             }
             const token = generateToken(req.user._id);
-            const frontendUrl = "https://thecyclecare.vercel.app";
-            res.redirect(`${frontendUrl}/login-success?token=${token}`);
+            res.redirect(`${FRONTEND_URL}/login-success?token=${token}`);
         } catch (error) {
             console.error("Google Auth Error:", error);
-            res.redirect("https://thecyclecare.vercel.app/login?error=server_error");
+            res.redirect(`${FRONTEND_URL}/login?error=server_error`);
         }
     }
 );
@@ -111,7 +112,7 @@ router.post('/login', async (req, res) => {
 router.get('/verify-email', async (req, res) => {
     // This endpoint is no longer used but kept for backward compatibility.
     // Redirect to login with a message.
-    res.redirect("https://thecyclecare.vercel.app/login?message=Email+verification+no+longer+required");
+    res.redirect(`${FRONTEND_URL}/login?message=Email+verification+no+longer+required`);
 });
 
 // 🔐 [GET] GET CURRENT USER 

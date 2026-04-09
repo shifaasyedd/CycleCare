@@ -1138,10 +1138,9 @@ function cycleStartForDate(date) {
           </div>
           <div style={styles.navLinks}>
             <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/about" style={styles.navLink}>About</Link>
-            <Link to="/contact" style={styles.navLink}>Contact</Link>
-            <Link to="/profile" style={styles.navLink}>Profile</Link>
+            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
             <Link to="/pcos-tracker" style={styles.navLink}>PCOS/PCOD</Link>
+            <Link to="/profile" style={styles.navLink}>Profile</Link>
             <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Tracker</span>
           </div>
           <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>

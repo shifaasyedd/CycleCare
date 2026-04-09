@@ -361,6 +361,7 @@ export default function Shopping() {
             <Link to="/" style={styles.navLink}>Home</Link>
             <Link to="/category" style={styles.navLink}>Categories</Link>
             <Link to="/contact" style={styles.navLink}>Contact</Link>
+            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
             <Link to="/profile" style={styles.navLink}>Profile</Link>
         </div>
 

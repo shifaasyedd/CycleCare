@@ -421,6 +421,7 @@ export default function Profile() {
           <div style={styles.navLinks}>
             <Link to="/" style={styles.navLink}>Home</Link>
             <Link to="/category" style={styles.navLink}>Categories</Link>
+            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
             <Link to="/contact" style={styles.navLink}>Contact</Link>
             <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Profile</span>
           </div>
