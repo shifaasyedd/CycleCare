@@ -16,6 +16,7 @@ import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
 import Terms from "./pages/Terms";
 import Shopping from "./pages/Shopping";
+import Dashboard from "./pages/Dashboard";
 
 function AppContent() {
   const location = useLocation();
@@ -79,6 +80,7 @@ function AppContent() {
       <Route path="/admin" element={<Admin />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/shopping" element={<Shopping />} />
+      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   );
 }

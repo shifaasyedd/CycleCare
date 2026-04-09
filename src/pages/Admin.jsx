@@ -28,6 +28,7 @@ export default function Admin() {
 
   // ---------- Fetch real-time data ----------
   const fetchData = useCallback(async () => {
+    console.log("fetchData called, isAdmin =", isAdmin);
     if (!isAdmin) return;
     try {
       const [usersRes, statsRes] = await Promise.all([
@@ -64,19 +65,26 @@ export default function Admin() {
   // Admin verification
   useEffect(() => {
     const checkAdminAuth = async () => {
-      const userStr = localStorage.getItem("cyclecare_user");
-      if (!userStr) {
-        alert("Please login first.");
-        navigate("/login");
-        return;
-      }
-      const user = JSON.parse(userStr);
-      if (user.email === "shifashoebsyed@gmail.com") {
-        localStorage.setItem("cyclecare_is_admin", "true");
-        setIsAdmin(true);
-        setLoading(false);
-        return;
-      }
+  console.log("🔍 Checking admin auth...");
+  const userStr = localStorage.getItem("cyclecare_user");
+  console.log("User from localStorage:", userStr);
+  
+  if (!userStr) {
+    alert("Please login first.");
+    navigate("/login");
+    return;
+  }
+  
+  const user = JSON.parse(userStr);
+  console.log("Parsed user email:", user.email);
+  
+  if (user.email === "shifashoebsyed@gmail.com") {
+    console.log("✅ Email matched hardcoded admin, setting isAdmin=true");
+    localStorage.setItem("cyclecare_is_admin", "true");
+    setIsAdmin(true);
+    setLoading(false);
+    return;
+  }
       try {
         const res = await fetch(`${API_URL}/api/admin/verify`, {
           headers: { Authorization: `Bearer ${token}` },
