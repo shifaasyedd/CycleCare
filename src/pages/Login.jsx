@@ -78,21 +78,40 @@ export default function Login() {
     if (!validateForm()) return;
 
     if (adminMode) {
-      if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASSWORD) {
-        localStorage.setItem("cyclecare_logged_in", "true");
-        localStorage.setItem(
-          "cyclecare_user",
-          JSON.stringify({
-            email: formData.email,
-            name: "Admin",
-            isAdmin: true,
-          })
-        );
-        localStorage.setItem("cyclecare_is_admin", "true");
-        navigate("/admin");
-      } else {
+      if (formData.email !== ADMIN_EMAIL || formData.password !== ADMIN_PASSWORD) {
         setAdminError("Invalid admin email or password. Please try again.");
+        return;
       }
+      // Hit the real backend login so we get a JWT — the admin pages need it
+      // to call /api/admin/* (the backend grants admin via the hardcoded
+      // ADMIN_EMAILS list, so any valid token for this account works).
+      fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email, password: formData.password }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            localStorage.setItem("cyclecare_token", data.token);
+            localStorage.setItem("cyclecare_logged_in", "true");
+            localStorage.setItem(
+              "cyclecare_user",
+              JSON.stringify({
+                email: data.user.email,
+                name: data.user.name || "Admin",
+                isAdmin: true,
+              })
+            );
+            localStorage.setItem("cyclecare_is_admin", "true");
+            navigate("/admin");
+          } else {
+            setAdminError(data.error || "Admin account not found on the server.");
+          }
+        })
+        .catch(() => {
+          setAdminError("Network error. Please check your connection.");
+        });
       return;
     }
 
