@@ -24,38 +24,72 @@ export default function Admin() {
   const [error, setError] = useState(null);
 
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-  const token = localStorage.getItem("cyclecare_token");
+
+  const getToken = () => localStorage.getItem("cyclecare_token");
 
   // ---------- Fetch real-time data ----------
   const fetchData = useCallback(async () => {
-    console.log("fetchData called, isAdmin =", isAdmin);
-    if (!isAdmin) return;
+    const token = getToken();
+    setLoading(true);
+    setError(null);
+    console.log("fetchData called, isAdmin =", isAdmin, "token =", token ? "present" : "missing");
+    if (!isAdmin) {
+      setLoading(false);
+      return;
+    }
+    if (!token) {
+      console.error("No token found");
+      setError("Please login first");
+      setLoading(false);
+      return;
+    }
     try {
       const [usersRes, statsRes] = await Promise.all([
         fetch(`${API_URL}/api/admin/users`, { headers: { Authorization: `Bearer ${token}` } }),
         fetch(`${API_URL}/api/admin/stats`, { headers: { Authorization: `Bearer ${token}` } })
       ]);
       
-      if (usersRes.ok) {
+      console.log("usersRes status:", usersRes.status, "statsRes status:", statsRes.status);
+      
+      if (!usersRes.ok) {
+        const errText = await usersRes.text();
+        console.error("Users API error:", usersRes.status, errText);
+        setError(`Failed to load users (${usersRes.status})`);
+      } else {
         const usersData = await usersRes.json();
-        if (usersData.success) setUsers(usersData.users);
+        if (usersData.success) {
+          setUsers(usersData.users);
+        } else {
+          setError(usersData.error || "Failed to load users");
+        }
       }
-      if (statsRes.ok) {
+      
+      if (!statsRes.ok) {
+        const errText = await statsRes.text();
+        console.error("Stats API error:", statsRes.status, errText);
+        setError(`Failed to load stats (${statsRes.status})`);
+      } else {
         const statsData = await statsRes.json();
         if (statsData.success) {
           setStats(statsData.stats);
           setActivityData(statsData.activity);
+        } else {
+          setError(statsData.error || "Failed to load stats");
         }
       }
     } catch (err) {
       console.error("Fetch error:", err);
       setError("Failed to load real-time data");
+    } finally {
+      setLoading(false);
     }
-  }, [isAdmin, token, API_URL]);
+  }, [isAdmin, API_URL]);
 
   // Poll every 30 seconds
   useEffect(() => {
+    console.log("isAdmin changed:", isAdmin);
     if (isAdmin) {
+      console.log("Calling fetchData because isAdmin=true");
       fetchData();
       const interval = setInterval(fetchData, 30000);
       return () => clearInterval(interval);
@@ -86,6 +120,7 @@ export default function Admin() {
     return;
   }
       try {
+        const token = getToken();
         const res = await fetch(`${API_URL}/api/admin/verify`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -104,7 +139,7 @@ export default function Admin() {
       }
     };
     checkAdminAuth();
-  }, [navigate, token, API_URL]);
+  }, [navigate, API_URL]);
 
   // Theme management
   useEffect(() => {
