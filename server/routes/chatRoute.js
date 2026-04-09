@@ -3,11 +3,15 @@ const router = express.Router();
 const OpenAI = require("openai");
 
 const openai = new OpenAI({
-  baseURL: "https://router.huggingface.co/v1",
-  apiKey: process.env.HF_API_KEY,
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.OPENROUTER_API_KEY,
+  defaultHeaders: {
+    "HTTP-Referer": "http://localhost:5000",
+    "X-Title": "CycleCare Chatbot",
+  },
 });
 
-const MODEL = "Qwen/Qwen2.5-3B-Instruct";
+const MODEL = "minimax/minimax-m2.5:free";
 
 // Your existing fallback logic, which is good to keep
 function getFallbackReply(message) {
