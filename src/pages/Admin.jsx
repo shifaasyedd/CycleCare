@@ -22,6 +22,7 @@ export default function Admin() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [debugInfo, setDebugInfo] = useState("");
 
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
@@ -50,6 +51,7 @@ export default function Admin() {
       ]);
       
       console.log("usersRes status:", usersRes.status, "statsRes status:", statsRes.status);
+      console.log("Headers sent:", { Authorization: `Bearer ${token?.substring(0, 20)}...` });
       
       if (!usersRes.ok) {
         const errText = await usersRes.text();
@@ -261,7 +263,11 @@ export default function Admin() {
           <span style={styles.badge}>📊 Real-Time Dashboard</span>
           <h1 style={styles.title}>User Analytics</h1>
           <p style={styles.subtitle}>Live data – updates every 30 seconds</p>
+          <button onClick={fetchData} style={{ marginTop: 12, padding: "8px 16px", background: theme.accent, color: "white", border: "none", borderRadius: 8, cursor: "pointer" }}>
+            {loading ? "Loading..." : "Refresh Data"}
+          </button>
           {error && <div style={{ color: theme.accent, fontSize: 11, marginTop: 8 }}>{error}</div>}
+          {users.length === 0 && !loading && <div style={{ color: theme.muted, fontSize: 11, marginTop: 8 }}>No users loaded - check console for errors</div>}
         </div>
 
         {/* Stats Cards */}

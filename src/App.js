@@ -17,7 +17,6 @@ import Admin from "./pages/Admin";
 import Dashboard from "./pages/Dashboard";
 import Terms from "./pages/Terms";
 import Shopping from "./pages/Shopping";
-import Dashboard from "./pages/Dashboard";
 
 function AppContent() {
   const location = useLocation();
