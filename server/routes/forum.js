@@ -9,8 +9,17 @@ const router = express.Router();
 const forumAccess = async (req, res, next) => {
   try {
     const user = await User.findById(req.user._id);
-    if (!user || !['women', 'girls'].includes(user.role)) {
-      return res.status(403).json({ success: false, error: 'Forum is only available for Women and Non-Menstruators categories' });
+    if (!user) return res.status(403).json({ success: false, error: 'User not found' });
+
+    // If DB role is not set yet, check if frontend sent it via header and sync it
+    if (!['women', 'girls'].includes(user.role)) {
+      const clientRole = req.headers['x-user-role'];
+      if (clientRole && ['women', 'girls'].includes(clientRole)) {
+        user.role = clientRole;
+        await user.save();
+      } else {
+        return res.status(403).json({ success: false, error: 'Forum is only available for Women and Non-Menstruators categories' });
+      }
     }
     next();
   } catch (err) {

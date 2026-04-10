@@ -36,6 +36,11 @@ export default function Forum() {
 
   const API_URL = `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/forum`;
   const getToken = () => localStorage.getItem("cyclecare_token");
+  const getHeaders = () => ({
+    Authorization: `Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+    "x-user-role": localStorage.getItem("cyclecare_role") || "",
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem("cyclecare_theme");
@@ -95,7 +100,7 @@ export default function Forum() {
       const token = getToken();
       if (!token) { navigate("/login"); return; }
       const url = activeCategory ? `${API_URL}?category=${encodeURIComponent(activeCategory)}` : API_URL;
-      const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(url, { headers: getHeaders() });
       const data = await res.json();
       if (data.success) setPosts(data.posts);
     } catch { /* ignore */ } finally { setLoading(false); }
@@ -110,7 +115,7 @@ export default function Forum() {
     try {
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
+        headers: getHeaders(),
         body: JSON.stringify(newPost),
       });
       const data = await res.json();

@@ -24,7 +24,8 @@ initCronJobs();
 // Middleware
 app.use(cors({
   origin: ["https://thecyclecare.vercel.app","http://localhost:5173", "http://localhost:3000"],
-  credentials: true
+  credentials: true,
+  allowedHeaders: ["Content-Type", "Authorization", "x-user-role"],
 }));
 app.use(express.json());
 app.use(passport.initialize());

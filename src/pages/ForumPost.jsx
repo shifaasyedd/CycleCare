@@ -33,6 +33,11 @@ export default function ForumPostPage() {
 
   const API_URL = `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/forum`;
   const getToken = () => localStorage.getItem("cyclecare_token");
+  const getHeaders = () => ({
+    Authorization: `Bearer ${getToken()}`,
+    "Content-Type": "application/json",
+    "x-user-role": localStorage.getItem("cyclecare_role") || "",
+  });
 
   useEffect(() => {
     const saved = localStorage.getItem("cyclecare_theme");
@@ -87,7 +92,7 @@ export default function ForumPostPage() {
     try {
       const token = getToken();
       if (!token) { navigate("/login"); return; }
-      const res = await fetch(`${API_URL}/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch(`${API_URL}/${id}`, { headers: getHeaders() });
       const data = await res.json();
       if (data.success) setPost(data.post);
       else navigate("/forum");
@@ -101,7 +106,7 @@ export default function ForumPostPage() {
     try {
       const res = await fetch(`${API_URL}/${id}/like`, {
         method: "PUT",
-        headers: { Authorization: `Bearer ${getToken()}` },
+        headers: getHeaders(),
       });
       const data = await res.json();
       if (data.success) {
@@ -122,7 +127,7 @@ export default function ForumPostPage() {
     try {
       const res = await fetch(`${API_URL}/${id}/comments`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` },
+        headers: getHeaders(),
         body: JSON.stringify({ body: commentBody }),
       });
       const data = await res.json();
@@ -138,7 +143,7 @@ export default function ForumPostPage() {
     try {
       const res = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${getToken()}` },
+        headers: getHeaders(),
       });
       const data = await res.json();
       if (data.success) navigate("/forum");
@@ -150,7 +155,7 @@ export default function ForumPostPage() {
     try {
       const res = await fetch(`${API_URL}/${id}/comments/${commentId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${getToken()}` },
+        headers: getHeaders(),
       });
       const data = await res.json();
       if (data.success) {
