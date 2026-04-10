@@ -82,10 +82,9 @@ export default function Login() {
         setAdminError("Invalid admin email or password. Please try again.");
         return;
       }
-      // Hit the real backend login so we get a JWT — the admin pages need it
-      // to call /api/admin/* (the backend grants admin via the hardcoded
-      // ADMIN_EMAILS list, so any valid token for this account works).
-      fetch(`${API_URL}/auth/login`, {
+      // Hit the dedicated admin login endpoint — it auto-creates the admin
+      // account in the DB if it doesn't exist yet, so hardcoded creds always work.
+      fetch(`${API_URL}/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: formData.email, password: formData.password }),
