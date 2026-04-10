@@ -115,7 +115,21 @@ router.get('/verify-email', async (req, res) => {
     res.redirect(`${FRONTEND_URL}/login?message=Email+verification+no+longer+required`);
 });
 
-// 🔐 [GET] GET CURRENT USER 
+// 🔄 [PUT] UPDATE USER ROLE
+router.put('/role', protect, async (req, res) => {
+    try {
+        const { role } = req.body;
+        if (!['men', 'girls', 'women'].includes(role)) {
+            return res.status(400).json({ success: false, error: 'Invalid role' });
+        }
+        const user = await User.findByIdAndUpdate(req.user._id, { role }, { new: true });
+        res.json({ success: true, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+    } catch (err) {
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
+// 🔐 [GET] GET CURRENT USER
 router.get('/me', protect, async (req, res) => {
     try {
         res.json({ success: true, user: req.user });

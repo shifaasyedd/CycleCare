@@ -123,9 +123,10 @@ export default function Category() {
       
       // Save role to database
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("cyclecare_token");
+        const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
         if (token) {
-          const response = await fetch('http://localhost:5000/api/auth/role', {
+          const response = await fetch(`${apiUrl}/api/auth/role`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
