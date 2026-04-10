@@ -6,11 +6,14 @@ export default function MenSupport() {
   const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [flipped, setFlipped] = useState({});
   const [activeScenario, setActiveScenario] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [quizAnswers, setQuizAnswers] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const [quizSubmitted, setQuizSubmitted] = useState(false);
   const [confidenceLevel, setConfidenceLevel] = useState(null);
   const [personalNote, setPersonalNote] = useState("");
   const [noteSaved, setNoteSaved] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [viewedSections, setViewedSections] = useState({});
   const [showKit, setShowKit] = useState(false);
   const [selectedPhase, setSelectedPhase] = useState("menstruation");
@@ -39,6 +42,7 @@ export default function MenSupport() {
     setViewedSections(prev => ({ ...prev, [section]: true }));
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleQuizSubmit = () => {
     setQuizSubmitted(true);
     markSectionViewed('quiz');

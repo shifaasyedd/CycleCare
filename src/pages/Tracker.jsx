@@ -310,6 +310,7 @@ function cycleStartForDate(date) {
     return { phase, dayInCycle, phaseDay, phaseTotal };
   }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const selectedInfo = useMemo(() => phaseForDate(selectedDate), [
     selectedDate, avgCycle, typicalPeriodLen, lastStart, phaseForDate
   ]);

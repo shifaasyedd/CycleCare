@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Chatbot() {
-  const navigate = useNavigate();
-  const location = useLocation();
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
   const [loading, setLoading] = useState(false);

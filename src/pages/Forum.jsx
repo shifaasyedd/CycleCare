@@ -107,6 +107,7 @@ export default function Forum() {
       const data = await res.json();
       if (data.success) setPosts(data.posts);
     } catch { /* ignore */ } finally { setLoading(false); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [API_URL, activeCategory, navigate]);
 
   useEffect(() => { fetchPosts(); }, [fetchPosts]);

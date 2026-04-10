@@ -14,6 +14,7 @@ export default function GirlsAwareness() {
     q5: "",
   });
   const [flipped, setFlipped] = useState({});
+  // eslint-disable-next-line no-unused-vars
   const [selectedAnatomy, setSelectedAnatomy] = useState("cup");
   const [selectedSymptom, setSelectedSymptom] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState("pad");

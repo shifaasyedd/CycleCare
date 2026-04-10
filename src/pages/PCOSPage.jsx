@@ -70,6 +70,7 @@ export default function PCOSPage() {
       console.error("Error loading data:", err);
       setIsLoading(false);
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, navigate]);
 
   // Load today's log when logs load

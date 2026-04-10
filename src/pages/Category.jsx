@@ -8,6 +8,7 @@ export default function Category() {
   const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [hoveredCard, setHoveredCard] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
+  // eslint-disable-next-line no-unused-vars
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export default function Category() {
     return "Unknown";
   };
 
+  // eslint-disable-next-line no-unused-vars
   const getRoleIcon = (role) => {
     if (role === "men") return "👨";
     if (role === "girls") return "👧";
@@ -149,6 +151,7 @@ export default function Category() {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleReset = () => {
     const existingRole = localStorage.getItem("cyclecare_role");
     if (existingRole) {
@@ -179,6 +182,7 @@ export default function Category() {
     }
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleLogout = () => {
     const confirmLogout = window.confirm("Are you sure you want to logout?");
     if (confirmLogout) {

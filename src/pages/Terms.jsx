@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
 export default function Terms() {
-  const navigate = useNavigate();
   const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [lastUpdated] = useState("March 24, 2025");
 

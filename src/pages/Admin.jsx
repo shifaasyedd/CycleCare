@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Area, AreaChart,
-  BarChart, Bar, Legend,
+  XAxis, YAxis, CartesianGrid, Area, AreaChart,
+  BarChart, Bar,
 } from "recharts";
 import Navbar from "../components/Navbar";
 

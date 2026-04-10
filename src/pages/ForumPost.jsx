@@ -100,6 +100,7 @@ export default function ForumPostPage() {
       if (data.success) setPost(data.post);
       else navigate("/forum");
     } catch { navigate("/forum"); } finally { setLoading(false); }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [API_URL, id, navigate]);
 
   useEffect(() => { fetchPost(); }, [fetchPost]);
