@@ -30,7 +30,7 @@ export default function Navbar({ active }) {
 
   const t = useMemo(
     () => dark ? {
-    bg: "rgba(6,6,11,0.85)",
+    bg: "#0A0A0F",
     border: "rgba(255, 105, 150, 0.15)",
     text: "#F1EEF6",
     textSecondary: "rgba(241, 238, 246, 0.6)",
@@ -38,8 +38,8 @@ export default function Navbar({ active }) {
     accentSoft: "rgba(255, 107, 139, 0.12)",
     toggle: "rgba(255,255,255,0.06)",
   } : {
-    bg: "rgba(248,246,250,0.85)",
-    border: "rgba(229, 76, 111, 0.1)",
+    bg: "#FFFFFF",
+    border: "rgba(229, 76, 111, 0.12)",
     text: "#1A1225",
     textSecondary: "rgba(26, 18, 37, 0.6)",
     accent: "#E54C6F",
@@ -59,7 +59,7 @@ export default function Navbar({ active }) {
   return (
     <nav style={{
       position: "sticky", top: 0, zIndex: 100,
-      background: t.bg, backdropFilter: "blur(20px)",
+      background: t.bg,
       borderBottom: `1px solid ${t.border}`, padding: "0 32px",
     }}>
       <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", height: 56 }}>
