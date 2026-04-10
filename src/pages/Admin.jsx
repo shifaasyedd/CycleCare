@@ -115,7 +115,8 @@ export default function Admin() {
     localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
   }, [dark]);
 
-  const t = useMemo(() => dark ? {
+  const t = useMemo(
+    () => dark ? {
     bg: "#06060B",
     surface: "rgba(18, 18, 28, 0.95)",
     surfaceHover: "rgba(25, 25, 38, 0.95)",
@@ -165,7 +166,8 @@ export default function Admin() {
     cyanSoft: "rgba(8, 145, 178, 0.08)",
     shadow: "0 1px 3px rgba(0,0,0,0.06)",
     shadowLg: "0 8px 32px rgba(0,0,0,0.08)",
-  }), [dark]);
+  },
+  [dark]);
 
   const roleColors = { men: t.blue, girls: t.green, women: t.accent };
   const flowColors = { light: t.green, medium: t.blue, heavy: t.accent, spotting: t.amber, none: t.textTertiary };

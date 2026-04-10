@@ -560,6 +560,7 @@ export default function Category() {
             <Link to="/about" style={styles.navLink}>About</Link>
             <Link to="/contact" style={styles.navLink}>Contact</Link>
             <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
+            <Link to="/forum" style={styles.navLink}>Forum</Link>
             <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Categories</span>
           </div>
 

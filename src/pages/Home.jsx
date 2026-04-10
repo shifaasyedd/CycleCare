@@ -554,6 +554,7 @@ export default function Home() {
             <button style={styles.navLink} onClick={() => navigate("/about")}>About</button>
             <button style={styles.navLink} onClick={() => navigate("/category")}>Features</button>
             <button style={styles.navLink} onClick={() => navigate("/contact")}>Contact</button>
+            <button style={styles.navLink} onClick={() => navigate("/forum")}>Forum</button>
           </div>
 
           <div style={styles.navActions}>

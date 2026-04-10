@@ -17,6 +17,8 @@ import Admin from "./pages/Admin";
 import Dashboard from "./pages/Dashboard";
 import Terms from "./pages/Terms";
 import Shopping from "./pages/Shopping";
+import Forum from "./pages/Forum";
+import ForumPost from "./pages/ForumPost";
 
 function AppContent() {
   const location = useLocation();
@@ -81,7 +83,8 @@ function AppContent() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/shopping" element={<Shopping />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/forum" element={<Forum />} />
+      <Route path="/forum/:id" element={<ForumPost />} />
     </Routes>
   );
 }
