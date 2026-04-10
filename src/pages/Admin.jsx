@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, LineChart, Line, XAxis, YAxis } from 'recharts';
+import {
+  PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Area, AreaChart,
+  BarChart, Bar, Legend,
+} from "recharts";
 import logo from "../assets/cyclecare-logo.png";
 
 export default function Admin() {
@@ -8,132 +12,92 @@ export default function Admin() {
   const [dark, setDark] = useState(false);
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState({
-    totalUsers: 0,
-    men: 0,
-    girls: 0,
-    women: 0,
-    activeToday: 0,
-    activeThisWeek: 0,
+    totalUsers: 0, men: 0, girls: 0, women: 0,
+    activeToday: 0, activeThisWeek: 0, activeThisMonth: 0,
+    totalCycles: 0, totalLogs: 0, totalMessages: 0,
+    totalVisits: 0, totalMedications: 0, avgCycleLength: 0,
   });
   const [activityData, setActivityData] = useState([]);
+  const [signupGrowth, setSignupGrowth] = useState([]);
+  const [chatUsage, setChatUsage] = useState([]);
+  const [flowBreakdown, setFlowBreakdown] = useState([]);
+  const [topSymptoms, setTopSymptoms] = useState([]);
+  const [stressLevels, setStressLevels] = useState([]);
+  const [sleepPatterns, setSleepPatterns] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [dateRange, setDateRange] = useState("all");
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [debugInfo, setDebugInfo] = useState("");
+  const [activeTab, setActiveTab] = useState("overview");
 
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
-
   const getToken = () => localStorage.getItem("cyclecare_token");
 
-  // ---------- Fetch real-time data ----------
   const fetchData = useCallback(async () => {
     const token = getToken();
     setLoading(true);
     setError(null);
-    console.log("fetchData called, isAdmin =", isAdmin, "token =", token ? "present" : "missing");
-    if (!isAdmin) {
-      setLoading(false);
-      return;
-    }
-    if (!token) {
-      console.error("No token found");
-      setError("Please login first");
-      setLoading(false);
-      return;
-    }
+    if (!isAdmin) { setLoading(false); return; }
+    if (!token) { setError("Please login first"); setLoading(false); return; }
     try {
       const [usersRes, statsRes] = await Promise.all([
         fetch(`${API_URL}/api/admin/users`, { headers: { Authorization: `Bearer ${token}` } }),
-        fetch(`${API_URL}/api/admin/stats`, { headers: { Authorization: `Bearer ${token}` } })
+        fetch(`${API_URL}/api/admin/stats`, { headers: { Authorization: `Bearer ${token}` } }),
       ]);
-      
-      console.log("usersRes status:", usersRes.status, "statsRes status:", statsRes.status);
-      console.log("Headers sent:", { Authorization: `Bearer ${token?.substring(0, 20)}...` });
-      
-      if (!usersRes.ok) {
-        const errText = await usersRes.text();
-        console.error("Users API error:", usersRes.status, errText);
-        setError(`Failed to load users (${usersRes.status})`);
-      } else {
+      if (usersRes.ok) {
         const usersData = await usersRes.json();
-        if (usersData.success) {
-          setUsers(usersData.users);
-        } else {
-          setError(usersData.error || "Failed to load users");
-        }
+        if (usersData.success) setUsers(usersData.users);
       }
-      
-      if (!statsRes.ok) {
-        const errText = await statsRes.text();
-        console.error("Stats API error:", statsRes.status, errText);
-        setError(`Failed to load stats (${statsRes.status})`);
-      } else {
+      if (statsRes.ok) {
         const statsData = await statsRes.json();
         if (statsData.success) {
           setStats(statsData.stats);
           setActivityData(statsData.activity);
-        } else {
-          setError(statsData.error || "Failed to load stats");
+          setSignupGrowth(statsData.signupGrowth || []);
+          setChatUsage(statsData.chatUsage || []);
+          setFlowBreakdown(statsData.flowBreakdown || []);
+          setTopSymptoms(statsData.topSymptoms || []);
+          setStressLevels(statsData.stressLevels || []);
+          setSleepPatterns(statsData.sleepPatterns || []);
         }
       }
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setError("Failed to load real-time data");
+    } catch {
+      setError("Failed to load data");
     } finally {
       setLoading(false);
     }
   }, [isAdmin, API_URL]);
 
-  // Poll every 30 seconds
   useEffect(() => {
-    console.log("isAdmin changed:", isAdmin);
     if (isAdmin) {
-      console.log("Calling fetchData because isAdmin=true");
       fetchData();
       const interval = setInterval(fetchData, 30000);
       return () => clearInterval(interval);
     }
   }, [isAdmin, fetchData]);
 
-  // Admin verification
   useEffect(() => {
     const checkAdminAuth = async () => {
-  console.log("🔍 Checking admin auth...");
-  const userStr = localStorage.getItem("cyclecare_user");
-  console.log("User from localStorage:", userStr);
-  
-  if (!userStr) {
-    alert("Please login first.");
-    navigate("/login");
-    return;
-  }
-  
-  const user = JSON.parse(userStr);
-  console.log("Parsed user email:", user.email);
-  
-  if (user.email === "shifashoebsyed@gmail.com") {
-    console.log("✅ Email matched hardcoded admin, setting isAdmin=true");
-    localStorage.setItem("cyclecare_is_admin", "true");
-    setIsAdmin(true);
-    setLoading(false);
-    return;
-  }
+      const userStr = localStorage.getItem("cyclecare_user");
+      if (!userStr) { navigate("/login"); return; }
+      const user = JSON.parse(userStr);
+      if (user.email === "shifashoebsyed@gmail.com") {
+        localStorage.setItem("cyclecare_is_admin", "true");
+        setIsAdmin(true);
+        setLoading(false);
+        return;
+      }
       try {
         const token = getToken();
-        const res = await fetch(`${API_URL}/api/admin/verify`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(`${API_URL}/api/admin/verify`, { headers: { Authorization: `Bearer ${token}` } });
         if (res.ok) {
           const data = await res.json();
-          if (data.isAdmin) {
-            localStorage.setItem("cyclecare_is_admin", "true");
-            setIsAdmin(true);
-          } else throw new Error("Not admin");
-        } else throw new Error("Verification failed");
-      } catch (err) {
+          if (data.isAdmin) { setIsAdmin(true); }
+          else throw new Error();
+        } else throw new Error();
+      } catch {
         alert("Admin access only.");
         navigate("/login");
       } finally {
@@ -143,7 +107,6 @@ export default function Admin() {
     checkAdminAuth();
   }, [navigate, API_URL]);
 
-  // Theme management
   useEffect(() => {
     const saved = localStorage.getItem("cyclecare_theme");
     if (saved === "dark") setDark(true);
@@ -152,214 +115,483 @@ export default function Admin() {
     localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
   }, [dark]);
 
-  // ---------- Colors & helpers ----------
-  const theme = useMemo(() => dark ? {
-    bg: "#0A0A0F",
-    card: "rgba(25, 25, 35, 0.85)",
-    border: "rgba(255, 105, 150, 0.3)",
-    text: "#FDF2F8",
-    muted: "rgba(253, 242, 248, 0.7)",
+  const t = useMemo(() => dark ? {
+    bg: "#06060B",
+    surface: "rgba(18, 18, 28, 0.95)",
+    surfaceHover: "rgba(25, 25, 38, 0.95)",
+    border: "rgba(255, 105, 150, 0.15)",
+    borderStrong: "rgba(255, 105, 150, 0.3)",
+    text: "#F1EEF6",
+    textSecondary: "rgba(241, 238, 246, 0.6)",
+    textTertiary: "rgba(241, 238, 246, 0.4)",
     accent: "#FF6B8B",
+    accentSoft: "rgba(255, 107, 139, 0.12)",
     gradientStart: "#FF6B8B",
     gradientEnd: "#FF8EAA",
     green: "#4ADE80",
-    blue: "#3B82F6",
-    chip: "rgba(255, 255, 255, 0.08)",      // ✅ added
+    greenSoft: "rgba(74, 222, 128, 0.12)",
+    blue: "#60A5FA",
+    blueSoft: "rgba(96, 165, 250, 0.12)",
+    purple: "#C084FC",
+    purpleSoft: "rgba(192, 132, 252, 0.12)",
+    amber: "#FBBF24",
+    amberSoft: "rgba(251, 191, 36, 0.12)",
+    cyan: "#22D3EE",
+    cyanSoft: "rgba(34, 211, 238, 0.12)",
+    shadow: "0 1px 3px rgba(0,0,0,0.4)",
+    shadowLg: "0 8px 32px rgba(0,0,0,0.4)",
   } : {
-    bg: "#FFF9FB",
-    card: "rgba(255, 245, 248, 0.95)",
-    border: "rgba(229, 76, 111, 0.2)",
-    text: "#2D1B23",
-    muted: "rgba(45, 27, 35, 0.65)",
+    bg: "#F8F6FA",
+    surface: "rgba(255, 255, 255, 0.95)",
+    surfaceHover: "rgba(255, 255, 255, 1)",
+    border: "rgba(229, 76, 111, 0.1)",
+    borderStrong: "rgba(229, 76, 111, 0.2)",
+    text: "#1A1225",
+    textSecondary: "rgba(26, 18, 37, 0.6)",
+    textTertiary: "rgba(26, 18, 37, 0.4)",
     accent: "#E54C6F",
+    accentSoft: "rgba(229, 76, 111, 0.08)",
     gradientStart: "#E54C6F",
     gradientEnd: "#FF8EAA",
     green: "#16A34A",
-    blue: "#3B82F6",
-    chip: "rgba(0, 0, 0, 0.04)",           // ✅ added
-  }, [dark]);
+    greenSoft: "rgba(22, 163, 74, 0.08)",
+    blue: "#2563EB",
+    blueSoft: "rgba(37, 99, 235, 0.08)",
+    purple: "#9333EA",
+    purpleSoft: "rgba(147, 51, 234, 0.08)",
+    amber: "#D97706",
+    amberSoft: "rgba(217, 119, 6, 0.08)",
+    cyan: "#0891B2",
+    cyanSoft: "rgba(8, 145, 178, 0.08)",
+    shadow: "0 1px 3px rgba(0,0,0,0.06)",
+    shadowLg: "0 8px 32px rgba(0,0,0,0.08)",
+  }), [dark]);
 
-  const roleColors = { men: "#3B82F6", girls: "#10B981", women: "#E54C6F" };
-  const roleIcons = { men: "👨", girls: "👧", women: "👩" };
+  const roleColors = { men: t.blue, girls: t.green, women: t.accent };
+  const flowColors = { light: t.green, medium: t.blue, heavy: t.accent, spotting: t.amber, none: t.textTertiary };
 
   const pieData = [
-    { name: "Men", value: stats.men, color: roleColors.men },
-    { name: "Non‑Menstruators", value: stats.girls, color: roleColors.girls },
-    { name: "Menstruators", value: stats.women, color: roleColors.women },
+    { name: "Men", value: stats.men, color: t.blue },
+    { name: "Non-Menstruators", value: stats.girls, color: t.green },
+    { name: "Menstruators", value: stats.women, color: t.accent },
   ];
 
-  const filteredUsers = users.filter(user => {
-    const matchSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                        user.email.toLowerCase().includes(searchTerm.toLowerCase());
-    if (dateRange === "all") return matchSearch;
-    return matchSearch && user.role === dateRange;
+  const filteredUsers = users.filter(u => {
+    const match = u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  u.email.toLowerCase().includes(searchTerm.toLowerCase());
+    if (dateRange === "all") return match;
+    return match && u.role === dateRange;
   });
 
-  if (loading) return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>Verifying admin access...</div>;
+  if (loading) return (
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: dark ? "#06060B" : "#F8F6FA", color: dark ? "#F1EEF6" : "#1A1225", fontFamily: "'Inter', sans-serif" }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{ fontSize: 32, marginBottom: 12 }}>Loading...</div>
+        <div style={{ fontSize: 13, opacity: 0.5 }}>Verifying admin access</div>
+      </div>
+    </div>
+  );
   if (!isAdmin) return null;
 
-  // Helper to safely get role color with fallback
-  const getRoleColor = (role) => roleColors[role] || "#6B7280";
+  const StatCard = ({ icon, value, label, color, bgColor, subtext }) => (
+    <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 16, padding: "20px 18px", display: "flex", flexDirection: "column", gap: 10, boxShadow: t.shadow, transition: "all 0.2s" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div style={{ width: 40, height: 40, borderRadius: 10, background: bgColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{icon}</div>
+        {subtext && <span style={{ fontSize: 10, color: t.green, fontWeight: 600, background: t.greenSoft, padding: "3px 8px", borderRadius: 100 }}>{subtext}</span>}
+      </div>
+      <div>
+        <div style={{ fontSize: 28, fontWeight: 800, color: color || t.text, letterSpacing: -0.5, lineHeight: 1 }}>{value}</div>
+        <div style={{ fontSize: 11, color: t.textSecondary, marginTop: 4, fontWeight: 500, textTransform: "uppercase", letterSpacing: 0.5 }}>{label}</div>
+      </div>
+    </div>
+  );
 
-  const styles = {
-    page: { minHeight: "100vh", background: theme.bg, color: theme.text, fontFamily: "'Inter', sans-serif" },
-    container: { maxWidth: 1280, margin: "0 auto", padding: "0 24px" },
-    nav: { position: "sticky", top: 20, display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 20px", borderRadius: 100, background: dark ? "rgba(20,20,28,0.9)" : "rgba(255,255,255,0.9)", backdropFilter: "blur(12px)", border: `1px solid ${theme.border}`, marginTop: 20 },
-    brand: { display: "flex", alignItems: "center", gap: 10, cursor: "pointer" },
-    logo: { height: 40 },
-    brandName: { fontSize: 16, fontWeight: 700 },
-    brandTagline: { fontSize: 9, color: theme.muted },
-    navLinks: { display: "flex", gap: 4 },
-    navLink: { padding: "6px 14px", borderRadius: 100, fontSize: 12, cursor: "pointer", color: theme.muted, textDecoration: "none" },
-    navLinkActive: { color: theme.accent, background: theme.chip },
-    themeToggle: { padding: "6px 12px", borderRadius: 100, background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)", border: `1px solid ${theme.border}`, cursor: "pointer" },
-    hero: { marginTop: 32, padding: 32, borderRadius: 32, background: theme.card, border: `1px solid ${theme.border}`, textAlign: "center" },
-    badge: { display: "inline-block", padding: "4px 12px", borderRadius: 100, background: theme.chip, fontSize: 11, color: theme.accent },
-    title: { fontSize: 28, fontWeight: 800, margin: "8px 0" },
-    subtitle: { fontSize: 12, color: theme.muted },
-    statsGrid: { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, marginBottom: 32 },
-    statCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 24, padding: 20, textAlign: "center" },
-    statValue: { fontSize: 32, fontWeight: 800, color: theme.accent },
-    statLabel: { fontSize: 12, color: theme.muted, marginTop: 8 },
-    statIcon: { fontSize: 28, marginBottom: 8 },
-    chartsGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, marginBottom: 32 },
-    chartCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 24, padding: 20 },
-    chartTitle: { fontSize: 16, fontWeight: 600, marginBottom: 16, textAlign: "center" },
-    filters: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 16 },
-    searchBox: { display: "flex", alignItems: "center", gap: 8, background: dark ? "rgba(255,255,255,0.05)" : "white", border: `1px solid ${theme.border}`, borderRadius: 100, padding: "6px 16px" },
-    searchInput: { background: "transparent", border: "none", outline: "none", color: theme.text, fontSize: 13, padding: "8px 0", width: 200 },
-    filterBtns: { display: "flex", gap: 8 },
-    filterBtn: (active) => ({ padding: "6px 14px", borderRadius: 100, fontSize: 12, fontWeight: 500, cursor: "pointer", background: active ? `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})` : "transparent", border: active ? "none" : `1px solid ${theme.border}`, color: active ? "white" : theme.text }),
-    usersTable: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 24, overflow: "hidden", marginBottom: 32 },
-    tableHeader: { display: "grid", gridTemplateColumns: "2fr 2fr 1.5fr 1.5fr 1.5fr 1fr", padding: "16px 20px", background: dark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.02)", borderBottom: `1px solid ${theme.border}`, fontWeight: 600, fontSize: 12 },
-    tableRow: { display: "grid", gridTemplateColumns: "2fr 2fr 1.5fr 1.5fr 1.5fr 1fr", padding: "14px 20px", borderBottom: `1px solid ${theme.border}`, fontSize: 12, cursor: "pointer", transition: "background 0.2s", ":hover": { background: theme.chip } },
-    roleBadge: (bgColor) => ({ display: "inline-flex", alignItems: "center", gap: 4, padding: "4px 8px", borderRadius: 100, background: bgColor, fontSize: 11, fontWeight: 500, width: "fit-content" }),
-    modal: { position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0,0,0,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 },
-    modalContent: { background: theme.card, borderRadius: 28, padding: 32, maxWidth: 500, width: "90%", maxHeight: "80vh", overflow: "auto" },
-    modalHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
-    modalTitle: { fontSize: 20, fontWeight: 700 },
-    closeBtn: { background: "none", border: "none", fontSize: 24, cursor: "pointer", color: theme.muted },
-    footer: { padding: "24px 0", borderTop: `1px solid ${theme.border}`, display: "flex", justifyContent: "space-between", marginTop: 24 },
+  const ChartCard = ({ title, subtitle, children, span }) => (
+    <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 16, padding: 24, boxShadow: t.shadow, gridColumn: span ? `span ${span}` : undefined }}>
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ fontSize: 15, fontWeight: 700, color: t.text }}>{title}</div>
+        {subtitle && <div style={{ fontSize: 11, color: t.textTertiary, marginTop: 2 }}>{subtitle}</div>}
+      </div>
+      {children}
+    </div>
+  );
+
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "health", label: "Health Insights" },
+    { id: "users", label: "Users" },
+  ];
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (!active || !payload?.length) return null;
+    return (
+      <div style={{ background: t.surface, border: `1px solid ${t.borderStrong}`, borderRadius: 10, padding: "10px 14px", boxShadow: t.shadowLg }}>
+        <div style={{ fontSize: 11, color: t.textSecondary, marginBottom: 4 }}>{label}</div>
+        {payload.map((p, i) => (
+          <div key={i} style={{ fontSize: 13, fontWeight: 600, color: p.color }}>{p.value} {p.name || ""}</div>
+        ))}
+      </div>
+    );
   };
 
   return (
-    <div style={styles.page}>
-      <div style={styles.container}>
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div><div style={styles.brandName}>CycleCare</div><div style={styles.brandTagline}>Admin Dashboard</div></div>
+    <div style={{ minHeight: "100vh", background: t.bg, color: t.text, fontFamily: "'Inter', system-ui, sans-serif" }}>
+      {/* Top Nav */}
+      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: dark ? "rgba(6,6,11,0.85)" : "rgba(248,246,250,0.85)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${t.border}`, padding: "0 32px" }}>
+        <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", height: 56 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => navigate("/")}>
+              <img src={logo} alt="CycleCare" style={{ height: 30 }} />
+              <span style={{ fontSize: 15, fontWeight: 700 }}>CycleCare</span>
+              <span style={{ fontSize: 10, color: t.textTertiary, background: t.accentSoft, padding: "2px 8px", borderRadius: 100, fontWeight: 600, color: t.accent }}>Admin</span>
+            </div>
+            <div style={{ display: "flex", gap: 2 }}>
+              {[{ to: "/", label: "Home" }, { to: "/category", label: "Categories" }].map(l => (
+                <Link key={l.to} to={l.to} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 13, color: t.textSecondary, textDecoration: "none", fontWeight: 500 }}>{l.label}</Link>
+              ))}
+            </div>
           </div>
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/category" style={styles.navLink}>Categories</Link>
-            <Link to="/profile" style={styles.navLink}>Profile</Link>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Admin</span>
-          </div>
-          <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>{dark ? "☀️" : "🌙"}</div>
-        </nav>
-
-        <div style={styles.hero}>
-          <span style={styles.badge}>📊 Real-Time Dashboard</span>
-          <h1 style={styles.title}>User Analytics</h1>
-          <p style={styles.subtitle}>Live data – updates every 30 seconds</p>
-          <button onClick={fetchData} style={{ marginTop: 12, padding: "8px 16px", background: theme.accent, color: "white", border: "none", borderRadius: 8, cursor: "pointer" }}>
-            {loading ? "Loading..." : "Refresh Data"}
-          </button>
-          {error && <div style={{ color: theme.accent, fontSize: 11, marginTop: 8 }}>{error}</div>}
-          {users.length === 0 && !loading && <div style={{ color: theme.muted, fontSize: 11, marginTop: 8 }}>No users loaded - check console for errors</div>}
-        </div>
-
-        {/* Stats Cards */}
-        <div style={styles.statsGrid}>
-          <div style={styles.statCard}><div style={styles.statIcon}>👥</div><div style={styles.statValue}>{stats.totalUsers}</div><div style={styles.statLabel}>Total Users</div></div>
-          <div style={styles.statCard}><div style={styles.statIcon}>🟢</div><div style={styles.statValue}>{stats.activeToday}</div><div style={styles.statLabel}>Active Today</div></div>
-          <div style={styles.statCard}><div style={styles.statIcon}>📅</div><div style={styles.statValue}>{stats.activeThisWeek}</div><div style={styles.statLabel}>Active This Week</div></div>
-          <div style={styles.statCard}><div style={styles.statIcon}>📊</div><div style={styles.statValue}>{Math.round((stats.activeToday / (stats.totalUsers || 1)) * 100)}%</div><div style={styles.statLabel}>Engagement</div></div>
-        </div>
-
-        {/* Charts */}
-        <div style={styles.chartsGrid}>
-          <div style={styles.chartCard}>
-            <div style={styles.chartTitle}>👥 User Roles Distribution</div>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value" label={({ name, percent }) => `${name}: ${(percent*100).toFixed(0)}%`}>
-                  {pieData.map((entry, idx) => <Cell key={`cell-${idx}`} fill={entry.color} />)}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-          <div style={styles.chartCard}>
-            <div style={styles.chartTitle}>📈 Active Users (Last 7 Days)</div>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={activityData}>
-                <XAxis dataKey="date" stroke={theme.muted} />
-                <YAxis stroke={theme.muted} />
-                <Tooltip />
-                <Line type="monotone" dataKey="count" stroke={theme.accent} strokeWidth={2} dot={{ fill: theme.accent }} />
-              </LineChart>
-            </ResponsiveContainer>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <button onClick={fetchData} disabled={loading} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer", background: t.accentSoft, border: `1px solid ${t.border}`, color: t.accent }}>
+              {loading ? "..." : "Refresh"}
+            </button>
+            <div style={{ padding: "6px 12px", borderRadius: 8, background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)", border: `1px solid ${t.border}`, cursor: "pointer", fontSize: 13 }} onClick={() => setDark(v => !v)}>
+              {dark ? "Light" : "Dark"}
+            </div>
           </div>
         </div>
+      </nav>
 
-        {/* Filters & Table */}
-        <div style={styles.filters}>
-          <div style={styles.searchBox}><span>🔍</span><input type="text" style={styles.searchInput} placeholder="Search..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)} /></div>
-          <div style={styles.filterBtns}>
-            {["all","men","girls","women"].map(cat => (
-              <button key={cat} style={styles.filterBtn(dateRange === cat)} onClick={() => setDateRange(cat)}>
-                {cat === "all" ? "All" : cat === "men" ? "👨 Men" : cat === "girls" ? "👧 Girls" : "👩 Women"}
-              </button>
-            ))}
+      <div style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 32px 64px" }}>
+        {/* Header */}
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 8 }}>
+            <div>
+              <h1 style={{ fontSize: 26, fontWeight: 800, margin: 0, letterSpacing: -0.5 }}>Dashboard</h1>
+              <p style={{ fontSize: 13, color: t.textSecondary, margin: "4px 0 0" }}>Real-time analytics and insights</p>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <div style={{ width: 8, height: 8, borderRadius: 4, background: t.green, animation: "pulse 2s infinite" }} />
+              <span style={{ fontSize: 11, color: t.textTertiary }}>Live - updates every 30s</span>
+            </div>
           </div>
+          {error && <div style={{ marginTop: 8, padding: "8px 14px", background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", borderRadius: 8, fontSize: 12, color: "#EF4444" }}>{error}</div>}
         </div>
 
-        <div style={styles.usersTable}>
-          <div style={styles.tableHeader}>
-            <div>Name</div><div>Email</div><div>Category</div><div>Joined</div><div>Last Active</div><div>Activity</div>
-          </div>
-          {filteredUsers.length === 0 ? (
-            <div style={{ padding: 40, textAlign: "center" }}>No users found</div>
-          ) : (
-            filteredUsers.map(user => (
-              <div key={user.id} style={styles.tableRow} onClick={() => setSelectedUser(user)}>
-                <div style={{ fontWeight: 500 }}>{user.name}</div>
-                <div style={{ color: theme.muted }}>{user.email}</div>
-                <div>
-                  <span style={styles.roleBadge((getRoleColor(user.role) + "20"))}>
-                    {roleIcons[user.role] || "❓"} {user.role === "men" ? "Men" : user.role === "girls" ? "Girls" : user.role === "women" ? "Women" : "Not selected"}
-                  </span>
+        {/* Tabs */}
+        <div style={{ display: "flex", gap: 4, marginBottom: 28, background: t.surface, borderRadius: 10, padding: 4, border: `1px solid ${t.border}`, width: "fit-content" }}>
+          {tabs.map(tab => (
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} style={{
+              padding: "8px 20px", borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: "pointer", border: "none", transition: "all 0.2s",
+              background: activeTab === tab.id ? `linear-gradient(135deg, ${t.gradientStart}, ${t.gradientEnd})` : "transparent",
+              color: activeTab === tab.id ? "white" : t.textSecondary,
+            }}>{tab.label}</button>
+          ))}
+        </div>
+
+        {/* ============ OVERVIEW TAB ============ */}
+        {activeTab === "overview" && (
+          <>
+            {/* Primary Stats */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
+              <StatCard icon="👥" value={stats.totalUsers} label="Total Users" color={t.text} bgColor={t.accentSoft} />
+              <StatCard icon="🟢" value={stats.activeToday} label="Active Today" color={t.green} bgColor={t.greenSoft} subtext={`${Math.round((stats.activeToday / (stats.totalUsers || 1)) * 100)}%`} />
+              <StatCard icon="📅" value={stats.activeThisWeek} label="Active This Week" color={t.blue} bgColor={t.blueSoft} />
+              <StatCard icon="📊" value={stats.activeThisMonth} label="Active This Month" color={t.purple} bgColor={t.purpleSoft} />
+            </div>
+
+            {/* Secondary Stats */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 16, marginBottom: 28 }}>
+              <StatCard icon="🔄" value={stats.totalCycles} label="Cycles Tracked" color={t.accent} bgColor={t.accentSoft} />
+              <StatCard icon="📝" value={stats.totalLogs} label="Daily Logs" color={t.blue} bgColor={t.blueSoft} />
+              <StatCard icon="💬" value={stats.totalMessages} label="Chat Messages" color={t.purple} bgColor={t.purpleSoft} />
+              <StatCard icon="🏥" value={stats.totalVisits} label="Doctor Visits" color={t.cyan} bgColor={t.cyanSoft} />
+              <StatCard icon="💊" value={stats.totalMedications} label="Medications" color={t.amber} bgColor={t.amberSoft} />
+            </div>
+
+            {/* Charts Row 1 */}
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20, marginBottom: 20 }}>
+              <ChartCard title="User Activity" subtitle="Daily active users - last 7 days">
+                <ResponsiveContainer width="100%" height={240}>
+                  <AreaChart data={activityData}>
+                    <defs>
+                      <linearGradient id="actGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={t.accent} stopOpacity={0.3} />
+                        <stop offset="100%" stopColor={t.accent} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke={t.border} strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="date" stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} />
+                    <YAxis stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area type="monotone" dataKey="count" stroke={t.accent} strokeWidth={2.5} fill="url(#actGrad)" name="Users" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </ChartCard>
+
+              <ChartCard title="User Roles" subtitle="Distribution by category">
+                <ResponsiveContainer width="100%" height={240}>
+                  <PieChart>
+                    <Pie data={pieData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} paddingAngle={4} dataKey="value" strokeWidth={0}>
+                      {pieData.map((entry, idx) => <Cell key={idx} fill={entry.color} />)}
+                    </Pie>
+                    <Tooltip content={<CustomTooltip />} />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 8 }}>
+                  {pieData.map(d => (
+                    <div key={d.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: t.textSecondary }}>
+                      <div style={{ width: 8, height: 8, borderRadius: 4, background: d.color }} />
+                      {d.name}: {d.value}
+                    </div>
+                  ))}
                 </div>
-                <div style={{ color: theme.muted }}>{new Date(user.createdAt).toLocaleDateString()}</div>
-                <div style={{ color: theme.muted }}>{new Date(user.lastActive).toLocaleDateString()}</div>
-                <div><span style={{ color: theme.green }}>📊 {user.cyclesTracked} cycles</span></div>
-              </div>
-            ))
-          )}
-        </div>
+              </ChartCard>
+            </div>
 
-        {selectedUser && (
-          <div style={styles.modal} onClick={() => setSelectedUser(null)}>
-            <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
-              <div style={styles.modalHeader}>
-                <div style={styles.modalTitle}>User Details</div>
-                <button style={styles.closeBtn} onClick={() => setSelectedUser(null)}>✕</button>
+            {/* Charts Row 2 */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+              <ChartCard title="User Growth" subtitle="New signups - last 30 days">
+                <ResponsiveContainer width="100%" height={220}>
+                  <AreaChart data={signupGrowth}>
+                    <defs>
+                      <linearGradient id="signupGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={t.green} stopOpacity={0.3} />
+                        <stop offset="100%" stopColor={t.green} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke={t.border} strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="date" stroke={t.textTertiary} fontSize={10} tickLine={false} axisLine={false} interval={4} />
+                    <YAxis stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area type="monotone" dataKey="count" stroke={t.green} strokeWidth={2} fill="url(#signupGrad)" name="Signups" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </ChartCard>
+
+              <ChartCard title="Chatbot Usage" subtitle="Messages - last 14 days">
+                <ResponsiveContainer width="100%" height={220}>
+                  <AreaChart data={chatUsage}>
+                    <defs>
+                      <linearGradient id="chatGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={t.purple} stopOpacity={0.3} />
+                        <stop offset="100%" stopColor={t.purple} stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid stroke={t.border} strokeDasharray="3 3" vertical={false} />
+                    <XAxis dataKey="date" stroke={t.textTertiary} fontSize={10} tickLine={false} axisLine={false} interval={2} />
+                    <YAxis stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area type="monotone" dataKey="count" stroke={t.purple} strokeWidth={2} fill="url(#chatGrad)" name="Messages" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </ChartCard>
+            </div>
+          </>
+        )}
+
+        {/* ============ HEALTH TAB ============ */}
+        {activeTab === "health" && (
+          <>
+            {/* Health summary stat */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 28 }}>
+              <StatCard icon="🔄" value={stats.avgCycleLength ? `${stats.avgCycleLength} days` : "N/A"} label="Avg Cycle Length" color={t.accent} bgColor={t.accentSoft} />
+              <StatCard icon="📝" value={stats.totalLogs} label="Total Symptom Logs" color={t.blue} bgColor={t.blueSoft} />
+              <StatCard icon="🏥" value={stats.totalVisits} label="Doctor Visits Logged" color={t.cyan} bgColor={t.cyanSoft} />
+            </div>
+
+            {/* Top Symptoms */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+              <ChartCard title="Top Reported Symptoms" subtitle="Most common across all users">
+                {topSymptoms.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={topSymptoms} layout="vertical" margin={{ left: 20 }}>
+                      <CartesianGrid stroke={t.border} strokeDasharray="3 3" horizontal={false} />
+                      <XAxis type="number" stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                      <YAxis type="category" dataKey="name" stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} width={100} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Bar dataKey="count" fill={t.accent} radius={[0, 6, 6, 0]} name="Reports" barSize={20} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div style={{ height: 300, display: "flex", alignItems: "center", justifyContent: "center", color: t.textTertiary, fontSize: 13 }}>No symptom data yet</div>
+                )}
+              </ChartCard>
+
+              <ChartCard title="Flow Type Distribution" subtitle="Cycle flow intensity breakdown">
+                {flowBreakdown.length > 0 ? (
+                  <>
+                    <ResponsiveContainer width="100%" height={240}>
+                      <PieChart>
+                        <Pie data={flowBreakdown} cx="50%" cy="50%" innerRadius={50} outerRadius={75} paddingAngle={4} dataKey="count" strokeWidth={0}>
+                          {flowBreakdown.map((entry, idx) => <Cell key={idx} fill={flowColors[entry.name] || t.textTertiary} />)}
+                        </Pie>
+                        <Tooltip content={<CustomTooltip />} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 12, marginTop: 8 }}>
+                      {flowBreakdown.map(d => (
+                        <div key={d.name} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: t.textSecondary }}>
+                          <div style={{ width: 8, height: 8, borderRadius: 4, background: flowColors[d.name] || t.textTertiary }} />
+                          {d.name}: {d.count}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ height: 300, display: "flex", alignItems: "center", justifyContent: "center", color: t.textTertiary, fontSize: 13 }}>No flow data yet</div>
+                )}
+              </ChartCard>
+            </div>
+
+            {/* Stress & Sleep */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 20 }}>
+              <ChartCard title="Stress Levels" subtitle="Self-reported stress distribution">
+                {stressLevels.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={250}>
+                    <BarChart data={stressLevels}>
+                      <CartesianGrid stroke={t.border} strokeDasharray="3 3" vertical={false} />
+                      <XAxis dataKey="name" stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Bar dataKey="count" fill={t.amber} radius={[6, 6, 0, 0]} name="Logs" barSize={36} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div style={{ height: 250, display: "flex", alignItems: "center", justifyContent: "center", color: t.textTertiary, fontSize: 13 }}>No stress data yet</div>
+                )}
+              </ChartCard>
+
+              <ChartCard title="Sleep Patterns" subtitle="Self-reported sleep duration">
+                {sleepPatterns.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={250}>
+                    <BarChart data={sleepPatterns}>
+                      <CartesianGrid stroke={t.border} strokeDasharray="3 3" vertical={false} />
+                      <XAxis dataKey="name" stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} />
+                      <YAxis stroke={t.textTertiary} fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <Bar dataKey="count" fill={t.blue} radius={[6, 6, 0, 0]} name="Logs" barSize={36} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div style={{ height: 250, display: "flex", alignItems: "center", justifyContent: "center", color: t.textTertiary, fontSize: 13 }}>No sleep data yet</div>
+                )}
+              </ChartCard>
+            </div>
+          </>
+        )}
+
+        {/* ============ USERS TAB ============ */}
+        {activeTab === "users" && (
+          <>
+            {/* Filters */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20, flexWrap: "wrap", gap: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, background: t.surface, border: `1px solid ${t.border}`, borderRadius: 10, padding: "0 14px", boxShadow: t.shadow }}>
+                <span style={{ fontSize: 14, color: t.textTertiary }}>&#128269;</span>
+                <input type="text" placeholder="Search users..." value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
+                  style={{ background: "transparent", border: "none", outline: "none", color: t.text, fontSize: 13, padding: "10px 0", width: 240, fontFamily: "inherit" }} />
               </div>
-              <div><div style={{ fontSize: 11, color: theme.muted }}>Name</div><div style={{ fontWeight: 500 }}>{selectedUser.name}</div></div>
-              <div style={{ marginTop: 12 }}><div style={{ fontSize: 11, color: theme.muted }}>Email</div><div>{selectedUser.email}</div></div>
-              <div style={{ marginTop: 12 }}><div style={{ fontSize: 11, color: theme.muted }}>Category</div><div>{selectedUser.role}</div></div>
-              <div style={{ marginTop: 12 }}><div style={{ fontSize: 11, color: theme.muted }}>Joined</div><div>{new Date(selectedUser.createdAt).toLocaleString()}</div></div>
-              <div style={{ marginTop: 12 }}><div style={{ fontSize: 11, color: theme.muted }}>Last Active</div><div>{new Date(selectedUser.lastActive).toLocaleString()}</div></div>
-              <div style={{ marginTop: 12 }}><div style={{ fontSize: 11, color: theme.muted }}>Activity</div><div>📊 {selectedUser.cyclesTracked} cycles • 📝 {selectedUser.logsCount} logs</div></div>
+              <div style={{ display: "flex", gap: 6 }}>
+                {[{ key: "all", label: "All" }, { key: "men", label: "Men" }, { key: "girls", label: "Non-Menstruators" }, { key: "women", label: "Menstruators" }].map(f => (
+                  <button key={f.key} onClick={() => setDateRange(f.key)} style={{
+                    padding: "7px 16px", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer", transition: "all 0.2s",
+                    background: dateRange === f.key ? `linear-gradient(135deg, ${t.gradientStart}, ${t.gradientEnd})` : "transparent",
+                    border: dateRange === f.key ? "none" : `1px solid ${t.border}`,
+                    color: dateRange === f.key ? "white" : t.textSecondary,
+                  }}>{f.label}</button>
+                ))}
+              </div>
+            </div>
+
+            {/* User count */}
+            <div style={{ fontSize: 12, color: t.textTertiary, marginBottom: 12 }}>{filteredUsers.length} user{filteredUsers.length !== 1 ? "s" : ""}</div>
+
+            {/* Table */}
+            <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 16, overflow: "hidden", boxShadow: t.shadow }}>
+              <div style={{ display: "grid", gridTemplateColumns: "2fr 2.5fr 1.5fr 1.2fr 1.2fr 1fr", padding: "12px 20px", borderBottom: `1px solid ${t.border}`, fontSize: 11, fontWeight: 600, color: t.textTertiary, textTransform: "uppercase", letterSpacing: 0.5 }}>
+                <div>Name</div><div>Email</div><div>Category</div><div>Joined</div><div>Last Active</div><div>Activity</div>
+              </div>
+              {filteredUsers.length === 0 ? (
+                <div style={{ padding: 48, textAlign: "center", color: t.textTertiary, fontSize: 13 }}>No users found</div>
+              ) : (
+                filteredUsers.map((user, idx) => (
+                  <div key={user.id} onClick={() => setSelectedUser(user)} style={{
+                    display: "grid", gridTemplateColumns: "2fr 2.5fr 1.5fr 1.2fr 1.2fr 1fr", padding: "14px 20px",
+                    borderBottom: idx < filteredUsers.length - 1 ? `1px solid ${t.border}` : "none",
+                    fontSize: 13, cursor: "pointer", transition: "background 0.15s",
+                    background: "transparent",
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = t.surfaceHover}
+                  onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+                  >
+                    <div style={{ fontWeight: 600, display: "flex", alignItems: "center", gap: 8 }}>
+                      <div style={{ width: 28, height: 28, borderRadius: 14, background: `linear-gradient(135deg, ${t.gradientStart}, ${t.gradientEnd})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: "white", fontWeight: 700, flexShrink: 0 }}>
+                        {(user.name || "?")[0].toUpperCase()}
+                      </div>
+                      <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{user.name}</span>
+                    </div>
+                    <div style={{ color: t.textSecondary, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", display: "flex", alignItems: "center" }}>{user.email}</div>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <span style={{
+                        padding: "4px 10px", borderRadius: 100, fontSize: 11, fontWeight: 600,
+                        background: roleColors[user.role] ? `${roleColors[user.role]}18` : t.accentSoft,
+                        color: roleColors[user.role] || t.textTertiary,
+                      }}>
+                        {user.role === "men" ? "Men" : user.role === "girls" ? "Non-Menstruator" : user.role === "women" ? "Menstruator" : "Not selected"}
+                      </span>
+                    </div>
+                    <div style={{ color: t.textTertiary, display: "flex", alignItems: "center", fontSize: 12 }}>{new Date(user.createdAt).toLocaleDateString()}</div>
+                    <div style={{ color: t.textTertiary, display: "flex", alignItems: "center", fontSize: 12 }}>{new Date(user.lastActive).toLocaleDateString()}</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12 }}>
+                      <span style={{ color: t.accent, fontWeight: 600 }}>{user.cyclesTracked}</span>
+                      <span style={{ color: t.textTertiary }}>cycles</span>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </>
+        )}
+
+        {/* User Detail Modal */}
+        {selectedUser && (
+          <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }} onClick={() => setSelectedUser(null)}>
+            <div style={{ background: t.surface, borderRadius: 20, padding: 32, maxWidth: 480, width: "90%", border: `1px solid ${t.borderStrong}`, boxShadow: t.shadowLg }} onClick={e => e.stopPropagation()}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 22, background: `linear-gradient(135deg, ${t.gradientStart}, ${t.gradientEnd})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "white", fontWeight: 700 }}>
+                    {(selectedUser.name || "?")[0].toUpperCase()}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 18, fontWeight: 700 }}>{selectedUser.name}</div>
+                    <div style={{ fontSize: 12, color: t.textSecondary }}>{selectedUser.email}</div>
+                  </div>
+                </div>
+                <button onClick={() => setSelectedUser(null)} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: t.textTertiary, padding: 4 }}>&#10005;</button>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                {[
+                  { label: "Category", value: selectedUser.role === "men" ? "Men" : selectedUser.role === "girls" ? "Non-Menstruator" : selectedUser.role === "women" ? "Menstruator" : "Not selected" },
+                  { label: "Admin", value: selectedUser.isAdmin ? "Yes" : "No" },
+                  { label: "Joined", value: new Date(selectedUser.createdAt).toLocaleDateString() },
+                  { label: "Last Active", value: new Date(selectedUser.lastActive).toLocaleDateString() },
+                  { label: "Cycles Tracked", value: selectedUser.cyclesTracked },
+                  { label: "Daily Logs", value: selectedUser.logsCount },
+                ].map(item => (
+                  <div key={item.label} style={{ padding: 14, borderRadius: 12, background: dark ? "rgba(255,255,255,0.04)" : "rgba(0,0,0,0.02)", border: `1px solid ${t.border}` }}>
+                    <div style={{ fontSize: 10, color: t.textTertiary, fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 4 }}>{item.label}</div>
+                    <div style={{ fontSize: 15, fontWeight: 600 }}>{item.value}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}
 
-        <footer style={styles.footer}>
-          <span style={{ fontSize: 10 }}>© 2025 CycleCare • Real-Time Admin Dashboard</span>
-          <Link to="/" style={{ ...styles.navLink, fontSize: 10 }}>← Back to Home</Link>
+        {/* Footer */}
+        <footer style={{ marginTop: 48, padding: "20px 0", borderTop: `1px solid ${t.border}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <span style={{ fontSize: 11, color: t.textTertiary }}>CycleCare Admin Dashboard</span>
+          <Link to="/" style={{ fontSize: 11, color: t.textTertiary, textDecoration: "none" }}>Back to Home</Link>
         </footer>
       </div>
     </div>
