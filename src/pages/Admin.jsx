@@ -5,11 +5,11 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Area, AreaChart,
   BarChart, Bar, Legend,
 } from "recharts";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function Admin() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState({
     totalUsers: 0, men: 0, girls: 0, women: 0,
@@ -108,12 +108,10 @@ export default function Admin() {
   }, [navigate, API_URL]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
   }, []);
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   const t = useMemo(
     () => dark ? {
@@ -238,31 +236,7 @@ export default function Admin() {
 
   return (
     <div style={{ minHeight: "100vh", background: t.bg, color: t.text, fontFamily: "'Inter', system-ui, sans-serif" }}>
-      {/* Top Nav */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: dark ? "rgba(6,6,11,0.85)" : "rgba(248,246,250,0.85)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${t.border}`, padding: "0 32px" }}>
-        <div style={{ maxWidth: 1400, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", height: 56 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => navigate("/")}>
-              <img src={logo} alt="CycleCare" style={{ height: 30 }} />
-              <span style={{ fontSize: 15, fontWeight: 700 }}>CycleCare</span>
-              <span style={{ fontSize: 10, color: t.textTertiary, background: t.accentSoft, padding: "2px 8px", borderRadius: 100, fontWeight: 600, color: t.accent }}>Admin</span>
-            </div>
-            <div style={{ display: "flex", gap: 2 }}>
-              {[{ to: "/", label: "Home" }, { to: "/category", label: "Categories" }].map(l => (
-                <Link key={l.to} to={l.to} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 13, color: t.textSecondary, textDecoration: "none", fontWeight: 500 }}>{l.label}</Link>
-              ))}
-            </div>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <button onClick={fetchData} disabled={loading} style={{ padding: "6px 14px", borderRadius: 8, fontSize: 12, fontWeight: 600, cursor: "pointer", background: t.accentSoft, border: `1px solid ${t.border}`, color: t.accent }}>
-              {loading ? "..." : "Refresh"}
-            </button>
-            <div style={{ padding: "6px 12px", borderRadius: 8, background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)", border: `1px solid ${t.border}`, cursor: "pointer", fontSize: 13 }} onClick={() => setDark(v => !v)}>
-              {dark ? "Light" : "Dark"}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar active="Dashboard" />
 
       <div style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 32px 64px" }}>
         {/* Header */}

@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [user, setUser] = useState(null);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [passwordForm, setPasswordForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
@@ -16,16 +16,16 @@ export default function Profile() {
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
+  }, []);
+
+  useEffect(() => {
     const userData = localStorage.getItem("cyclecare_user");
     if (userData) setUser(JSON.parse(userData));
     else navigate("/login");
   }, [navigate]);
-
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   const t = useMemo(
     () => dark ? {
@@ -151,26 +151,7 @@ export default function Profile() {
 
   return (
     <div style={{ minHeight: "100vh", background: t.bg, color: t.text, fontFamily: "'Inter', system-ui, sans-serif" }}>
-      {/* Nav */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: dark ? "rgba(6,6,11,0.85)" : "rgba(248,246,250,0.85)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${t.border}`, padding: "0 32px" }}>
-        <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", height: 56 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => navigate("/")}>
-              <img src={logo} alt="CycleCare" style={{ height: 28 }} />
-              <span style={{ fontSize: 15, fontWeight: 700 }}>CycleCare</span>
-            </div>
-            <div style={{ display: "flex", gap: 2 }}>
-              {[{ to: "/", label: "Home" }, { to: "/category", label: "Categories" }, { to: "/dashboard", label: "Dashboard" }, { to: "/forum", label: "Forum" }].map(l => (
-                <Link key={l.to} to={l.to} style={{ padding: "6px 12px", borderRadius: 8, fontSize: 13, color: t.textSecondary, textDecoration: "none", fontWeight: 500 }}>{l.label}</Link>
-              ))}
-              <span style={{ padding: "6px 12px", borderRadius: 8, fontSize: 13, color: t.accent, fontWeight: 600, background: t.accentSoft }}>Profile</span>
-            </div>
-          </div>
-          <div style={{ padding: "6px 12px", borderRadius: 8, background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)", border: `1px solid ${t.border}`, cursor: "pointer", fontSize: 13 }} onClick={() => setDark(v => !v)}>
-            {dark ? "Light" : "Dark"}
-          </div>
-        </div>
-      </nav>
+      <Navbar active="Profile" />
 
       <div style={{ maxWidth: 800, margin: "0 auto", padding: "32px 32px 80px" }}>
         {/* Header */}

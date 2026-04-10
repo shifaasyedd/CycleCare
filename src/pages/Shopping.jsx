@@ -1,20 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function Shopping() {
     console.log("SHOPPING COMPONENT IS RENDERING");
     const navigate = useNavigate();
-    const [dark, setDark] = useState(false);
+    const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   const theme = useMemo(
     () =>
@@ -348,29 +345,7 @@ export default function Shopping() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        <nav style={styles.nav}>
-        <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div style={styles.brandText}>
-            <div style={styles.brandName}>CycleCare</div>
-            <div style={styles.brandTagline}>Shopping Guide</div>
-            </div>
-        </div>
-
-        <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/category" style={styles.navLink}>Categories</Link>
-            <Link to="/contact" style={styles.navLink}>Contact</Link>
-            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
-            <Link to="/profile" style={styles.navLink}>Profile</Link>
-        </div>
-
-        <div style={styles.navActions}>
-            <div style={styles.themeToggle} onClick={() => setDark(!dark)}>
-            {dark ? "☀️ Light" : "🌙 Dark"}
-            </div>
-        </div>
-        </nav>
+        <Navbar />
 
         <div style={styles.hero}>
           <h1 style={styles.title}>🛍️ The Complete Period Care Shop</h1>

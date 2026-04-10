@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function PCOSPage() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [activeTab, setActiveTab] = useState("overview");
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,16 +42,19 @@ export default function PCOSPage() {
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
   const token = localStorage.getItem("cyclecare_token");
 
+  useEffect(() => {
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
+  }, []);
+
   // Load all data from database
   useEffect(() => {
-    const savedTheme = localStorage.getItem("cyclecare_theme");
-    if (savedTheme === "dark") setDark(true);
-    
     if (!token) {
       navigate("/login");
       return;
     }
-    
+
     Promise.all([
       fetch(`${API_URL}/api/tracker/cycles`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
       fetch(`${API_URL}/api/tracker/daily-logs`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
@@ -68,11 +71,6 @@ export default function PCOSPage() {
       setIsLoading(false);
     });
   }, [token, navigate]);
-
-  // Save theme only
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   // Load today's log when logs load
   useEffect(() => {
@@ -895,26 +893,7 @@ export default function PCOSPage() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Navigation */}
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div>
-              <div style={styles.brandName}>CycleCare</div>
-              <div style={styles.brandTagline}>PCOS/PCOD Tracker</div>
-            </div>
-          </div>
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/category" style={styles.navLink}>Categories</Link>
-            <Link to="/tracker" style={styles.navLink}>Period Tracker</Link>
-            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>PCOS/PCOD</span>
-          </div>
-          <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
-            {dark ? "☀️" : "🌙"}
-          </div>
-        </nav>
+        <Navbar active="Categories" />
 
         {/* Hero */}
         <div style={styles.hero}>

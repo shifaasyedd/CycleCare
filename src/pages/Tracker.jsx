@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 // ---------- Date helpers ----------
 const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
@@ -69,7 +69,7 @@ function pretty(d) {
 
 export default function Tracker() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [quiz, setQuiz] = useState({ flow: "", activity: "", internalComfort: "" });
   const [activeTab, setActiveTab] = useState("period");
   const [isLoading, setIsLoading] = useState(true);
@@ -112,16 +112,19 @@ export default function Tracker() {
   // API setup
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
   const token = localStorage.getItem("cyclecare_token");
+  useEffect(() => {
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
+  }, []);
+
   // Load all data from database
   useEffect(() => {
-    const savedTheme = localStorage.getItem("cyclecare_theme");
-    if (savedTheme === "dark") setDark(true);
-    
     if (!token) {
       navigate("/login");
       return;
     }
-    
+
     Promise.all([
       fetch(`${API_URL}/api/tracker/cycles`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
       fetch(`${API_URL}/api/tracker/daily-logs`, { headers: { Authorization: `Bearer ${token}` } }).then(r => r.json()),
@@ -138,11 +141,6 @@ export default function Tracker() {
       setIsLoading(false);
     });
   }, [token, navigate, API_URL]);
-
-  // Save theme only
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   // Load today's log when date changes or logs load
   useEffect(() => {
@@ -1127,26 +1125,7 @@ function cycleStartForDate(date) {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Navigation */}
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div>
-              <div style={styles.brandName}>CycleCare</div>
-              <div style={styles.brandTagline}>Period Tracker</div>
-            </div>
-          </div>
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
-            <Link to="/pcos-tracker" style={styles.navLink}>PCOS/PCOD</Link>
-            <Link to="/profile" style={styles.navLink}>Profile</Link>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Tracker</span>
-          </div>
-          <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
-            {dark ? "☀️" : "🌙"}
-          </div>
-        </nav>
+        <Navbar active="Categories" />
 
         {/* Hero */}
         <div style={styles.hero}>

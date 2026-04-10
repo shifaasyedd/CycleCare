@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function MenSupport() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [flipped, setFlipped] = useState({});
   const [activeScenario, setActiveScenario] = useState(null);
   const [quizAnswers, setQuizAnswers] = useState({});
@@ -17,15 +17,15 @@ export default function MenSupport() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
-    const savedNote = localStorage.getItem("cyclecare_personal_note");
-    if (savedNote) setPersonalNote(savedNote);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
+    const savedNote = localStorage.getItem("cyclecare_personal_note");
+    if (savedNote) setPersonalNote(savedNote);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("cyclecare_personal_note", personalNote);
@@ -443,26 +443,7 @@ export default function MenSupport() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Navigation */}
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div>
-              <div style={styles.brandName}>CycleCare</div>
-              <div style={styles.brandTagline}>Support Guide</div>
-            </div>
-          </div>
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/category" style={styles.navLink}>Categories</Link>
-            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
-            <Link to="/profile" style={styles.navLink}>Profile</Link>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Support</span>
-          </div>
-          <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
-            {dark ? "☀️ Light" : "🌙 Dark"}
-          </div>
-        </nav>
+        <Navbar active="Categories" />
 
         {/* Hero */}
         <div style={styles.hero}>

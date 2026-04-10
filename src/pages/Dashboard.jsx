@@ -4,11 +4,11 @@ import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line,
 } from "recharts";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [data, setData] = useState(null);
   const [insights, setInsights] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,19 +17,19 @@ export default function Dashboard() {
   const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
   const token = localStorage.getItem("cyclecare_token");
 
+  useEffect(() => {
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
+  }, []);
+
   // ---------- Auth gate ----------
   useEffect(() => {
     if (!token) {
       navigate("/login");
       return;
     }
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
   }, [token, navigate]);
-
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   // ---------- Fetch dashboard data ----------
   const fetchAll = useCallback(async () => {
@@ -253,23 +253,7 @@ export default function Dashboard() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Nav */}
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div>
-              <div style={styles.brandName}>CycleCare</div>
-              <div style={styles.brandTagline}>Your Dashboard</div>
-            </div>
-          </div>
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/tracker" style={styles.navLink}>Tracker</Link>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Dashboard</span>
-            <Link to="/profile" style={styles.navLink}>Profile</Link>
-          </div>
-          <div style={styles.themeToggle} onClick={() => setDark((v) => !v)}>{dark ? "☀️" : "🌙"}</div>
-        </nav>
+        <Navbar active="Dashboard" />
 
         {/* Hero */}
         <div style={styles.hero}>

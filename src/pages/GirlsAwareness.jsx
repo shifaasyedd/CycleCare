@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function GirlsAwareness() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [quiz, setQuiz] = useState({
     q1: "",
     q2: "",
@@ -18,13 +19,10 @@ export default function GirlsAwareness() {
   const [selectedProduct, setSelectedProduct] = useState("pad");
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   const theme = useMemo(
     () =>
@@ -523,31 +521,7 @@ export default function GirlsAwareness() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Navigation */}
-        <nav style={styles.nav}>
-          <div style={styles.brand}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div style={styles.brandText}>
-              <span style={styles.brandName}>CycleCare</span>
-              <span style={styles.brandTagline}>Girls Awareness</span>
-            </div>
-          </div>
-
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/category" style={styles.navLink}>Categories</Link>
-            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
-            <Link to="/profile" style={styles.navLink}>Profile</Link>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Awareness</span>
-          </div>
-
-          <div style={styles.navActions}>
-            <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
-              <span>{dark ? "🌙" : "☀️"}</span>
-              <span style={{ fontSize: 13 }}>{dark ? "Dark" : "Light"}</span>
-            </div>
-          </div>
-        </nav>
+        <Navbar active="Categories" />
 
         {/* Hero Section */}
         <div style={styles.hero}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 const categoryColors = {
   General: "#6366F1",
@@ -24,7 +24,7 @@ function timeAgo(date) {
 export default function ForumPostPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [commentBody, setCommentBody] = useState("");
@@ -40,8 +40,12 @@ export default function ForumPostPage() {
   });
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
+  }, []);
+
+  useEffect(() => {
     const u = localStorage.getItem("cyclecare_user");
     if (u) setUser(JSON.parse(u));
     const role = localStorage.getItem("cyclecare_role");
@@ -49,7 +53,6 @@ export default function ForumPostPage() {
       navigate("/category");
     }
   }, [navigate]);
-  useEffect(() => { localStorage.setItem("cyclecare_theme", dark ? "dark" : "light"); }, [dark]);
 
   const t = useMemo(
     () => dark ? {
@@ -176,20 +179,7 @@ export default function ForumPostPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: t.bg, color: t.text, fontFamily: "'Inter', system-ui, sans-serif" }}>
-      {/* Nav */}
-      <nav style={{ position: "sticky", top: 0, zIndex: 100, background: dark ? "rgba(6,6,11,0.85)" : "rgba(248,246,250,0.85)", backdropFilter: "blur(20px)", borderBottom: `1px solid ${t.border}`, padding: "0 32px" }}>
-        <div style={{ maxWidth: 800, margin: "0 auto", display: "flex", justifyContent: "space-between", alignItems: "center", height: 56 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }} onClick={() => navigate("/")}>
-              <img src={logo} alt="CycleCare" style={{ height: 28 }} />
-              <span style={{ fontSize: 15, fontWeight: 700 }}>CycleCare</span>
-            </div>
-          </div>
-          <div style={{ padding: "6px 12px", borderRadius: 8, background: dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.04)", border: `1px solid ${t.border}`, cursor: "pointer", fontSize: 13 }} onClick={() => setDark(v => !v)}>
-            {dark ? "Light" : "Dark"}
-          </div>
-        </div>
-      </nav>
+      <Navbar active="Forum" />
 
       <div style={{ maxWidth: 800, margin: "0 auto", padding: "32px 32px 80px" }}>
         {/* Back link */}

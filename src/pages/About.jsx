@@ -1,19 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function About() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   const theme = useMemo(
     () =>
@@ -309,30 +307,7 @@ export default function About() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Navigation */}
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div style={styles.brandText}>
-              <span style={styles.brandName}>CycleCare</span>
-              <span style={styles.brandTagline}>Period care for everyone</span>
-            </div>
-          </div>
-
-          <div style={styles.navLinks}>
-            <span style={styles.navLink} onClick={() => navigate("/")}>Home</span>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>About</span>
-            <span style={styles.navLink} onClick={() => navigate("/contact")}>Contact</span>
-            <span style={styles.navLink} onClick={() => navigate("/profile")}>Profile</span>
-          </div>
-
-          <div style={styles.navActions}>
-            <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
-              <span>{dark ? "🌙" : "☀️"}</span>
-              <span style={{ fontSize: 13 }}>{dark ? "Dark" : "Light"}</span>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
 
         {/* Hero Section */}
         <div style={styles.hero}>

@@ -1,28 +1,28 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function Category() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [hoveredCard, setHoveredCard] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
-    
-    const savedRole = localStorage.getItem("cyclecare_role");
-    if (savedRole) setSelectedRole(savedRole);
-    
-    const userData = localStorage.getItem("cyclecare_user");
-    if (userData) setUser(JSON.parse(userData));
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
+    const savedRole = localStorage.getItem("cyclecare_role");
+    if (savedRole) setSelectedRole(savedRole);
+
+    const userData = localStorage.getItem("cyclecare_user");
+    if (userData) setUser(JSON.parse(userData));
+  }, []);
 
   const theme = useMemo(
     () =>
@@ -204,113 +204,6 @@ export default function Category() {
     },
     content: { flex: 1 },
     container: { maxWidth: 1280, margin: "0 auto", padding: "0 24px" },
-
-    nav: {
-      position: "sticky",
-      top: 20,
-      zIndex: 100,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: 20,
-      padding: "12px 24px",
-      marginTop: 20,
-      borderRadius: 100,
-      background: dark ? "rgba(20, 20, 28, 0.85)" : "rgba(255, 255, 255, 0.85)",
-      backdropFilter: "blur(12px)",
-      border: `1px solid ${theme.border}`,
-      boxShadow: `0 8px 32px ${theme.shadow}`,
-    },
-    brand: { display: "flex", alignItems: "center", gap: 12, cursor: "pointer" },
-    logo: {
-      height: 48,
-      width: "auto",
-      filter: dark ? "drop-shadow(0 4px 12px rgba(255,107,139,0.4))" : "none",
-    },
-    brandText: { display: "flex", flexDirection: "column" },
-    brandName: { fontSize: 20, fontWeight: 800, letterSpacing: -0.3 },
-    brandTagline: { fontSize: 11, color: theme.muted, fontWeight: 500, letterSpacing: 0.3 },
-    
-    userSection: {
-      display: "flex",
-      alignItems: "center",
-      gap: 12,
-    },
-    profileBtn: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      padding: "6px 14px",
-      borderRadius: 100,
-      background: theme.chip,
-      border: `1px solid ${theme.border}`,
-      cursor: "pointer",
-      textDecoration: "none",
-      color: theme.text,
-      transition: "all 0.2s",
-    },
-    profileAvatar: {
-      width: 32,
-      height: 32,
-      borderRadius: 16,
-      background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontSize: 16,
-    },
-    profileInfo: {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "flex-start",
-    },
-    profileName: {
-      fontSize: 12,
-      fontWeight: 600,
-    },
-    profileRole: {
-      fontSize: 9,
-      color: theme.muted,
-    },
-    logoutBtn: {
-      padding: "6px 12px",
-      borderRadius: 100,
-      fontSize: 12,
-      fontWeight: 500,
-      cursor: "pointer",
-      background: "transparent",
-      border: `1px solid ${theme.border}`,
-      color: theme.muted,
-    },
-
-    navLinks: { display: "flex", gap: 8, alignItems: "center" },
-    navLink: {
-      padding: "8px 16px",
-      borderRadius: 100,
-      fontSize: 14,
-      fontWeight: 600,
-      cursor: "pointer",
-      color: theme.muted,
-      transition: "all 0.2s ease",
-      textDecoration: "none",
-    },
-    navLinkActive: {
-      color: theme.accent,
-      background: theme.chip,
-    },
-    navActions: { display: "flex", alignItems: "center", gap: 12 },
-    themeToggle: {
-      display: "flex",
-      alignItems: "center",
-      gap: 8,
-      padding: "8px 14px",
-      borderRadius: 100,
-      background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)",
-      border: `1px solid ${theme.border}`,
-      cursor: "pointer",
-      fontSize: 14,
-      fontWeight: 500,
-    },
 
     hero: {
       marginTop: 60,
@@ -501,8 +394,6 @@ export default function Category() {
     },
     "@media (max-width: 640px)": {
       title: { fontSize: 32 },
-      navLinks: { display: "none" },
-      userSection: { display: "none" },
       footer: { flexDirection: "column", textAlign: "center" },
       footerLinks: { justifyContent: "center" },
       featuresSection: { padding: "32px 24px" },
@@ -545,47 +436,7 @@ export default function Category() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Navigation */}
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div style={styles.brandText}>
-              <span style={styles.brandName}>CycleCare</span>
-              <span style={styles.brandTagline}>Choose your path</span>
-            </div>
-          </div>
-
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/about" style={styles.navLink}>About</Link>
-            <Link to="/contact" style={styles.navLink}>Contact</Link>
-            <Link to="/dashboard" style={styles.navLink}>Dashboard</Link>
-            <Link to="/forum" style={styles.navLink}>Forum</Link>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Categories</span>
-          </div>
-
-          <div style={styles.userSection}>
-            <Link to="/profile" style={styles.profileBtn}>
-              <div style={styles.profileAvatar}>
-                {getRoleIcon(selectedRole) || "👤"}
-              </div>
-              <div style={styles.profileInfo}>
-                <div style={styles.profileName}>{user?.name || "User"}</div>
-                <div style={styles.profileRole}>{selectedRole ? getRoleName(selectedRole) : "Select a category"}</div>
-              </div>
-            </Link>
-            <button style={styles.logoutBtn} onClick={handleLogout}>
-              Logout
-            </button>
-          </div>
-
-          <div style={styles.navActions}>
-            <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
-              <span>{dark ? "🌙" : "☀️"}</span>
-              <span style={{ fontSize: 13 }}>{dark ? "Dark" : "Light"}</span>
-            </div>
-          </div>
-        </nav>
+        <Navbar active="Categories" />
 
         {/* Hero Section */}
         <div style={styles.hero}>

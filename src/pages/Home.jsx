@@ -8,16 +8,15 @@ import {
   Calendar,
   ShieldCheck,
   ArrowRight,
-  Sun,
-  Moon,
   Droplet,
   LineChart,
   MessageCircle,
 } from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function Home() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,13 +30,10 @@ export default function Home() {
   }, [navigate]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   // ---------- Theme: soft pink + rose palette to match the rest of the site ----------
   const theme = useMemo(
@@ -89,77 +85,6 @@ export default function Home() {
       WebkitFontSmoothing: "antialiased",
     },
     container: { maxWidth: 1200, margin: "0 auto", padding: "0 32px" },
-
-    // ---- Nav ----
-    nav: {
-      position: "sticky",
-      top: 24,
-      zIndex: 100,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "space-between",
-      gap: 24,
-      padding: "14px 22px",
-      marginTop: 24,
-      borderRadius: 100,
-      background: theme.card,
-      border: `1px solid ${theme.borderSoft}`,
-      boxShadow: theme.shadowSoft,
-    },
-    brand: { display: "flex", alignItems: "center", gap: 12, cursor: "pointer" },
-    logo: { height: 38, width: "auto" },
-    brandText: { display: "flex", flexDirection: "column", lineHeight: 1.1 },
-    brandName: { fontSize: 17, fontWeight: 700, letterSpacing: -0.2, color: theme.text },
-    brandTagline: { fontSize: 10, color: theme.textMuted, fontWeight: 500, marginTop: 2 },
-    navLinks: { display: "flex", gap: 4, alignItems: "center" },
-    navLink: {
-      padding: "8px 16px",
-      borderRadius: 100,
-      fontSize: 13,
-      fontWeight: 500,
-      cursor: "pointer",
-      color: theme.textMuted,
-      transition: "all 0.2s",
-      background: "transparent",
-      border: "none",
-    },
-    navLinkActive: { color: theme.accent, background: theme.accentChip, fontWeight: 600 },
-    navActions: { display: "flex", alignItems: "center", gap: 10 },
-    iconBtn: {
-      width: 38,
-      height: 38,
-      borderRadius: 100,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      background: theme.accentChip,
-      color: theme.accent,
-      border: "none",
-      cursor: "pointer",
-      transition: "all 0.2s",
-    },
-    btnGhost: {
-      padding: "9px 18px",
-      borderRadius: 100,
-      fontSize: 13,
-      fontWeight: 600,
-      cursor: "pointer",
-      background: "transparent",
-      border: "none",
-      color: theme.text,
-    },
-    btnPrimary: {
-      padding: "10px 22px",
-      borderRadius: 100,
-      fontSize: 13,
-      fontWeight: 600,
-      cursor: "pointer",
-      background: theme.accent,
-      border: "none",
-      color: "#FFFFFF",
-      boxShadow: `0 6px 18px ${dark ? "rgba(229,76,111,0.35)" : "rgba(229,76,111,0.32)"}`,
-      transition: "transform 0.2s, box-shadow 0.2s",
-    },
 
     // ---- Hero ----
     hero: {
@@ -539,40 +464,7 @@ export default function Home() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Navigation */}
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div style={styles.brandText}>
-              <span style={styles.brandName}>CycleCare</span>
-              <span style={styles.brandTagline}>Care, redefined.</span>
-            </div>
-          </div>
-
-          <div style={styles.navLinks}>
-            <button style={{ ...styles.navLink, ...styles.navLinkActive }}>Home</button>
-            <button style={styles.navLink} onClick={() => navigate("/about")}>About</button>
-            <button style={styles.navLink} onClick={() => navigate("/category")}>Features</button>
-            <button style={styles.navLink} onClick={() => navigate("/contact")}>Contact</button>
-            <button style={styles.navLink} onClick={() => navigate("/forum")}>Forum</button>
-          </div>
-
-          <div style={styles.navActions}>
-            <button
-              style={styles.iconBtn}
-              onClick={() => setDark((v) => !v)}
-              aria-label="Toggle theme"
-            >
-              {dark ? <Sun size={16} strokeWidth={2} /> : <Moon size={16} strokeWidth={2} />}
-            </button>
-            <button style={styles.btnGhost} onClick={() => navigate("/login")}>
-              Log in
-            </button>
-            <button style={styles.btnPrimary} onClick={() => navigate("/signup")}>
-              Sign up
-            </button>
-          </div>
-        </nav>
+        <Navbar active="Home" />
 
         {/* Hero */}
         <section style={styles.hero}>

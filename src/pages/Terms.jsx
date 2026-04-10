@@ -1,20 +1,17 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/cyclecare-logo.png";
+import Navbar from "../components/Navbar";
 
 export default function Terms() {
   const navigate = useNavigate();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [lastUpdated] = useState("March 24, 2025");
 
   useEffect(() => {
-    const saved = localStorage.getItem("cyclecare_theme");
-    if (saved === "dark") setDark(true);
+    const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
+    window.addEventListener("themechange", handler);
+    return () => window.removeEventListener("themechange", handler);
   }, []);
-
-  useEffect(() => {
-    localStorage.setItem("cyclecare_theme", dark ? "dark" : "light");
-  }, [dark]);
 
   const theme = useMemo(
     () =>
@@ -207,25 +204,7 @@ export default function Terms() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        {/* Navigation */}
-        <nav style={styles.nav}>
-          <div style={styles.brand} onClick={() => navigate("/")}>
-            <img src={logo} alt="CycleCare" style={styles.logo} />
-            <div>
-              <div style={styles.brandName}>CycleCare</div>
-              <div style={styles.brandTagline}>For Those Who Experience & Care</div>
-            </div>
-          </div>
-          <div style={styles.navLinks}>
-            <Link to="/" style={styles.navLink}>Home</Link>
-            <Link to="/about" style={styles.navLink}>About</Link>
-            <Link to="/contact" style={styles.navLink}>Contact</Link>
-            <span style={{ ...styles.navLink, ...styles.navLinkActive }}>Terms</span>
-          </div>
-          <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
-            {dark ? "☀️" : "🌙"}
-          </div>
-        </nav>
+        <Navbar />
 
         {/* Hero */}
         <div style={styles.hero}>
