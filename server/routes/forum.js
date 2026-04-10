@@ -1,11 +1,25 @@
 const express = require('express');
 const ForumPost = require('../models/ForumPost');
+const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Middleware: only women and girls can access the forum
+const forumAccess = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!user || !['women', 'girls'].includes(user.role)) {
+      return res.status(403).json({ success: false, error: 'Forum is only available for Women and Non-Menstruators categories' });
+    }
+    next();
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
 // GET /api/forum — list posts (newest first), optional ?category= filter
-router.get('/', protect, async (req, res) => {
+router.get('/', protect, forumAccess, async (req, res) => {
   try {
     const filter = {};
     if (req.query.category) filter.category = req.query.category;
@@ -36,7 +50,7 @@ router.get('/', protect, async (req, res) => {
 });
 
 // GET /api/forum/:id — single post with comments
-router.get('/:id', protect, async (req, res) => {
+router.get('/:id', protect, forumAccess, async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.id)
       .populate('user', 'name')
@@ -49,7 +63,7 @@ router.get('/:id', protect, async (req, res) => {
 });
 
 // POST /api/forum — create a post
-router.post('/', protect, async (req, res) => {
+router.post('/', protect, forumAccess, async (req, res) => {
   try {
     const { title, body, category } = req.body;
     const post = await ForumPost.create({
@@ -66,7 +80,7 @@ router.post('/', protect, async (req, res) => {
 });
 
 // PUT /api/forum/:id/like — toggle like
-router.put('/:id/like', protect, async (req, res) => {
+router.put('/:id/like', protect, forumAccess, async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.id);
     if (!post) return res.status(404).json({ success: false, error: 'Post not found' });
@@ -88,7 +102,7 @@ router.put('/:id/like', protect, async (req, res) => {
 });
 
 // POST /api/forum/:id/comments — add comment
-router.post('/:id/comments', protect, async (req, res) => {
+router.post('/:id/comments', protect, forumAccess, async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.id);
     if (!post) return res.status(404).json({ success: false, error: 'Post not found' });
@@ -105,7 +119,7 @@ router.post('/:id/comments', protect, async (req, res) => {
 });
 
 // DELETE /api/forum/:id — delete own post
-router.delete('/:id', protect, async (req, res) => {
+router.delete('/:id', protect, forumAccess, async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.id);
     if (!post) return res.status(404).json({ success: false, error: 'Post not found' });
@@ -120,7 +134,7 @@ router.delete('/:id', protect, async (req, res) => {
 });
 
 // DELETE /api/forum/:id/comments/:commentId — delete own comment
-router.delete('/:id/comments/:commentId', protect, async (req, res) => {
+router.delete('/:id/comments/:commentId', protect, forumAccess, async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.id);
     if (!post) return res.status(404).json({ success: false, error: 'Post not found' });

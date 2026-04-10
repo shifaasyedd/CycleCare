@@ -39,7 +39,11 @@ export default function ForumPostPage() {
     if (saved === "dark") setDark(true);
     const u = localStorage.getItem("cyclecare_user");
     if (u) setUser(JSON.parse(u));
-  }, []);
+    const role = localStorage.getItem("cyclecare_role");
+    if (role && !["women", "girls"].includes(role)) {
+      navigate("/category");
+    }
+  }, [navigate]);
   useEffect(() => { localStorage.setItem("cyclecare_theme", dark ? "dark" : "light"); }, [dark]);
 
   const t = useMemo(
