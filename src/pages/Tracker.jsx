@@ -489,7 +489,7 @@ function cycleStartForDate(date) {
     Luteal: { emoji: "🌙", tip: "Self-care, manage stress, rest", color: theme.blue },
   };
 
-  const CARD_HEIGHT = "500px";
+  const CARD_HEIGHT = "auto";
 
   const styles = {
     page: {
@@ -551,27 +551,27 @@ function cycleStartForDate(date) {
     },
     badge: {
       display: "inline-block",
-      padding: "4px 12px",
+      padding: "6px 14px",
       borderRadius: 100,
       background: theme.chip,
-      fontSize: 12,
+      fontSize: 14,
       color: theme.accent,
       marginBottom: 12,
     },
-    title: { fontSize: 32, fontWeight: 800, margin: "0 0 8px" },
-    subtitle: { fontSize: 13, color: theme.muted },
+    title: { fontSize: 36, fontWeight: 800, margin: "0 0 8px" },
+    subtitle: { fontSize: 16, color: theme.muted },
 
     topInfo: {
       marginTop: 20,
       marginBottom: 20,
-      padding: 20,
+      padding: 24,
       borderRadius: 24,
       background: `linear-gradient(135deg, ${theme.gradientStart}10, ${theme.gradientEnd}10)`,
       border: `1px solid ${theme.border}`,
       textAlign: "center",
     },
-    cycleDay: { fontSize: 36, fontWeight: 800, color: theme.accent },
-    phaseText: { fontSize: 14, fontWeight: 600, marginTop: 4 },
+    cycleDay: { fontSize: 40, fontWeight: 800, color: theme.accent },
+    phaseText: { fontSize: 18, fontWeight: 600, marginTop: 4 },
 
     mainTabs: {
       display: "flex",
@@ -581,9 +581,9 @@ function cycleStartForDate(date) {
       flexWrap: "wrap",
     },
     tabBtn: (active) => ({
-      padding: "8px 20px",
+      padding: "10px 24px",
       borderRadius: 100,
-      fontSize: 13,
+      fontSize: 15,
       fontWeight: 600,
       cursor: "pointer",
       background: active ? `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})` : "transparent",
@@ -595,14 +595,14 @@ function cycleStartForDate(date) {
       display: "flex",
       justifyContent: "center",
       gap: 20,
-      marginBottom: 20,
+      marginBottom: 16,
     },
-    legendItem: { display: "flex", alignItems: "center", gap: 6, fontSize: 11 },
-    legendDot: (color) => ({ width: 10, height: 10, borderRadius: 999, background: color }),
+    legendItem: { display: "flex", alignItems: "center", gap: 6, fontSize: 13 },
+    legendDot: (color) => ({ width: 12, height: 12, borderRadius: 999, background: color }),
 
     grid2: {
       display: "grid",
-      gridTemplateColumns: "1fr 1.2fr",
+      gridTemplateColumns: "1fr 1fr",
       gap: 24,
       marginBottom: 24,
     },
@@ -611,7 +611,6 @@ function cycleStartForDate(date) {
       background: theme.card,
       border: `1px solid ${theme.border}`,
       borderRadius: 24,
-      height: CARD_HEIGHT,
       display: "flex",
       flexDirection: "column",
       overflow: "hidden",
@@ -620,7 +619,6 @@ function cycleStartForDate(date) {
       background: theme.card,
       border: `1px solid ${theme.border}`,
       borderRadius: 24,
-      height: CARD_HEIGHT,
       display: "flex",
       flexDirection: "column",
       overflow: "hidden",
@@ -629,48 +627,46 @@ function cycleStartForDate(date) {
       padding: "16px 20px 12px 20px",
       borderBottom: `1px solid ${theme.border}`,
       fontWeight: 700,
-      fontSize: 16,
+      fontSize: 18,
       background: dark ? "rgba(255,255,255,0.03)" : "rgba(0,0,0,0.01)",
     },
     cardBody: {
-      flex: 1,
-      overflowY: "auto",
       padding: "16px 20px",
     },
 
     input: {
       width: "100%",
-      padding: "10px 14px",
+      padding: "12px 16px",
       borderRadius: 12,
       border: `1px solid ${theme.border}`,
       background: dark ? "rgba(255,255,255,0.05)" : "white",
       color: theme.text,
-      fontSize: 13,
+      fontSize: 15,
       marginBottom: 12,
       outline: "none",
       transition: "all 0.2s",
     },
     textarea: {
       width: "100%",
-      padding: "10px 14px",
+      padding: "12px 16px",
       borderRadius: 12,
       border: `1px solid ${theme.border}`,
       background: dark ? "rgba(255,255,255,0.05)" : "white",
       color: theme.text,
-      fontSize: 13,
+      fontSize: 15,
       fontFamily: "inherit",
       resize: "vertical",
-      minHeight: 70,
+      minHeight: 80,
       marginBottom: 12,
       outline: "none",
     },
-    label: { fontSize: 12, fontWeight: 600, marginBottom: 4, display: "block" },
+    label: { fontSize: 14, fontWeight: 600, marginBottom: 6, display: "block" },
 
     row: { display: "flex", gap: 10 },
     btnPrimary: {
-      padding: "8px 20px",
+      padding: "10px 24px",
       borderRadius: 100,
-      fontSize: 13,
+      fontSize: 15,
       fontWeight: 600,
       cursor: "pointer",
       background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
@@ -678,9 +674,9 @@ function cycleStartForDate(date) {
       color: "white",
     },
     btnSecondary: {
-      padding: "8px 20px",
+      padding: "10px 24px",
       borderRadius: 100,
-      fontSize: 13,
+      fontSize: 15,
       fontWeight: 600,
       cursor: "pointer",
       background: "transparent",
@@ -692,30 +688,30 @@ function cycleStartForDate(date) {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      marginBottom: 16,
+      marginBottom: 12,
     },
-    monthTitle: { fontSize: 18, fontWeight: 700 },
+    monthTitle: { fontSize: 20, fontWeight: 700 },
     navBtn: {
-      padding: "6px 14px",
+      padding: "8px 16px",
       borderRadius: 100,
       background: theme.chip,
       border: `1px solid ${theme.border}`,
       cursor: "pointer",
-      fontSize: 13,
+      fontSize: 14,
     },
 
     weekDays: {
       display: "grid",
       gridTemplateColumns: "repeat(7, 1fr)",
-      gap: 6,
+      gap: 4,
       marginBottom: 8,
     },
-    weekDay: { textAlign: "center", fontSize: 11, fontWeight: 600, color: theme.muted },
+    weekDay: { textAlign: "center", fontSize: 12, fontWeight: 600, color: theme.muted },
 
     calendarGrid: {
       display: "grid",
       gridTemplateColumns: "repeat(7, 1fr)",
-      gap: 6,
+      gap: 4,
     },
     dayBtn: (inMonth, isSelected, isToday, bg) => ({
       aspectRatio: "1",
@@ -728,7 +724,7 @@ function cycleStartForDate(date) {
       alignItems: "center",
       justifyContent: "center",
       fontWeight: isToday ? 700 : 500,
-      fontSize: 12,
+      fontSize: 14,
       transition: "all 0.2s",
     }),
 
@@ -739,9 +735,9 @@ function cycleStartForDate(date) {
       marginBottom: 12,
     },
     symptomBtn: (selected) => ({
-      padding: "6px 10px",
+      padding: "8px 12px",
       borderRadius: 20,
-      fontSize: 11,
+      fontSize: 13,
       cursor: "pointer",
       background: selected ? theme.accent : theme.chip,
       color: selected ? "white" : theme.text,
@@ -752,24 +748,24 @@ function cycleStartForDate(date) {
 
     select: {
       width: "100%",
-      padding: "8px 12px",
+      padding: "10px 14px",
       borderRadius: 10,
       border: `1px solid ${theme.border}`,
       background: dark ? "rgba(255,255,255,0.05)" : "white",
       color: theme.text,
-      fontSize: 12,
+      fontSize: 14,
       marginBottom: 10,
       outline: "none",
     },
 
     list: {
-      maxHeight: "140px",
+      maxHeight: "160px",
       overflowY: "auto",
     },
     listItem: {
-      padding: "8px 0",
+      padding: "10px 0",
       borderBottom: `1px solid ${theme.border}`,
-      fontSize: 12,
+      fontSize: 14,
     },
 
     phaseGrid: {
@@ -778,7 +774,7 @@ function cycleStartForDate(date) {
       gap: 12,
     },
     phaseCard: (bgColor) => ({
-      padding: 12,
+      padding: 14,
       borderRadius: 14,
       background: bgColor,
       border: `1px solid ${theme.border}`,
@@ -787,9 +783,10 @@ function cycleStartForDate(date) {
 
     infoBox: {
       marginTop: 12,
-      padding: 12,
+      padding: 14,
       background: theme.chip,
       borderRadius: 12,
+      fontSize: 14,
     },
 
     quizSection: {
@@ -812,12 +809,12 @@ function cycleStartForDate(date) {
       transition: "transform 0.2s",
     },
     chatbotIcon: { fontSize: 48, marginBottom: 16 },
-    chatbotTitle: { fontSize: 24, fontWeight: 700, marginBottom: 12 },
-    chatbotDesc: { fontSize: 14, color: theme.muted, marginBottom: 20, lineHeight: 1.5, maxWidth: 500, margin: "0 auto 20px auto" },
+    chatbotTitle: { fontSize: 26, fontWeight: 700, marginBottom: 12 },
+    chatbotDesc: { fontSize: 16, color: theme.muted, marginBottom: 20, lineHeight: 1.5, maxWidth: 500, margin: "0 auto 20px auto" },
     chatbotBtn: {
       padding: "12px 32px",
       borderRadius: 100,
-      fontSize: 14,
+      fontSize: 15,
       fontWeight: 600,
       cursor: "pointer",
       background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
@@ -838,19 +835,19 @@ function cycleStartForDate(date) {
 
     "@media (max-width: 1024px)": {
       grid2: { gridTemplateColumns: "1fr", gap: 20 },
-      leftCard: { height: "auto", minHeight: "450px" },
-      rightCard: { height: "auto", minHeight: "450px" },
+      leftCard: { height: "auto" },
+      rightCard: { height: "auto" },
       symptomGrid: { gridTemplateColumns: "repeat(2, 1fr)" },
     },
     "@media (max-width: 640px)": {
-      title: { fontSize: 24 },
+      title: { fontSize: 28 },
       navLinks: { display: "none" },
       hero: { padding: 20 },
       leftCard: { padding: 16 },
       rightCard: { padding: 16 },
       symptomGrid: { gridTemplateColumns: "1fr" },
       phaseGrid: { gridTemplateColumns: "1fr" },
-      chatbotTitle: { fontSize: 20 },
+      chatbotTitle: { fontSize: 22 },
       chatbotSection: { padding: 24 },
     },
   };

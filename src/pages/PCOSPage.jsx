@@ -308,7 +308,7 @@ export default function PCOSPage() {
     navigate("/chatbot");
   };
 
-  const CARD_HEIGHT = "450px";
+  const CARD_HEIGHT = "auto";
 
   const styles = {
     page: {
@@ -362,7 +362,7 @@ export default function PCOSPage() {
     hero: {
       marginTop: 24,
       marginBottom: 20,
-      padding: 28,
+      padding: 32,
       borderRadius: 24,
       background: theme.card,
       border: `1px solid ${theme.border}`,
@@ -370,15 +370,15 @@ export default function PCOSPage() {
     },
     badge: {
       display: "inline-block",
-      padding: "4px 12px",
+      padding: "6px 14px",
       borderRadius: 100,
       background: theme.chip,
-      fontSize: 11,
+      fontSize: 14,
       color: theme.accent,
-      marginBottom: 10,
+      marginBottom: 12,
     },
-    title: { fontSize: 28, fontWeight: 700, margin: "0 0 8px" },
-    subtitle: { fontSize: 13, color: theme.muted },
+    title: { fontSize: 34, fontWeight: 700, margin: "0 0 8px" },
+    subtitle: { fontSize: 16, color: theme.muted },
 
     statsGrid: {
       display: "grid",
@@ -387,14 +387,14 @@ export default function PCOSPage() {
       marginBottom: 24,
     },
     statCard: {
-      padding: 16,
+      padding: 20,
       borderRadius: 20,
       background: theme.card,
       border: `1px solid ${theme.border}`,
       textAlign: "center",
     },
-    statValue: { fontSize: 28, fontWeight: 800, color: theme.accent },
-    statLabel: { fontSize: 11, color: theme.muted, marginTop: 4 },
+    statValue: { fontSize: 32, fontWeight: 800, color: theme.accent },
+    statLabel: { fontSize: 14, color: theme.muted, marginTop: 4 },
 
     tabs: {
       display: "flex",
@@ -405,9 +405,9 @@ export default function PCOSPage() {
     },
     
     tabBtn: (active) => ({
-      padding: "8px 20px",
+      padding: "10px 24px",
       borderRadius: 100,
-      fontSize: 13,
+      fontSize: 15,
       fontWeight: 600,
       cursor: "pointer",
       background: active ? `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})` : "transparent",
@@ -419,67 +419,64 @@ export default function PCOSPage() {
       background: theme.card,
       border: `1px solid ${theme.border}`,
       borderRadius: 20,
-      height: CARD_HEIGHT,
       display: "flex",
       flexDirection: "column",
       overflow: "hidden",
     },
     cardHeader: {
-      padding: "12px 16px 8px 16px",
+      padding: "14px 18px 10px 18px",
       borderBottom: `1px solid ${theme.border}`,
       fontWeight: 700,
-      fontSize: 15,
+      fontSize: 18,
     },
     cardBody: {
-      flex: 1,
-      overflowY: "auto",
-      padding: "14px 16px",
+      padding: "16px 18px",
     },
 
     grid2: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 },
 
     input: {
       width: "100%",
-      padding: "10px 14px",
+      padding: "12px 16px",
       borderRadius: 12,
       border: `1px solid ${theme.border}`,
       background: dark ? "rgba(255,255,255,0.05)" : "white",
       color: theme.text,
-      fontSize: 13,
+      fontSize: 15,
       marginBottom: 12,
       outline: "none",
     },
     textarea: {
       width: "100%",
-      padding: "10px 14px",
+      padding: "12px 16px",
       borderRadius: 12,
       border: `1px solid ${theme.border}`,
       background: dark ? "rgba(255,255,255,0.05)" : "white",
       color: theme.text,
-      fontSize: 13,
+      fontSize: 15,
       fontFamily: "inherit",
       resize: "vertical",
-      minHeight: 70,
+      minHeight: 80,
       marginBottom: 12,
       outline: "none",
     },
     select: {
       width: "100%",
-      padding: "10px 14px",
+      padding: "12px 16px",
       borderRadius: 12,
       border: `1px solid ${theme.border}`,
       background: dark ? "rgba(255,255,255,0.05)" : "white",
       color: theme.text,
-      fontSize: 13,
+      fontSize: 15,
       marginBottom: 12,
       outline: "none",
     },
-    label: { fontSize: 12, fontWeight: 600, marginBottom: 4, display: "block" },
+    label: { fontSize: 14, fontWeight: 600, marginBottom: 6, display: "block" },
 
     btnPrimary: {
-      padding: "8px 16px",
+      padding: "12px 24px",
       borderRadius: 100,
-      fontSize: 12,
+      fontSize: 15,
       fontWeight: 600,
       cursor: "pointer",
       background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
@@ -487,9 +484,9 @@ export default function PCOSPage() {
       color: "white",
     },
     btnSecondary: {
-      padding: "8px 16px",
+      padding: "12px 24px",
       borderRadius: 100,
-      fontSize: 12,
+      fontSize: 15,
       fontWeight: 600,
       cursor: "pointer",
       background: "transparent",
@@ -504,9 +501,9 @@ export default function PCOSPage() {
       marginBottom: 12,
     },
     symptomBtn: (selected) => ({
-      padding: "6px 10px",
+      padding: "8px 12px",
       borderRadius: 20,
-      fontSize: 11,
+      fontSize: 13,
       cursor: "pointer",
       background: selected ? theme.accent : theme.chip,
       color: selected ? "white" : theme.text,
@@ -519,23 +516,24 @@ export default function PCOSPage() {
       overflowY: "auto",
     },
     listItem: {
-      padding: 10,
+      padding: 12,
       borderBottom: `1px solid ${theme.border}`,
-      fontSize: 12,
+      fontSize: 14,
     },
 
-    row: { display: "flex", gap: 10, marginTop: 6 },
+    row: { display: "flex", gap: 10, marginTop: 8 },
     infoBox: {
       marginTop: 12,
-      padding: 12,
+      padding: 14,
       background: theme.chip,
       borderRadius: 12,
+      fontSize: 14,
     },
 
     chatbotSection: {
       marginTop: 28,
       marginBottom: 20,
-      padding: 28,
+      padding: 32,
       borderRadius: 28,
       background: `linear-gradient(135deg, ${theme.gradientStart}15, ${theme.gradientEnd}15)`,
       border: `2px solid ${theme.accent}`,
@@ -543,12 +541,12 @@ export default function PCOSPage() {
       cursor: "pointer",
     },
     chatbotIcon: { fontSize: 56, marginBottom: 16 },
-    chatbotTitle: { fontSize: 22, fontWeight: 700, marginBottom: 12 },
-    chatbotDesc: { fontSize: 14, color: theme.muted, marginBottom: 20, lineHeight: 1.5 },
+    chatbotTitle: { fontSize: 26, fontWeight: 700, marginBottom: 12 },
+    chatbotDesc: { fontSize: 16, color: theme.muted, marginBottom: 20, lineHeight: 1.5 },
     chatbotBtn: {
-      padding: "12px 28px",
+      padding: "14px 32px",
       borderRadius: 100,
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: 600,
       cursor: "pointer",
       background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
@@ -569,16 +567,16 @@ export default function PCOSPage() {
       statsGrid: { gridTemplateColumns: "repeat(2, 1fr)" },
       grid2: { gridTemplateColumns: "1fr", gap: 16 },
       symptomGrid: { gridTemplateColumns: "repeat(2, 1fr)" },
-      card: { height: "auto", minHeight: "400px" },
+      card: { height: "auto" },
     },
     "@media (max-width: 640px)": {
       statsGrid: { gridTemplateColumns: "1fr" },
-      title: { fontSize: 24 },
+      title: { fontSize: 26 },
       navLinks: { display: "none" },
       hero: { padding: 20 },
       symptomGrid: { gridTemplateColumns: "1fr" },
-      chatbotTitle: { fontSize: 18 },
-      chatbotSection: { padding: 20 },
+      chatbotTitle: { fontSize: 20 },
+      chatbotSection: { padding: 24 },
     },
   };
 
