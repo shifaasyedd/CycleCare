@@ -5,6 +5,17 @@ import logo from "../assets/cyclecare-logo.png";
 export default function Navbar({ active }) {
   const navigate = useNavigate();
   const [dark, setDark] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("cyclecare_token"));
+
+  useEffect(() => {
+    const checkToken = () => setToken(localStorage.getItem("token"));
+    window.addEventListener("storage", checkToken);
+    window.addEventListener("authchange", checkToken);
+    return () => {
+      window.removeEventListener("storage", checkToken);
+      window.removeEventListener("authchange", checkToken);
+    };
+  }, []);
 
   useEffect(() => {
     const saved = localStorage.getItem("cyclecare_theme");
@@ -48,7 +59,7 @@ export default function Navbar({ active }) {
   },
   [dark]);
 
-  const isLoggedIn = localStorage.getItem("token");
+  const isLoggedIn = token;
 
   const links = isLoggedIn
     ? [

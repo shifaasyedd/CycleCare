@@ -104,6 +104,7 @@ export default function Login() {
               })
             );
             localStorage.setItem("cyclecare_is_admin", "true");
+            window.dispatchEvent(new Event("authchange"));
             navigate("/admin");
           } else {
             setAdminError(data.error || "Admin account not found on the server.");
@@ -135,6 +136,7 @@ export default function Login() {
             })
           );
           localStorage.setItem("cyclecare_is_admin", "false");
+          window.dispatchEvent(new Event("authchange"));
           navigate("/category");
         } else {
           setErrors({ general: data.error || "Invalid email or password" });
