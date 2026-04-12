@@ -8,7 +8,7 @@ import {
   Activity, Calendar, Clock, Droplets, Utensils, Pill, Stethoscope,
   MessageCircle, ShoppingBag, AlertCircle, Heart, FileText,
   Lightbulb, TrendingUp, Moon, Sun, FlaskConical, Leaf,
-  RefreshCcw, Sparkles, CheckCircle, AlertTriangle, Info, Thermometer
+  RefreshCcw, Sparkles, CheckCircle, AlertTriangle, Info, Thermometer, Sparkle
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 
@@ -263,7 +263,7 @@ export default function Dashboard() {
 
         {/* Hero */}
         <div style={styles.hero}>
-          <span style={styles.badge}>📊 Personal Insights</span>
+          <span style={styles.badge}><Activity size={14} style={{ marginRight: 6 }} /> Personal Insights</span>
           <h1 style={styles.title}>Your Health Dashboard</h1>
           <p style={styles.subtitle}>Cycle patterns, symptoms, and AI-powered insights</p>
           {error && <div style={styles.errorBox}>{error}</div>}
@@ -301,7 +301,7 @@ export default function Dashboard() {
             {/* Stats */}
             <div style={styles.statsGrid}>
               <div style={styles.statCard}>
-                <div style={styles.statIcon}>🔄</div>
+                <RefreshCcw size={28} color={theme.accent} style={{ marginBottom: 8 }} />
                 <div style={styles.statValue}>{data.stats.totalCycles}</div>
                 <div style={styles.statLabel}>Total Cycles</div>
               </div>
@@ -355,7 +355,7 @@ export default function Dashboard() {
                 {insights.recommendation && (
                   <div style={{ ...styles.insightCard(theme.accent), marginBottom: 32 }}>
                     <div style={styles.insightTitle}>
-                      <span>🌟</span>
+                      <Sparkle size={16} color={theme.accent} />
                       <span>Recommendation</span>
                     </div>
                     <div style={styles.insightMessage}>{insights.recommendation}</div>
