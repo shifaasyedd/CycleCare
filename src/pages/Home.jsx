@@ -471,7 +471,7 @@ export default function Home() {
           <div style={styles.heroLeft}>
             <div style={styles.heroBadge}>
               <Sparkles size={13} strokeWidth={2.2} />
-              Welcome to CycleCare
+              For Those Who Experience & Care
             </div>
             <h1 style={styles.heroTitle}>
               Your journey with
@@ -480,7 +480,7 @@ export default function Home() {
             </h1>
             <p style={styles.heroDesc}>
               A safe, respectful space for everyone — whether you're tracking,
-              learning, or supporting. Personalized insights and education,
+              learning, or supporting someone. Personalized insights and education,
               tailored to you.
             </p>
             <div style={styles.heroCtas}>
@@ -493,8 +493,8 @@ export default function Home() {
                 Get Started
                 <ArrowRight size={16} strokeWidth={2.2} />
               </button>
-              <button style={styles.btnLargeGhost} onClick={() => navigate("/about")}>
-                Learn More
+              <button style={styles.btnLargeGhost} onClick={() => navigate("/login")}>
+                Log In
               </button>
             </div>
           </div>
@@ -557,68 +557,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features */}
-        <section style={styles.section}>
-          <div style={styles.sectionHeader}>
-            <span style={styles.sectionLabel}>What we offer</span>
-            <h2 style={styles.sectionTitle}>Built for understanding</h2>
-            <p style={styles.sectionDesc}>
-              Three thoughtful tools designed to make cycle care simple, respectful,
-              and accessible to everyone.
-            </p>
-          </div>
-          <div style={styles.features}>
-            <FeatureCard
-              Icon={BookOpen}
-              title="Learn & Understand"
-              desc="Age-appropriate education for every stage — from first period to cycle tracking."
-            />
-            <FeatureCard
-              Icon={Activity}
-              title="Track with Ease"
-              desc="Simple logging tools to monitor your cycle, symptoms, and overall wellness."
-            />
-            <FeatureCard
-              Icon={LineChart}
-              title="Personalized Insights"
-              desc="Get predictions and insights based on your unique cycle patterns."
-            />
-          </div>
-        </section>
-
-        {/* Pillars */}
-        <section style={styles.section}>
-          <div style={styles.sectionHeader}>
-            <span style={styles.sectionLabel}>Our principles</span>
-            <h2 style={styles.sectionTitle}>Care that respects you</h2>
-            <p style={styles.sectionDesc}>
-              Every feature is built around four values that put people first.
-            </p>
-          </div>
-          <div style={styles.pillars}>
-            <Pillar
-              Icon={ShieldCheck}
-              title="Private by design"
-              desc="Your data is yours. Always encrypted, never sold."
-            />
-            <Pillar
-              Icon={Heart}
-              title="Inclusive"
-              desc="A safe space for menstruators, allies, and supporters."
-            />
-            <Pillar
-              Icon={Calendar}
-              title="Accurate"
-              desc="Smart predictions that learn from your unique patterns."
-            />
-            <Pillar
-              Icon={MessageCircle}
-              title="Supportive"
-              desc="AI guidance and resources whenever you need them."
-            />
-          </div>
-        </section>
-
         {/* Quote */}
         <section style={styles.section}>
           <div style={styles.quoteCard}>
@@ -628,34 +566,23 @@ export default function Home() {
             <p style={styles.quoteText}>
               "Understanding our bodies shouldn't be complicated. CycleCare makes
               period education and tracking simple, respectful, and accessible
-              for everyone."
+              for everyone — for those who experience and care."
             </p>
-            <p style={styles.quoteAuthor}>— THE CYCLECARE TEAM</p>
+            <p style={styles.quoteAuthor}>— FOR THOSE WHO EXPERIENCE & CARE</p>
           </div>
-        </section>
-
-        {/* CTA */}
-        <section style={styles.cta}>
-          <h2 style={styles.ctaTitle}>Ready to begin?</h2>
-          <p style={styles.ctaDesc}>
-            Sign up today and choose the path that's right for you.
-          </p>
-          <button style={styles.ctaButton} onClick={() => navigate("/signup")}>
-            Create free account
-            <ArrowRight size={16} strokeWidth={2.2} />
-          </button>
         </section>
 
         {/* Footer */}
         <footer style={styles.footer}>
           <div style={styles.footerLeft}>
             <img src={logo} alt="CycleCare" style={styles.footerLogo} />
-            <span style={styles.footerText}>© 2025 CycleCare. All rights reserved.</span>
+            <span style={styles.footerText}>© 2025 CycleCare • For Those Who Experience & Care</span>
           </div>
           <div style={styles.footerLinks}>
-            <button style={styles.footerLink} onClick={() => navigate("/about")}>About</button>
-            <button style={styles.footerLink} onClick={() => navigate("/contact")}>Contact</button>
             <button style={styles.footerLink} onClick={() => navigate("/terms")}>Terms</button>
+            <button style={styles.footerLink} onClick={() => navigate("/contact")}>Contact</button>
+            <button style={styles.footerLink} onClick={() => navigate("/login")}>Login</button>
+            <button style={styles.footerLink} onClick={() => navigate("/signup")}>Signup</button>
           </div>
         </footer>
       </div>
