@@ -2,10 +2,18 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Heart, Droplets, Activity, Calendar, Lightbulb, MessageCircle,
-  ShoppingBag, AlertCircle, Sparkles, Users, ArrowRight
+  ShoppingBag, AlertCircle, Sparkles, Users, ArrowRight,
+  Handshake, Sparkle
 } from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 import Navbar from "../components/Navbar";
+
+const VenusIcon = ({ size, color }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="12" r="4"/>
+    <path d="M16.5 7.5c0 2.5-2.5 5-4.5 5s-4.5-2.5-4.5-5c0-2.5 2.5-5 4.5-5s4.5 2.5 4.5 5z"/>
+  </svg>
+);
 
 export default function Category() {
   const navigate = useNavigate();
@@ -331,7 +339,6 @@ export default function Category() {
       alignItems: "center",
       justifyContent: "center",
       margin: "0 auto 20px",
-      fontSize: 40,
       boxShadow: `0 8px 20px ${theme.glow}`,
     },
     cardTitle: { fontSize: 28, fontWeight: 700, marginBottom: 12 },
@@ -431,7 +438,7 @@ export default function Category() {
             ✓ Selected
           </div>
         )}
-        <div style={styles.iconWrapper}>{icon}</div>
+        <div style={styles.iconWrapper}>{React.isValidElement(icon) ? icon : <span style={{ color: "white", fontSize: 40 }}>{icon}</span>}</div>
         <h3 style={styles.cardTitle}>{title}</h3>
         <p style={styles.cardDesc}>{desc}</p>
         <span style={styles.cardButton}>
@@ -473,19 +480,19 @@ export default function Category() {
         {/* Category Cards */}
         <div style={styles.grid}>
           <CategoryCard
-            icon="Men"
+            icon={<Handshake size={36} color="white" />}
             title="Men"
             desc="Learn what the menstrual cycle is, why phases happen, and how to support menstruators with respect and understanding."
             role="men"
           />
           <CategoryCard
-            icon="Women"
+            icon={<VenusIcon size={36} color="white" />}
             title="Non-Menstruators"
             desc="Awareness-first learning for young girls who haven't started menstruating yet. Simple explanations, myths vs facts, and confidence-building information to prepare you for what's ahead."
             role="girls"
           />
           <CategoryCard
-            icon="Women"
+            icon={<Droplets size={36} color="white" />}
             title="Menstruators"
             desc="For girls and women who menstruate. Track your periods, see cycle phases on calendar, log symptoms, and get accurate predictions based on your unique cycle."
             role="women"
