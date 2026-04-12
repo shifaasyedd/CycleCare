@@ -8,6 +8,16 @@ import {
 import logo from "../assets/cyclecare-logo.png";
 import Navbar from "../components/Navbar";
 
+const GirlIcon = ({ size = 24, color = "currentColor" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="4"/>
+    <path d="M12 12v2"/>
+    <path d="M8 22c-2-2-2-5 0-7 1-1 2-2 4-2s3 1 4 2c2 2 2 5 0 7"/>
+    <path d="M8 16c0 2-1 4-2 5"/>
+    <path d="M16 16c0 2 1 4 2 5"/>
+  </svg>
+);
+
 export default function Category() {
   const navigate = useNavigate();
   const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
@@ -479,7 +489,7 @@ export default function Category() {
             role="men"
           />
           <CategoryCard
-            icon={<User size={36} color="white" />}
+            icon={<GirlIcon size={36} color="white" />}
             title="Non-Menstruators"
             desc="Awareness-first learning for young girls who haven't started menstruating yet. Simple explanations, myths vs facts, and confidence-building information to prepare you for what's ahead."
             role="girls"
