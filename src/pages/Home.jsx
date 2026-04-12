@@ -474,9 +474,9 @@ export default function Home() {
               For Those Who Experience & Care
             </div>
             <h1 style={styles.heroTitle}>
-              Your journey with
+              For those who experience
               <br />
-              periods, <span style={styles.heroAccent}>understood.</span>
+              & <span style={styles.heroAccent}>care, understood.</span>
             </h1>
             <p style={styles.heroDesc}>
               A safe, respectful space for everyone — whether you're tracking,
@@ -493,8 +493,8 @@ export default function Home() {
                 Get Started
                 <ArrowRight size={16} strokeWidth={2.2} />
               </button>
-              <button style={styles.btnLargeGhost} onClick={() => navigate("/login")}>
-                Log In
+              <button style={styles.btnLargeGhost} onClick={() => navigate("/about")}>
+                Learn More
               </button>
             </div>
           </div>
@@ -557,6 +557,68 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Features */}
+        <section style={styles.section}>
+          <div style={styles.sectionHeader}>
+            <span style={styles.sectionLabel}>What we offer</span>
+            <h2 style={styles.sectionTitle}>Built for understanding</h2>
+            <p style={styles.sectionDesc}>
+              Three thoughtful tools designed to make cycle care simple, respectful,
+              and accessible to everyone.
+            </p>
+          </div>
+          <div style={styles.features}>
+            <FeatureCard
+              Icon={BookOpen}
+              title="Learn & Understand"
+              desc="Age-appropriate education for every stage — from first period to cycle tracking."
+            />
+            <FeatureCard
+              Icon={Activity}
+              title="Track with Ease"
+              desc="Simple logging tools to monitor your cycle, symptoms, and overall wellness."
+            />
+            <FeatureCard
+              Icon={LineChart}
+              title="Personalized Insights"
+              desc="Get predictions and insights based on your unique cycle patterns."
+            />
+          </div>
+        </section>
+
+        {/* Pillars */}
+        <section style={styles.section}>
+          <div style={styles.sectionHeader}>
+            <span style={styles.sectionLabel}>Our principles</span>
+            <h2 style={styles.sectionTitle}>Care that respects you</h2>
+            <p style={styles.sectionDesc}>
+              Every feature is built around four values that put people first.
+            </p>
+          </div>
+          <div style={styles.pillars}>
+            <Pillar
+              Icon={ShieldCheck}
+              title="Private by design"
+              desc="Your data is yours. Always encrypted, never sold."
+            />
+            <Pillar
+              Icon={Heart}
+              title="Inclusive"
+              desc="A safe space for menstruators, allies, and supporters."
+            />
+            <Pillar
+              Icon={Calendar}
+              title="Accurate"
+              desc="Smart predictions that learn from your unique patterns."
+            />
+            <Pillar
+              Icon={MessageCircle}
+              title="Supportive"
+              desc="AI guidance and resources whenever you need them."
+            />
+          </div>
+        </section>
+
         {/* Quote */}
         <section style={styles.section}>
           <div style={styles.quoteCard}>
@@ -572,6 +634,18 @@ export default function Home() {
           </div>
         </section>
 
+        {/* CTA */}
+        <section style={styles.cta}>
+          <h2 style={styles.ctaTitle}>Ready to begin?</h2>
+          <p style={styles.ctaDesc}>
+            Sign up today and choose the path that's right for you.
+          </p>
+          <button style={styles.ctaButton} onClick={() => navigate("/signup")}>
+            Create free account
+            <ArrowRight size={16} strokeWidth={2.2} />
+          </button>
+        </section>
+
         {/* Footer */}
         <footer style={styles.footer}>
           <div style={styles.footerLeft}>
@@ -579,10 +653,9 @@ export default function Home() {
             <span style={styles.footerText}>© 2025 CycleCare • For Those Who Experience & Care</span>
           </div>
           <div style={styles.footerLinks}>
-            <button style={styles.footerLink} onClick={() => navigate("/terms")}>Terms</button>
+            <button style={styles.footerLink} onClick={() => navigate("/about")}>About</button>
             <button style={styles.footerLink} onClick={() => navigate("/contact")}>Contact</button>
-            <button style={styles.footerLink} onClick={() => navigate("/login")}>Login</button>
-            <button style={styles.footerLink} onClick={() => navigate("/signup")}>Signup</button>
+            <button style={styles.footerLink} onClick={() => navigate("/terms")}>Terms</button>
           </div>
         </footer>
       </div>
