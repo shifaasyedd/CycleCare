@@ -10,6 +10,8 @@ import Navbar from "../components/Navbar";
 
 export default function MenSupport() {
   const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
+  const [activeSection, setActiveSection] = useState("hero");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [flipped, setFlipped] = useState({});
   const [activeScenario, setActiveScenario] = useState(null);
   // eslint-disable-next-line no-unused-vars
@@ -47,6 +49,22 @@ export default function MenSupport() {
   const markSectionViewed = (section) => {
     setViewedSections(prev => ({ ...prev, [section]: true }));
   };
+
+  const sections = [
+    { id: "hero", label: "Welcome" },
+    { id: "tips", label: "Quick Tips" },
+    { id: "cycle", label: "Cycle Support" },
+    { id: "mood", label: "Mood Changes" },
+    { id: "say", label: "What to Say" },
+    { id: "scenarios", label: "Real Scenarios" },
+    { id: "donts", label: "What Not to Say" },
+    { id: "products", label: "Products" },
+    { id: "kit", label: "Comfort Kit" },
+    { id: "pcos", label: "PCOS/PCOD" },
+    { id: "emergency", label: "Emergency" },
+    { id: "notes", label: "Personal Notes" },
+    { id: "confidence", label: "Confidence" },
+  ];
 
   // eslint-disable-next-line no-unused-vars
   const handleQuizSubmit = () => {
@@ -265,7 +283,6 @@ export default function MenSupport() {
     page: {
       minHeight: "100vh",
       display: "flex",
-      flexDirection: "column",
       fontFamily: "'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
       background: dark
         ? `radial-gradient(circle at 0% 0%, rgba(255, 107, 139, 0.1), transparent 40%),
@@ -273,6 +290,53 @@ export default function MenSupport() {
         : `radial-gradient(circle at 0% 0%, rgba(229, 76, 111, 0.05), transparent 40%),
            ${theme.bg}`,
       color: theme.text,
+    },
+    mainLayout: {
+      display: "flex",
+      marginTop: 20,
+      gap: 24,
+    },
+    sidebar: {
+      width: sidebarOpen ? 240 : 0,
+      minWidth: sidebarOpen ? 240 : 0,
+      padding: "16px 0",
+      transition: "all 0.3s ease",
+      overflow: "hidden",
+    },
+    sidebarToggle: {
+      position: "fixed",
+      left: sidebarOpen ? 220 : 10,
+      top: 100,
+      zIndex: 101,
+      padding: "8px 12px",
+      borderRadius: "0 8px 8px 0",
+      background: theme.card,
+      border: `1px solid ${theme.border}`,
+      borderLeft: "none",
+      cursor: "pointer",
+      fontSize: 12,
+      transition: "all 0.3s ease",
+      boxShadow: `0 4px 12px ${theme.shadow}`,
+    },
+    navItem: (active) => ({
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      padding: "12px 16px",
+      margin: "4px 8px",
+      borderRadius: 10,
+      fontSize: 13,
+      fontWeight: active ? 600 : 500,
+      cursor: "pointer",
+      background: active ? theme.chip : "transparent",
+      color: active ? theme.accent : theme.muted,
+      borderLeft: active ? `3px solid ${theme.accent}` : "3px solid transparent",
+      transition: "all 0.2s ease",
+    }),
+    contentArea: {
+      flex: 1,
+      paddingRight: 24,
+      paddingBottom: 40,
     },
     container: { maxWidth: 1200, margin: "0 auto", padding: "0 24px" },
 
@@ -450,13 +514,40 @@ export default function MenSupport() {
     },
   };
 
+  const scrollToSection = (id) => {
+    setActiveSection(id);
+    const el = document.getElementById(`section-${id}`);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div style={styles.page}>
       <div style={styles.container}>
         <Navbar active="Categories" />
 
-        {/* Hero */}
-        <div style={styles.hero}>
+        {/* Sidebar */}
+        <button style={styles.sidebarToggle} onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {sidebarOpen ? "◀" : "▶"}
+        </button>
+        <div style={styles.mainLayout}>
+          {sidebarOpen && (
+            <div style={styles.sidebar}>
+              {sections.map((section) => (
+                <div
+                  key={section.id}
+                  style={styles.navItem(activeSection === section.id)}
+                  onClick={() => scrollToSection(section.id)}
+                >
+                  {section.label}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div style={styles.contentArea}>
+            <div id="section-hero"></div>
+            {/* Hero */}
+            <div style={styles.hero}>
           <span style={styles.badge}>🤝 Be a True Ally</span>
           <h1 style={styles.title}>Understand. Support. Show Up.</h1>
           <p style={styles.subtitle}>It's not about having all the answers. It's about showing up with an open heart and willingness to learn.</p>
@@ -467,6 +558,7 @@ export default function MenSupport() {
         </div>
 
         {/* Quick Tips */}
+        <div id="section-tips"></div>
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}><Lightbulb size={18} style={{ marginRight: 8 }} /> Quick Tips</h2>
           <div style={styles.grid4}>
@@ -480,6 +572,7 @@ export default function MenSupport() {
         </div>
 
         {/* Cycle Support Chart */}
+        <div id="section-cycle"></div>
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}><TrendingUp size={18} style={{ marginRight: 8 }} /> How to Support Throughout the Cycle</h2>
           <p style={styles.sectionDesc}>Select a phase to see what helps</p>
@@ -720,6 +813,8 @@ export default function MenSupport() {
           <span style={{ fontSize: 12, color: theme.muted }}>© 2025 CycleCare • Support Guide</span>
           <Link to="/category" style={{ ...styles.navLink, color: theme.muted }}>← Back to Categories</Link>
         </footer>
+          </div>
+        </div>
       </div>
     </div>
   );

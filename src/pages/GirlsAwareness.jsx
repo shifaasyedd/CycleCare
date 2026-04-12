@@ -12,6 +12,8 @@ import Navbar from "../components/Navbar";
 export default function GirlsAwareness() {
   const navigate = useNavigate();
   const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
+  const [activeSection, setActiveSection] = useState("hero");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [quiz, setQuiz] = useState({
     q1: "",
     q2: "",
@@ -189,7 +191,7 @@ export default function GirlsAwareness() {
   const productVideos = {
     pad: {
       title: "How to Use a Sanitary Pad",
-      embedUrl: "https://www.youtube.com/embed/IWQfC7Y4M8w",
+      embedUrl: "https://www.youtube.com/embed/Bt69IYaeCqE",
       steps: [
         "Wash your hands thoroughly before and after",
         "Remove the pad from its wrapper",
@@ -202,7 +204,7 @@ export default function GirlsAwareness() {
     },
     tampon: {
       title: "How to Use a Tampon",
-      embedUrl: "https://www.youtube.com/embed/dYZL5CfC_1Y",
+      embedUrl: "https://www.youtube.com/embed/fz3rA4r1jJQ",
       steps: [
         "Wash your hands with soap and water",
         "Remove the tampon from its wrapper",
@@ -216,7 +218,7 @@ export default function GirlsAwareness() {
     },
     cup: {
       title: "How to Use a Menstrual Cup",
-      embedUrl: "https://www.youtube.com/embed/o9fPUfm-uYE",
+      embedUrl: "https://www.youtube.com/embed/JaDp6O1c3lE",
       steps: [
         "Wash your hands and sterilize the cup",
         "Fold the cup using a C-fold or punch-down fold",
@@ -230,11 +232,22 @@ export default function GirlsAwareness() {
     },
   };
 
+  const sections = [
+    { id: "hero", label: "Welcome" },
+    { id: "videos", label: "Video Tutorials" },
+    { id: "quiz", label: "Test Knowledge" },
+    { id: "whatis", label: "What is a Period" },
+    { id: "myths", label: "Myth Busters" },
+    { id: "symptoms", label: "Symptoms" },
+    { id: "dosdonts", label: "Do's & Don'ts" },
+    { id: "help", label: "When to Ask Help" },
+    { id: "faq", label: "FAQ" },
+  ];
+
   const styles = {
     page: {
       minHeight: "100vh",
       display: "flex",
-      flexDirection: "column",
       fontFamily: "'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
       background: dark
         ? `radial-gradient(circle at 10% 20%, rgba(255, 107, 139, 0.15), transparent 50%),
@@ -244,6 +257,53 @@ export default function GirlsAwareness() {
            radial-gradient(circle at 100% 100%, rgba(255, 107, 139, 0.1), transparent 50%),
            ${theme.bg}`,
       color: theme.text,
+    },
+    mainLayout: {
+      display: "flex",
+      marginTop: 20,
+      gap: 24,
+    },
+    sidebar: {
+      width: sidebarOpen ? 240 : 0,
+      minWidth: sidebarOpen ? 240 : 0,
+      padding: "16px 0",
+      transition: "all 0.3s ease",
+      overflow: "hidden",
+    },
+    sidebarToggle: {
+      position: "fixed",
+      left: sidebarOpen ? 220 : 10,
+      top: 100,
+      zIndex: 101,
+      padding: "8px 12px",
+      borderRadius: "0 8px 8px 0",
+      background: theme.card,
+      border: `1px solid ${theme.border}`,
+      borderLeft: "none",
+      cursor: "pointer",
+      fontSize: 12,
+      transition: "all 0.3s ease",
+      boxShadow: `0 4px 12px ${theme.shadow}`,
+    },
+    navItem: (active) => ({
+      display: "flex",
+      alignItems: "center",
+      gap: 10,
+      padding: "12px 16px",
+      margin: "4px 8px",
+      borderRadius: 10,
+      fontSize: 13,
+      fontWeight: active ? 600 : 500,
+      cursor: "pointer",
+      background: active ? theme.chip : "transparent",
+      color: active ? theme.accent : theme.muted,
+      borderLeft: active ? `3px solid ${theme.accent}` : "3px solid transparent",
+      transition: "all 0.2s ease",
+    }),
+    contentArea: {
+      flex: 1,
+      paddingRight: 24,
+      paddingBottom: 40,
     },
     container: { maxWidth: 1280, margin: "0 auto", padding: "0 24px" },
 
@@ -363,12 +423,16 @@ export default function GirlsAwareness() {
     videoWrapper: {
       borderRadius: 20,
       overflow: "hidden",
-      marginBottom: 20,
       boxShadow: `0 8px 20px ${theme.shadow}`,
     },
+    videoContainer: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: 24,
+    },
     stepsList: {
-      marginTop: 16,
       paddingLeft: 20,
+      textAlign: "left",
     },
     stepItem: {
       marginBottom: 10,
@@ -525,13 +589,40 @@ export default function GirlsAwareness() {
     },
   };
 
+  const scrollToSection = (id) => {
+    setActiveSection(id);
+    const el = document.getElementById(`section-${id}`);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div style={styles.page}>
       <div style={styles.container}>
         <Navbar active="Categories" />
 
-        {/* Hero Section */}
-        <div style={styles.hero}>
+        {/* Sidebar */}
+        <button style={styles.sidebarToggle} onClick={() => setSidebarOpen(!sidebarOpen)}>
+          {sidebarOpen ? "◀" : "▶"}
+        </button>
+        <div style={styles.mainLayout}>
+          {sidebarOpen && (
+            <div style={styles.sidebar}>
+              {sections.map((section) => (
+                <div
+                  key={section.id}
+                  style={styles.navItem(activeSection === section.id)}
+                  onClick={() => scrollToSection(section.id)}
+                >
+                  {section.label}
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div style={styles.contentArea}>
+            <div id="section-hero"></div>
+            {/* Hero Section */}
+            <div style={styles.hero}>
           <span style={styles.badge}><Heart size={12} style={{ marginRight: 6 }} /> For Non-Menstruators</span>
           <h1 style={styles.title}>Periods, explained simply and safely</h1>
           <p style={styles.subtitle}>
@@ -542,6 +633,7 @@ export default function GirlsAwareness() {
 
         {/* Video Tutorials Section */}
         <div style={styles.sectionBlock}>
+          <div id="section-videos"></div>
           <h2 style={styles.sectionTitle}><Video size={18} style={{ marginRight: 8 }} /> Learning About Period Products</h2>
           <p style={styles.sectionDesc}>Watch these videos to understand different period products so you'll feel prepared when your period starts.</p>
           
@@ -557,28 +649,34 @@ export default function GirlsAwareness() {
             </button>
           </div>
 
-          <div style={styles.videoWrapper}>
-            <iframe
-              width="100%"
-              height="400"
-              src={productVideos[selectedProduct].embedUrl}
-              title={productVideos[selectedProduct].title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+          <div style={styles.videoContainer}>
+            <div>
+              <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 16 }}>How to Use:</h3>
+              <ul style={styles.stepsList}>
+                {productVideos[selectedProduct].steps.map((step, idx) => (
+                  <li key={idx} style={{ ...styles.stepItem, marginBottom: 14, fontSize: 15 }}>
+                    <span style={{ color: theme.accent, marginRight: 8 }}>{idx + 1}.</span>{step}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div style={styles.videoWrapper}>
+              <iframe
+                width="100%"
+                height="350"
+                src={productVideos[selectedProduct].embedUrl}
+                title={productVideos[selectedProduct].title}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
           </div>
-
-          <h3 style={{ fontSize: 18, fontWeight: 600, marginBottom: 12 }}>How to Use:</h3>
-          <ul style={styles.stepsList}>
-            {productVideos[selectedProduct].steps.map((step, idx) => (
-              <li key={idx} style={styles.stepItem}>✨ {step}</li>
-            ))}
-          </ul>
         </div>
 
         {/* Knowledge Check Section */}
         <div style={styles.sectionBlock}>
+          <div id="section-quiz"></div>
           <h2 style={styles.sectionTitle}>📚 Test Your Knowledge</h2>
           <p style={styles.sectionDesc}>Answer these questions to learn more about periods and feel confident!</p>
           
@@ -637,6 +735,7 @@ export default function GirlsAwareness() {
         </div>
 
         {/* What is a Period Section */}
+        <div id="section-whatis"></div>
         <div style={styles.grid2}>
           <div style={styles.sectionBlock}>
             <h2 style={styles.sectionTitle}><Droplets size={18} style={{ marginRight: 8 }} /> What is a period?</h2>
@@ -665,6 +764,7 @@ export default function GirlsAwareness() {
         </div>
 
         {/* Myth-Buster Cards */}
+        <div id="section-myths"></div>
         <div style={styles.sectionBlock}>
           <h2 style={styles.sectionTitle}><Sparkle size={18} style={{ marginRight: 8 }} /> Myth-Buster Cards</h2>
           <p style={styles.sectionDesc}>Click on any card to reveal the truth!</p>
@@ -856,6 +956,8 @@ export default function GirlsAwareness() {
             <Link to="/category" style={{ ...styles.navLink, color: theme.muted }}>← Back to Categories</Link>
           </div>
         </footer>
+          </div>
+        </div>
       </div>
     </div>
   );
