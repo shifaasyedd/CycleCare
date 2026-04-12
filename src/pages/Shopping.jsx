@@ -151,12 +151,12 @@ export default function Shopping() {
 
 // Map of common product keywords to Unsplash photo URLs
   const unsplashImages = {
-    "Regular Day Pads": "https://images.unsplash.com/photo-1596755769461-05684b7ad4e2?w=400&h=300&fit=crop",
-    "Overnight Pads": "https://images.unsplash.com/photo-1527613426443-e67041c1bf78c?w=400&h=300&fit=crop",
-    "Panty Liners": "https://images.unsplash.com/photo-1558618666-f447d1e7b3d7?w=400&h=300&fit=crop",
-    "Light Tampons": "https://images.unsplash.com/photo-1626624369442-cd7af6081619?w=400&h=300&fit=crop",
-    "Super Tampons": "https://images.unsplash.com/photo-1618331835717-aa84c17903d5?w=400&h=300&fit=crop",
-    "Menstrual Cup": "https://images.unsplash.com/photo-1613771337727-1c1edc1106e3?w=400&h=300&fit=crop",
+    "Regular Day Pads": "https://images.unsplash.com/photo-1585666450921-16bf5a1540c1?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHJlZ3VsYXIlMjBwYWRzfGVufDB8fDB8fHww",
+    "Overnight Pads": "https://images.unsplash.com/photo-1712842955521-55c8c01ef148?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2FuaXRhcnklMjBwYWR8ZW58MHx8MHx8fDA%3D",
+    "Panty Liners": "https://plus.unsplash.com/premium_photo-1702598576513-fe7425ebf6bd?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHBhbnR5JTIwbGluZXJzJTIwaW1hZ2VzfGVufDB8fDB8fHww",
+    "Light Tampons": "https://media.istockphoto.com/id/468846250/photo/collection-of-pads-liners-and-tampons.jpg?s=612x612&w=0&k=20&c=SI_AmgOZbruROtnFop_4xz270gyedOyX7ubg8x5hGfM=",
+    "Super Tampons": "https://media.istockphoto.com/id/2266961880/photo/menstruation-cycle-with-sanitary-cotton-tampon-for-woman-hygiene-and-protection.jpg?s=612x612&w=0&k=20&c=UYnpjkZLkDItOrbuRbXeBE1gbRRv0R1r5KtxUHmgHXQ=",
+    "Menstrual Cup": "hhttps://images.unsplash.com/photo-1607185073253-44296286cd82?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bWVuc3RydWFsJTIwY3VwfGVufDB8fDB8fHww",
     "Menstrual Disc": "https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?w=400&h=300&fit=crop",
     "Period Underwear": "https://images.unsplash.com/photo-1584677437445-445a5863187e?w=400&h=300&fit=crop",
     "Electric Heating Pad": "https://images.unsplash.com/photo-1538102902303582065-wJi2tNqJ4w4?w=400&h=300&fit=crop",
