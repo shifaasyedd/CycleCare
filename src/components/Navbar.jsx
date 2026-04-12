@@ -48,17 +48,32 @@ export default function Navbar({ active }) {
   },
   [dark]);
 
-  const links = [
-    { to: "/", label: "Home" },
-    { to: "/about", label: "About" },
-    { to: "/contact", label: "Contact Us" },
-    { to: "/terms", label: "Terms" },
-  ];
+  const isLoggedIn = localStorage.getItem("token");
 
-  const authLinks = [
-    { to: "/login", label: "Login" },
-    { to: "/signup", label: "Signup" },
-  ];
+  const links = isLoggedIn
+    ? [
+        { to: "/", label: "Home" },
+        { to: "/dashboard", label: "Dashboard" },
+        { to: "/tracker", label: "Tracker" },
+        { to: "/pcos-tracker", label: "PCOS/PCOD" },
+        { to: "/forum", label: "Forum" },
+        { to: "/profile", label: "Profile" },
+      ]
+    : [
+        { to: "/", label: "Home" },
+        { to: "/about", label: "About" },
+        { to: "/contact", label: "Contact Us" },
+        { to: "/terms", label: "Terms" },
+      ];
+
+  const authLinks = isLoggedIn
+    ? [
+        { to: "/profile", label: "Logout" },
+      ]
+    : [
+        { to: "/login", label: "Login" },
+        { to: "/signup", label: "Signup" },
+      ];
 
   return (
     <nav style={{
@@ -88,10 +103,22 @@ export default function Navbar({ active }) {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <div style={{ display: "flex", gap: 2 }}>
             {authLinks.map(l => (
-              <Link key={l.to} to={l.to} style={{
-                padding: "6px 12px", borderRadius: 8, fontSize: 13, textDecoration: "none", fontWeight: 500,
-                color: t.accent,
-              }}>{l.label}</Link>
+              <span
+                key={l.to}
+                onClick={() => {
+                  if (l.label === "Logout") {
+                    localStorage.removeItem("token");
+                    navigate("/login");
+                  } else {
+                    navigate(l.to);
+                  }
+                }}
+                style={{
+                  padding: "6px 12px", borderRadius: 8, fontSize: 13, textDecoration: "none", fontWeight: 500,
+                  color: t.accent,
+                  cursor: "pointer",
+                }}
+              >{l.label}</span>
             ))}
           </div>
           <div style={{
