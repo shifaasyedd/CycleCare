@@ -474,9 +474,9 @@ export default function Home() {
               For Those Who Experience & Care
             </div>
             <h1 style={styles.heroTitle}>
-              For those who experience
+              For those who 
               <br />
-              & <span style={styles.heroAccent}>care, understood.</span>
+               <span style={styles.heroAccent}>experience & care, understood.</span>
             </h1>
             <p style={styles.heroDesc}>
               A safe, respectful space for everyone — whether you're tracking,
