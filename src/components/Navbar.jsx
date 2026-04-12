@@ -50,10 +50,14 @@ export default function Navbar({ active }) {
 
   const links = [
     { to: "/", label: "Home" },
-    { to: "/category", label: "Categories" },
-    { to: "/dashboard", label: "Dashboard" },
-    { to: "/forum", label: "Forum" },
-    { to: "/profile", label: "Profile" },
+    { to: "/about", label: "About" },
+    { to: "/contact", label: "Contact Us" },
+    { to: "/terms", label: "Terms" },
+  ];
+
+  const authLinks = [
+    { to: "/login", label: "Login" },
+    { to: "/signup", label: "Signup" },
   ];
 
   return (
@@ -81,11 +85,21 @@ export default function Navbar({ active }) {
             })}
           </div>
         </div>
-        <div style={{
-          padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontSize: 13,
-          background: t.toggle, border: `1px solid ${t.border}`, color: t.text,
-        }} onClick={toggleTheme}>
-          {dark ? "Light" : "Dark"}
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ display: "flex", gap: 2 }}>
+            {authLinks.map(l => (
+              <Link key={l.to} to={l.to} style={{
+                padding: "6px 12px", borderRadius: 8, fontSize: 13, textDecoration: "none", fontWeight: 500,
+                color: t.accent,
+              }}>{l.label}</Link>
+            ))}
+          </div>
+          <div style={{
+            padding: "6px 12px", borderRadius: 8, cursor: "pointer", fontSize: 13,
+            background: t.toggle, border: `1px solid ${t.border}`, color: t.text,
+          }} onClick={toggleTheme}>
+            {dark ? "Light" : "Dark"}
+          </div>
         </div>
       </div>
     </nav>
