@@ -170,16 +170,23 @@ export default function Dashboard() {
 
   const cleanMessage = (msg) => {
     if (!msg) return "";
-    if (typeof msg !== "string") return String(msg);
+    let text = typeof msg === "string" ? msg : String(msg);
     try {
-      const parsed = JSON.parse(msg);
+      const parsed = JSON.parse(text);
       if (typeof parsed === "object" && parsed !== null) {
-        return Object.values(parsed).filter(v => v).join(" • ");
+        const values = Object.values(parsed).filter(v => v && typeof v !== "object");
+        if (values.length > 0) return values.join(". ");
+        return Object.entries(parsed)
+          .filter(([, v]) => v && typeof v !== "object")
+          .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`)
+          .join(". ");
       }
-      return String(parsed);
     } catch {
-      return msg.replace(/[{}"\[\]]/g, "").replace(/,/g, " • ").trim();
+      text = text.replace(/^\[?\{[}\]]?$/g, "").replace(/\\"/g, '"').trim();
+      if (text.length < 5) return msg;
     }
+    const cleaned = text.replace(/^[\[\{].*?[\]\}]$/g, "").replace(/"\s*[,;]\s*"/g, ". ").replace(/\\n/g, " ").replace(/[{}"\[\]]/g, "");
+    return cleaned.length > 10 ? cleaned.trim() : text.trim();
   };
 
   const styles = {
@@ -430,7 +437,7 @@ export default function Dashboard() {
                 )}
               </div>
               <div style={styles.lifestyleCard}>
-                <div style={styles.lifestyleTitle}><Activity size={16} style={{ marginRight: 6 }} /> Exercise</div>
+                <div style={styles.lifestyleTitle}><Activity size={16} style={{ marginRight: 6 }} /> ♨ Exercise</div>
                 {lifestyleData.exercise.length === 0 ? (
                   <div style={styles.emptyState}>No data</div>
                 ) : (

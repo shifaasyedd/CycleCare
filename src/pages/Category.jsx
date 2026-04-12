@@ -498,7 +498,7 @@ export default function Category() {
           <p style={styles.featuresDesc}>Each path is tailored to your needs</p>
           <div style={styles.featuresGrid}>
             <div style={styles.featureItem}>
-              <div style={styles.featureIcon}>📚</div>
+              <div style={styles.featureIcon}>🕮</div>
               <div style={styles.featureName}>Age-appropriate content</div>
               <div style={styles.featureDetail}>Information tailored to your journey</div>
             </div>

@@ -189,12 +189,18 @@ Keep responses concise, supportive, and medically appropriate. Format as JSON wi
           { timeout: 15000 }
         );
 
-        const aiResponse = completion.choices[0].message.content;
+        let aiResponse = completion.choices[0].message.content;
+        // Clean up markdown code blocks if present
+        aiResponse = aiResponse.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
         let parsed;
         try {
           parsed = JSON.parse(aiResponse);
         } catch {
-          parsed = { insights: [{ type: 'info', title: 'Health Update', message: aiResponse }], prediction: null };
+          // If still can't parse, just use the raw response as message
+          parsed = { 
+            insights: [{ type: 'info', title: 'Health Update', message: aiResponse.replace(/["\{\}\[\]]/g, "").replace(/,/g, ". ").trim() }], 
+            prediction: null 
+          };
         }
 
         return res.json({
