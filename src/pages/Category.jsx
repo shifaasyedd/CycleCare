@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Heart, Droplets, Activity, Calendar, Lightbulb, MessageCircle,
   ShoppingBag, AlertCircle, Sparkles, Users, ArrowRight,
-  Handshake, Sparkle, Baby
+  Handshake, Sparkle, User
 } from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 import Navbar from "../components/Navbar";
@@ -479,7 +479,7 @@ export default function Category() {
             role="men"
           />
           <CategoryCard
-            icon={<Baby size={36} color="white" />}
+            icon={<User size={36} color="white" />}
             title="Non-Menstruators"
             desc="Awareness-first learning for young girls who haven't started menstruating yet. Simple explanations, myths vs facts, and confidence-building information to prepare you for what's ahead."
             role="girls"
