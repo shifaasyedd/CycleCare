@@ -3,17 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import {
   Heart, Droplets, Activity, Calendar, Lightbulb, MessageCircle,
   ShoppingBag, AlertCircle, Sparkles, Users, ArrowRight,
-  Handshake, Sparkle
+  Handshake, Sparkle, Flower2
 } from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 import Navbar from "../components/Navbar";
-
-const VenusIcon = ({ size, color }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="4"/>
-    <path d="M16.5 7.5c0 2.5-2.5 5-4.5 5s-4.5-2.5-4.5-5c0-2.5 2.5-5 4.5-5s4.5 2.5 4.5 5z"/>
-  </svg>
-);
 
 export default function Category() {
   const navigate = useNavigate();
@@ -486,7 +479,7 @@ export default function Category() {
             role="men"
           />
           <CategoryCard
-            icon={<VenusIcon size={36} color="white" />}
+            icon={<Flower2 size={36} color="white" />}
             title="Non-Menstruators"
             desc="Awareness-first learning for young girls who haven't started menstruating yet. Simple explanations, myths vs facts, and confidence-building information to prepare you for what's ahead."
             role="girls"
