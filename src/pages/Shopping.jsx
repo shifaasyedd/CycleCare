@@ -149,11 +149,80 @@ export default function Shopping() {
     }
   ];
 
-  // Simple deterministic image placeholder (Picsum – always works)
-  const getProductImage = (productName) => {
-    const hash = productName.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const imageId = (hash % 100) + 1;
-    return `https://picsum.photos/id/${imageId}/300/200`;
+// Map of common product keywords to Unsplash photo URLs
+  const unsplashImages = {
+    "Regular Day Pads": "https://images.unsplash.com/photo-1596755769461-05684b7ad4e2?w=400&h=300&fit=crop",
+    "Overnight Pads": "https://images.unsplash.com/photo-1527613426443-e67041c1bf78c?w=400&h=300&fit=crop",
+    "Panty Liners": "https://images.unsplash.com/photo-1558618666-f447d1e7b3d7?w=400&h=300&fit=crop",
+    "Light Tampons": "https://images.unsplash.com/photo-1626624369442-cd7af6081619?w=400&h=300&fit=crop",
+    "Super Tampons": "https://images.unsplash.com/photo-1618331835717-aa84c17903d5?w=400&h=300&fit=crop",
+    "Menstrual Cup": "https://images.unsplash.com/photo-1613771337727-1c1edc1106e3?w=400&h=300&fit=crop",
+    "Menstrual Disc": "https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?w=400&h=300&fit=crop",
+    "Period Underwear": "https://images.unsplash.com/photo-1584677437445-445a5863187e?w=400&h=300&fit=crop",
+    "Electric Heating Pad": "https://images.unsplash.com/photo-1538102902303582065-wJi2tNqJ4w4?w=400&h=300&fit=crop",
+    "Microwavable Seed Sack": "https://images.unsplash.com/photo-1544161515-4ab46ce0cc62?w=400&h=300&fit=crop",
+    "Hot Water Bottle": "https://images.unsplash.com/photo-1605656960541-95347a9cc6f6?w=400&h=300&fit=crop",
+    "Ibuprofen": "https://images.unsplash.com/photo-1554860514-4e054949ab29?w=400&h=300&fit=crop",
+    "Dark Chocolate": "https://images.unsplash.com/photo-1606312604171-950c1d06a977?w=400&h=300&fit=crop",
+    "Raspberry Leaf Tea": "https://images.unsplash.com/photo-1556679343-c1befa5a3fbb?w=400&h=300&fit=crop",
+    "Chamomile Tea": "https://images.unsplash.com/photo-1571504388575-9e62a302fb21?w=400&h=300&fit=crop",
+    "Peppermint Tea": "https://images.unsplash.com/photo-1597314461396-1d3c9ee3b403?w=400&h=300&fit=crop",
+    "Ginger Tea": "https://images.unsplash.com/photo-1513477892291-60b39ddc6fd8?w=400&h=300&fit=crop",
+    "Bananas": "https://images.unsplash.com/photo-1607623814075-fc4b3e8faf1e?w=400&h=300&fit=crop",
+    "Pumpkin Seeds": "https://images.unsplash.com/photo-1588613319737-26fc41ec8d27?w=400&h=300&fit=crop",
+    "Dried Apricots": "https://images.unsplash.com/photo-1563636619-e9143da1913f?w=400&h=300&fit=crop",
+    "Almonds": "https://images.unsplash.com/photo-1589995288056-1cac7c8a64a9?w=400&h=300&fit=crop",
+    "Oversized Hoodie": "https://images.unsplash.com/photo-1556905055-eab7c57a5ee0?w=400&h=300&fit=crop",
+    "Fuzzy Socks": "https://images.unsplash.com/photo-1576568008026-8a4c65224979?w=400&h=300&fit=crop",
+    "Weighted Blanket": "https://images.unsplash.com/photo-1544452535-0238c4de6f76?w=400&h=300&fit=crop",
+    "Silk Pillowcase": "https://images.unsplash.com/photo-1584545487008-48e8c7285457?w=400&h=300&fit=crop",
+    "Body Pillow": "https://images.unsplash.com/photo-1586350977773-b7b4b4d64e8f?w=400&h=300&fit=crop",
+    "Loose Joggers": "https://images.unsplash.com/photo-1584677437445-445a5863187e?w=400&h=300&fit=crop",
+    "House Slippers": "https://images.unsplash.com/photo-1526862156108-8328ef35a03c?w=400&h=300&fit=crop",
+    "Plushie Heating Pad": "https://images.unsplash.com/photo-1518981340509-26516c8c727c?w=400&h=300&fit=crop",
+    "Cramp Socks": "https://images.unsplash.com/photo-1576568008026-8a4c65224979?w=400&h=300&fit=crop",
+    "Sheet Masks": "https://images.unsplash.com/photo-1576421453121-89cc1fc16bf0?w=400&h=300&fit=crop",
+    "Aesthetic Water Bottle": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop",
+    "Scented Candle": "https://images.unsplash.com/photo-1603008201339-c9be2fb0e1f2?w=400&h=300&fit=crop",
+    "Flowers": "https://images.unsplash.com/photo-1490750967868-85c8b12fc7d5?w=400&h=300&fit=crop",
+  };
+
+  const fallbackImage = "https://images.unsplash.com/photo-1584677437445-445a5863187e?w=400&h=300&fit=crop";
+
+  const getProductImage = (itemName) => unsplashImages[itemName] || fallbackImage;
+
+  // Map of common product keywords to Unsplash photo IDs
+  const unsplashIds = {
+    "pads": "1596755769461-05684b7ad4e2",
+    "tampon": "1626624369442-cd7af6081619",
+    "heating pad": "1538102902303582065-wJi2tNqJ4w4",
+    "hot water bottle": "1605656960541-95347a9cc6f6",
+    "chocolate": "1606312604171-950c1d06a977",
+    "tea": "1556679343-c1befa5a3fbb",
+    "banana": "1607623814075-fc4b3e8faf1e",
+    "almond": "1589995288056-1cac7c8a64a9",
+    "hoodie": "1556905055-eab7c57a5ee0",
+    "socks": "1576568008026-8a4c65224979",
+    "blanket": "1544452535-0238c4de6f76",
+    "pillowcase": "1584545487008-48e8c7285457",
+    "candle": "1603008201339-c9be2fb0e1f2",
+    "flowers": "1490750967868-85c8b12fc7d5",
+    "water bottle": "1602143407151-7111542de6e8",
+    "facemask": "1576421453121-89cc1fc16bf0",
+    "essential oil": "1608579638275-d2e8c54e8f1c",
+    "ibuprofen": "1554860514-4e054949ab29",
+    "electrolyte": "1584468664466-efd323d57e39",
+    "omega": "1550590396-01c6c2cdd1da",
+    "menstrual cup": "1613771337727-1c1edc1106e3",
+    "panty liner": "1584515931498-94d4de4f92fc",
+  };
+
+  const getUnsplashId = (query) => {
+    const q = query.toLowerCase();
+    for (const [key, id] of Object.entries(unsplashIds)) {
+      if (q.includes(key)) return id;
+    }
+    return "1596755769461-05684b7ad4e2";
   };
 
   const styles = {
@@ -387,7 +456,7 @@ export default function Shopping() {
                   }}
                 >
                   <img
-                    src={getProductImage(item.name)}
+                    src={getProductImage(item.query)}
                     alt={item.name}
                     style={styles.productImage}
                   />
