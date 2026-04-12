@@ -152,7 +152,7 @@ export default function Dashboard() {
     if (!insights?.prediction) return null;
     const days = Math.round((new Date(insights.prediction) - new Date()) / (1000 * 60 * 60 * 24));
     return days;
-  }, [insights]);
+}, [insights]);
 
   const insightTypeColor = (type) => {
     if (type === "success") return theme.green;
@@ -168,86 +168,59 @@ export default function Dashboard() {
     return <Info size={16} color={theme.accent} />;
   };
 
-  // ---------- Styles ----------
+  const cleanMessage = (msg) => {
+    if (!msg) return "";
+    if (typeof msg !== "string") return String(msg);
+    try {
+      const parsed = JSON.parse(msg);
+      if (typeof parsed === "object" && parsed !== null) {
+        return Object.values(parsed).filter(v => v).join(" • ");
+      }
+      return String(parsed);
+    } catch {
+      return msg.replace(/[{}"\[\]]/g, "").replace(/,/g, " • ").trim();
+    }
+  };
+
   const styles = {
-    page: {
-      minHeight: "100vh",
-      fontFamily: "'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
-      background: dark
-        ? `radial-gradient(circle at 0% 0%, rgba(255, 107, 139, 0.1), transparent 40%),
-           radial-gradient(circle at 100% 100%, rgba(255, 142, 170, 0.08), transparent 50%),
-           ${theme.bg}`
-        : `radial-gradient(circle at 0% 0%, rgba(229, 76, 111, 0.05), transparent 40%),
-           radial-gradient(circle at 100% 100%, rgba(251, 113, 133, 0.08), transparent 50%),
-           ${theme.bg}`,
-      color: theme.text,
-    },
-    container: { maxWidth: 1280, margin: "0 auto", padding: "0 24px" },
-    nav: {
-      position: "sticky", top: 20, zIndex: 100,
-      display: "flex", alignItems: "center", justifyContent: "space-between", gap: 20,
-      padding: "10px 20px", marginTop: 20, borderRadius: 100,
-      background: dark ? "rgba(20, 20, 28, 0.9)" : "rgba(255, 255, 255, 0.9)",
-      backdropFilter: "blur(12px)", border: `1px solid ${theme.border}`,
-    },
-    brand: { display: "flex", alignItems: "center", gap: 10, cursor: "pointer" },
-    logo: { height: 40 },
-    brandName: { fontSize: 16, fontWeight: 700 },
-    brandTagline: { fontSize: 9, color: theme.muted },
-    navLinks: { display: "flex", gap: 4 },
-    navLink: { padding: "6px 14px", borderRadius: 100, fontSize: 12, fontWeight: 500, cursor: "pointer", color: theme.muted, textDecoration: "none" },
-    navLinkActive: { color: theme.accent, background: theme.chip },
-    themeToggle: { padding: "6px 12px", borderRadius: 100, background: dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.04)", border: `1px solid ${theme.border}`, cursor: "pointer", fontSize: 11 },
-    hero: { marginTop: 32, padding: 32, borderRadius: 32, background: theme.card, border: `1px solid ${theme.border}`, textAlign: "center" },
-    badge: { display: "inline-block", padding: "4px 12px", borderRadius: 100, background: theme.chip, fontSize: 11, color: theme.accent, marginBottom: 12 },
-    title: { fontSize: 28, fontWeight: 800, margin: "0 0 8px" },
-    subtitle: { fontSize: 12, color: theme.muted },
-    statsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20, marginTop: 32, marginBottom: 32 },
-    statCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 24, padding: 24, textAlign: "center" },
-    statIcon: { fontSize: 28, marginBottom: 8 },
-    statValue: { fontSize: 32, fontWeight: 800, color: theme.accent },
-    statLabel: { fontSize: 12, color: theme.muted, marginTop: 8 },
-    statSub: { fontSize: 10, color: theme.muted, marginTop: 4 },
-    predictionCard: {
-      marginBottom: 32,
-      padding: 28,
-      borderRadius: 28,
-      background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`,
-      color: "white",
-      textAlign: "center",
-      border: `1px solid ${theme.border}`,
-    },
-    predictionLabel: { fontSize: 12, opacity: 0.9, marginBottom: 8 },
-    predictionValue: { fontSize: 36, fontWeight: 800, marginBottom: 4 },
-    predictionSub: { fontSize: 12, opacity: 0.85 },
-    chartsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(380px, 1fr))", gap: 24, marginBottom: 32 },
-    chartCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 24, padding: 24 },
-    chartTitle: { fontSize: 16, fontWeight: 700, marginBottom: 16, display: "flex", alignItems: "center", gap: 8 },
-    insightsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16, marginBottom: 32 },
-    insightCard: (color) => ({
-      background: theme.card,
-      border: `1px solid ${color}40`,
-      borderLeft: `4px solid ${color}`,
-      borderRadius: 16,
-      padding: 20,
-    }),
-    insightTitle: { fontSize: 14, fontWeight: 700, marginBottom: 6, display: "flex", alignItems: "center", gap: 6 },
-    insightMessage: { fontSize: 12, color: theme.muted, lineHeight: 1.5 },
-    lifestyleGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: 20, marginBottom: 32 },
-    lifestyleCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 20, padding: 20 },
-    lifestyleTitle: { fontSize: 14, fontWeight: 700, marginBottom: 12 },
-    lifestyleRow: { display: "flex", justifyContent: "space-between", padding: "6px 0", fontSize: 12, borderBottom: `1px solid ${theme.border}` },
-    emptyState: { textAlign: "center", padding: "40px 20px", color: theme.muted, fontSize: 13 },
-    errorBox: { padding: 16, borderRadius: 16, background: theme.red + "15", border: `1px solid ${theme.red}`, color: theme.red, fontSize: 13, textAlign: "center", marginTop: 24 },
-    footer: { padding: "24px 0", borderTop: `1px solid ${theme.border}`, display: "flex", justifyContent: "space-between", marginTop: 24 },
-    refreshBtn: { padding: "8px 18px", borderRadius: 100, fontSize: 12, fontWeight: 600, cursor: "pointer", background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`, border: "none", color: "white", marginTop: 16 },
+    page: { minHeight: "100vh", background: theme.bg, color: theme.text },
+    container: { maxWidth: 1200, margin: "0 auto", padding: "0 16px" },
+    hero: { textAlign: "center", padding: "48px 16px 32px" },
+    badge: { display: "inline-flex", alignItems: "center", padding: "6px 14px", borderRadius: 20, background: theme.chip, color: theme.accent, fontSize: 12, fontWeight: 600, marginBottom: 16 },
+    title: { fontSize: 32, fontWeight: 800, marginBottom: 8, background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" },
+    subtitle: { fontSize: 16, color: theme.muted, marginBottom: 24 },
+    errorBox: { background: "rgba(239, 68, 68, 0.15)", color: theme.red, padding: "12px 16px", borderRadius: 8, marginBottom: 16, fontSize: 14 },
+    predictionCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 16, padding: "20px 24px", textAlign: "center" },
+    predictionLabel: { display: "inline-flex", alignItems: "center", fontSize: 13, color: theme.muted, marginBottom: 8 },
+    predictionValue: { fontSize: 28, fontWeight: 800, color: theme.accent, marginBottom: 4 },
+    predictionSub: { fontSize: 14, color: theme.muted },
+    statsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 16, marginBottom: 32 },
+    statCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 16, padding: "20px 16px", textAlign: "center" },
+    statValue: { fontSize: 28, fontWeight: 800, color: theme.text },
+    statLabel: { fontSize: 13, color: theme.muted, marginBottom: 2 },
+    statSub: { fontSize: 11, color: theme.muted },
+    insightsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 16, marginBottom: 24 },
+    insightCard: (color) => ({ background: theme.card, border: `1px solid ${color}40`, borderRadius: 16, padding: 20 }),
+    insightTitle: { display: "flex", alignItems: "center", gap: 8, fontSize: 18, fontWeight: 700, marginBottom: 10 },
+    insightMessage: { fontSize: 16, color: theme.muted, lineHeight: 1.6 },
+    chartsGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: 16, marginBottom: 32 },
+    chartCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 16, padding: 20 },
+    chartTitle: { display: "flex", alignItems: "center", fontSize: 16, fontWeight: 700, marginBottom: 16 },
+    emptyState: { textAlign: "center", color: theme.muted, padding: "40px 0", fontSize: 14 },
+    lifestyleGrid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16, marginBottom: 32 },
+    lifestyleCard: { background: theme.card, border: `1px solid ${theme.border}`, borderRadius: 16, padding: 20 },
+    lifestyleTitle: { display: "flex", alignItems: "center", fontSize: 14, fontWeight: 600, marginBottom: 12 },
+    lifestyleRow: { display: "flex", justifyContent: "space-between", fontSize: 13, padding: "6px 0" },
+    refreshBtn: { background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`, color: "#FFF", border: "none", padding: "12px 24px", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer" },
+    footer: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 0", borderTop: `1px solid ${theme.border}`, marginTop: 32 },
+    navLink: { color: theme.accent, textDecoration: "none" },
   };
 
   if (loading) {
     return (
       <div style={{ ...styles.page, display: "flex", alignItems: "center", justifyContent: "center" }}>
         <div style={{ textAlign: "center" }}>
-          <div style={{ fontSize: 32, marginBottom: 12 }}>📊</div>
+          <Activity size={32} color={theme.accent} style={{ marginBottom: 12 }} />
           <div style={{ fontSize: 14, color: theme.muted }}>Loading your dashboard...</div>
         </div>
       </div>
@@ -347,7 +320,7 @@ export default function Dashboard() {
                           <span>{insightTypeIcon(ins.type)}</span>
                           <span>{ins.title}</span>
                         </div>
-                        <div style={styles.insightMessage}>{ins.message}</div>
+                        <div style={styles.insightMessage}>{cleanMessage(ins.message)}</div>
                       </div>
                     );
                   })}
@@ -358,7 +331,7 @@ export default function Dashboard() {
                       <Sparkle size={16} color={theme.accent} />
                       <span>Recommendation</span>
                     </div>
-                    <div style={styles.insightMessage}>{insights.recommendation}</div>
+                    <div style={styles.insightMessage}>{cleanMessage(insights.recommendation)}</div>
                   </div>
                 )}
               </>
