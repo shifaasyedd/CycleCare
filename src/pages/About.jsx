@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Heart } from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 import Navbar from "../components/Navbar";
 
@@ -311,7 +312,7 @@ export default function About() {
 
         {/* Hero Section */}
         <div style={styles.hero}>
-          <span style={styles.badge}>🌸 Our story</span>
+          <span style={styles.badge}><Heart size={14} style={{ marginRight: 6 }} /> Our story</span>
           <h1 style={styles.title}>
             Making period care
             <br />
@@ -349,7 +350,7 @@ export default function About() {
               <path d="M120 220 L80 260" stroke={theme.accentLight} strokeWidth="2" strokeLinecap="round" />
               <path d="M280 220 L320 260" stroke={theme.accentLight} strokeWidth="2" strokeLinecap="round" />
               <path d="M170 280 L230 280" stroke={theme.accent} strokeWidth="2" strokeLinecap="round" />
-              <text x="200" y="310" textAnchor="middle" fill={theme.muted} fontSize="12">🌸 CycleCare</text>
+              <text x="200" y="310" textAnchor="middle" fill={theme.muted} fontSize="12">CycleCare</text>
             </svg>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { User, Mail, MessageCircle, Send, CheckCircle, FileText } from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 import Navbar from "../components/Navbar";
 
@@ -348,7 +349,7 @@ export default function Contact() {
 
         {/* Hero Section */}
         <div style={styles.hero}>
-          <span style={styles.badge}>💬 Get in touch</span>
+          <span style={styles.badge}><MessageCircle size={14} style={{ marginRight: 6 }} /> Get in touch</span>
           <h1 style={styles.title}>
             We'd love to hear
             <br />
@@ -371,7 +372,7 @@ export default function Contact() {
             <form style={styles.form} onSubmit={handleSubmit}>
               <div style={styles.fieldGroup}>
                 <div style={styles.label}>
-                  <span>👤</span> Your name
+                  <User size={14} style={{ marginRight: 6 }} /> Your name
                 </div>
                 <input
                   type="text"
@@ -386,7 +387,7 @@ export default function Contact() {
 
               <div style={styles.fieldGroup}>
                 <div style={styles.label}>
-                  <span>✉️</span> Email address
+                  <Mail size={14} style={{ marginRight: 6 }} /> Email address
                 </div>
                 <input
                   type="email"
@@ -401,7 +402,7 @@ export default function Contact() {
 
               <div style={styles.fieldGroup}>
                 <div style={styles.label}>
-                  <span>📌</span> Subject
+                  <FileText size={14} style={{ marginRight: 6 }} /> Subject
                 </div>
                 <input
                   type="text"
@@ -415,7 +416,7 @@ export default function Contact() {
 
               <div style={styles.fieldGroup}>
                 <div style={styles.label}>
-                  <span>💬</span> Message
+                  <MessageCircle size={14} style={{ marginRight: 6 }} /> Message
                 </div>
                 <textarea
                   name="message"

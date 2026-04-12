@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Moon, Sun, Mail, Lock, Eye, EyeOff, User, ArrowRight } from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 
 export default function Signup() {
@@ -323,7 +324,7 @@ export default function Signup() {
   return (
     <div style={styles.page}>
       <div style={styles.themeToggle} onClick={() => setDark(v => !v)}>
-        <span>{dark ? "🌙" : "☀️"}</span>
+        {dark ? <Moon size={16} /> : <Sun size={16} />}
         <span>{dark ? "Dark" : "Light"}</span>
       </div>
 
@@ -343,7 +344,7 @@ export default function Signup() {
 
             <form style={styles.form} onSubmit={handleSubmit}>
               <div style={styles.fieldGroup}>
-                <div style={styles.label}>👤 Full Name</div>
+                <div style={styles.label}><User size={14} style={{ marginRight: 6 }} /> Full Name</div>
                 <input
                   type="text"
                   name="fullName"
@@ -356,7 +357,7 @@ export default function Signup() {
               </div>
 
               <div style={styles.fieldGroup}>
-                <div style={styles.label}>✉️ Email</div>
+                <div style={styles.label}><Mail size={14} style={{ marginRight: 6 }} /> Email</div>
                 <input
                   type="email"
                   name="email"
@@ -369,7 +370,7 @@ export default function Signup() {
               </div>
 
               <div style={styles.fieldGroup}>
-                <div style={styles.label}>🔒 Password</div>
+                <div style={styles.label}><Lock size={14} style={{ marginRight: 6 }} /> Password</div>
                 <input
                   type={show ? "text" : "password"}
                   name="password"

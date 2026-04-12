@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Calendar, Clock, Activity, Utensils, Pill, Stethoscope,
+  MessageCircle, ShoppingBag, AlertCircle, Heart, Droplets,
+  FlaskConical, Swimsuit, Leaf, ArrowRight, Moon, FileText, HelpCircle
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 
 // ---------- Date helpers ----------
@@ -864,14 +869,14 @@ function cycleStartForDate(date) {
       case "period":
         return (
           <>
-            <div style={styles.label}>📅 Period Start Date</div>
+            <div style={styles.label}><Calendar size={14} style={{ marginRight: 6 }} /> Period Start Date</div>
             <input type="date" style={styles.input} value={start} onChange={(e) => setStart(e.target.value)} />
             
-            <div style={styles.label}>⏱️ Period Length (days)</div>
+            <div style={styles.label}><Clock size={14} style={{ marginRight: 6 }} /> Period Length (days)</div>
             <input type="number" min="1" max="10" style={styles.input} value={periodLen} onChange={(e) => setPeriodLen(e.target.value)} />
             
             {/* NEW: Flow Type Selector */}
-            <div style={styles.label}>🩸 Flow Type</div>
+            <div style={styles.label}><Droplets size={14} style={{ marginRight: 6 }} /> Flow Type</div>
             <select 
               style={styles.select} 
               value={flowType} 
@@ -882,7 +887,7 @@ function cycleStartForDate(date) {
               ))}
             </select>
             
-            <div style={styles.label}>📝 Notes</div>
+            <div style={styles.label}><FileText size={14} style={{ marginRight: 6 }} /> Notes</div>
             <textarea style={styles.textarea} value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="How are you feeling? Any symptoms?" />
             
             <div style={styles.row}>
@@ -890,10 +895,10 @@ function cycleStartForDate(date) {
               <button style={styles.btnSecondary} onClick={clearAll}>Clear All</button>
             </div>
             <div style={styles.infoBox}>
-              <div style={{ fontSize: 12 }}>📊 <strong>Your Stats:</strong> Avg {avgCycle}d cycle • Period {typicalPeriodLen}d</div>
+              <div style={{ fontSize: 12 }}><Activity size={14} style={{ marginRight: 6 }} /> <strong>Your Stats:</strong> Avg {avgCycle}d cycle • Period {typicalPeriodLen}d</div>
             </div>
             <div style={{ marginTop: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>📅 Recent Cycles</div>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}><Calendar size={14} style={{ marginRight: 6 }} /> Recent Cycles</div>
               <div style={styles.list}>
                 {entries.slice(0, 4).map(cycle => (
                   <div key={cycle._id} style={styles.listItem}>
@@ -907,7 +912,7 @@ function cycleStartForDate(date) {
             {/* Product Quiz (unchanged) */}
             <div style={styles.quizSection}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-                <div style={{ fontWeight: 600, fontSize: 13 }}>❓ Product Finder</div>
+                <div style={{ fontWeight: 600, fontSize: 13 }}><HelpCircle size={14} style={{ marginRight: 6 }} /> Product Finder</div>
                 <button style={{ fontSize: 11, background: "transparent", border: "none", cursor: "pointer", color: theme.accent }} onClick={() => setShowQuiz(!showQuiz)}>
                   {showQuiz ? "Hide" : "Show"}
                 </button>
@@ -967,7 +972,7 @@ function cycleStartForDate(date) {
             />
             <button style={styles.btnPrimary} onClick={saveDailyLog}>Save Today's Log</button>
             <div style={{ marginTop: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>📋 Recent Logs</div>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}><FileText size={14} style={{ marginRight: 6 }} /> Recent Logs</div>
               <div style={styles.list}>
                 {dailyLogs.slice(0, 5).map(log => (
                   <div key={log._id} style={styles.listItem}>
@@ -985,43 +990,43 @@ function cycleStartForDate(date) {
       case "lifestyle":
         return (
           <>
-            <div style={styles.label}>🏃 Exercise</div>
+            <div style={styles.label}><Activity size={14} style={{ marginRight: 6 }} /> Exercise</div>
             <select style={styles.select} value={lifestyle.exercise} onChange={(e) => setLifestyle({ ...lifestyle, exercise: e.target.value })}>
               <option value="">Select</option>
               {lifestyleOptions.exercise.map(opt => <option key={opt}>{opt}</option>)}
             </select>
             
-            <div style={styles.label}>😴 Sleep</div>
+            <div style={styles.label}><Moon size={14} style={{ marginRight: 6 }} /> Sleep</div>
             <select style={styles.select} value={lifestyle.sleep} onChange={(e) => setLifestyle({ ...lifestyle, sleep: e.target.value })}>
               <option value="">Select</option>
               {lifestyleOptions.sleep.map(opt => <option key={opt}>{opt}</option>)}
             </select>
             
-            <div style={styles.label}>😰 Stress Level</div>
+            <div style={styles.label}><Activity size={14} style={{ marginRight: 6 }} /> Stress Level</div>
             <select style={styles.select} value={lifestyle.stress} onChange={(e) => setLifestyle({ ...lifestyle, stress: e.target.value })}>
               <option value="">Select</option>
               {lifestyleOptions.stress.map(opt => <option key={opt}>{opt}</option>)}
             </select>
             
-            <div style={styles.label}>🍽️ Meals</div>
+            <div style={styles.label}><Utensils size={14} style={{ marginRight: 6 }} /> Meals</div>
             <input type="text" style={styles.input} placeholder="What did you eat today?" value={lifestyle.meals} onChange={(e) => setLifestyle({ ...lifestyle, meals: e.target.value })} />
             
             <button style={styles.btnPrimary} onClick={saveDailyLog}>Save Lifestyle Log</button>
             
             <div style={{ marginTop: 16 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>📋 Recent Lifestyle Logs</div>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}><FileText size={14} style={{ marginRight: 6 }} /> Recent Lifestyle Logs</div>
               <div style={styles.list}>
                 {dailyLogs.slice(0, 5).map(log => (
                   <div key={log._id} style={styles.listItem}>
                     <div style={{ fontWeight: 500 }}>{new Date(log.date).toLocaleDateString()}</div>
                     <div style={{ fontSize: 10, color: theme.muted, marginTop: 2 }}>
-                      {log.lifestyle?.exercise && `🏃 ${log.lifestyle.exercise} • `}
-                      {log.lifestyle?.sleep && `😴 ${log.lifestyle.sleep} • `}
-                      {log.lifestyle?.stress && `😰 ${log.lifestyle.stress}`}
+                      {log.lifestyle?.exercise && <><Activity size={10} style={{ marginRight: 4 }} /> {log.lifestyle.exercise} • </>}
+                      {log.lifestyle?.sleep && <><Moon size={10} style={{ marginRight: 4 }} /> {log.lifestyle.sleep} • </>}
+                      {log.lifestyle?.stress && <Activity size={10} style={{ marginRight: 4 }} />}
                     </div>
                     {log.lifestyle?.meals && (
                       <div style={{ fontSize: 10, color: theme.muted, marginTop: 2 }}>
-                        🍽️ {log.lifestyle.meals.substring(0, 50)}{log.lifestyle.meals.length > 50 ? '…' : ''}
+                        <Utensils size={10} style={{ marginRight: 4 }} /> {log.lifestyle.meals.substring(0, 50)}{log.lifestyle.meals.length > 50 ? '…' : ''}
                       </div>
                     )}
                   </div>
@@ -1037,7 +1042,7 @@ function cycleStartForDate(date) {
       case "medications":
         return (
           <>
-            <div style={styles.label}>💊 Medication Name</div>
+            <div style={styles.label}><Pill size={14} style={{ marginRight: 6 }} /> Medication Name</div>
             <input type="text" style={styles.input} placeholder="e.g., Ibuprofen" value={newMed.name} onChange={(e) => setNewMed({ ...newMed, name: e.target.value })} />
             <div style={styles.label}>📏 Dosage</div>
             <input type="text" style={styles.input} placeholder="e.g., 200mg" value={newMed.dosage} onChange={(e) => setNewMed({ ...newMed, dosage: e.target.value })} />
@@ -1045,7 +1050,7 @@ function cycleStartForDate(date) {
             <input type="text" style={styles.input} placeholder="e.g., Morning, with food" value={newMed.time} onChange={(e) => setNewMed({ ...newMed, time: e.target.value })} />
             <button style={styles.btnPrimary} onClick={addMedication}>Add Medication</button>
             <div style={{ marginTop: 12 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>📋 My Medications</div>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}><FileText size={14} style={{ marginRight: 6 }} /> My Medications</div>
               <div style={styles.list}>
                 {medications.length === 0 ? (
                   <div style={{ padding: 6, fontSize: 11, color: theme.muted }}>No medications added</div>
@@ -1064,13 +1069,13 @@ function cycleStartForDate(date) {
       case "doctor":
         return (
           <>
-            <div style={styles.label}>📅 Visit Date</div>
+            <div style={styles.label}><Calendar size={14} style={{ marginRight: 6 }} /> Visit Date</div>
             <input type="date" style={styles.input} value={newVisit.date} onChange={(e) => setNewVisit({ ...newVisit, date: e.target.value })} />
             
-            <div style={styles.label}>👨‍⚕️ Doctor's Name</div>
+            <div style={styles.label}><Stethoscope size={14} style={{ marginRight: 6 }} /> Doctor's Name</div>
             <input type="text" style={styles.input} placeholder="Dr. Name" value={newVisit.doctor} onChange={(e) => setNewVisit({ ...newVisit, doctor: e.target.value })} />
             
-            <div style={styles.label}>📝 Notes</div>
+            <div style={styles.label}><FileText size={14} style={{ marginRight: 6 }} /> Notes</div>
             <textarea style={styles.textarea} placeholder="What did the doctor say?" value={newVisit.notes} onChange={(e) => setNewVisit({ ...newVisit, notes: e.target.value })} />
             
             <div style={styles.label}>🔬 Tests Ordered / Results</div>
@@ -1079,7 +1084,7 @@ function cycleStartForDate(date) {
             <button style={styles.btnPrimary} onClick={addVisit}>Save Visit</button>
             
             <div style={{ marginTop: 16 }}>
-              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>📋 Visit History</div>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}><FileText size={14} style={{ marginRight: 6 }} /> Visit History</div>
               <div style={styles.list}>
                 {visits.length === 0 ? (
                   <div style={{ padding: 6, fontSize: 11, color: theme.muted }}>No visits recorded</div>
@@ -1130,7 +1135,7 @@ function cycleStartForDate(date) {
 
         {/* Hero */}
         <div style={styles.hero}>
-          <span style={styles.badge}>🌸 Track Your Cycle</span>
+          <span style={styles.badge}><Heart size={12} style={{ marginRight: 6 }} /> Track Your Cycle</span>
           <h1 style={styles.title}>Period Tracker</h1>
           <p style={styles.subtitle}>Track, understand, and manage your menstrual health with ease</p>
         </div>
@@ -1143,12 +1148,12 @@ function cycleStartForDate(date) {
 
         {/* Tabs */}
         <div style={styles.mainTabs}>
-          <button style={styles.tabBtn(activeTab === "period")} onClick={() => setActiveTab("period")}>📅 Period</button>
-          <button style={styles.tabBtn(activeTab === "symptoms")} onClick={() => setActiveTab("symptoms")}>💭 Symptoms</button>
-          <button style={styles.tabBtn(activeTab === "lifestyle")} onClick={() => setActiveTab("lifestyle")}>🥗 Lifestyle</button>
-          <button style={styles.tabBtn(activeTab === "medications")} onClick={() => setActiveTab("medications")}>💊 Meds</button>
-          <button style={styles.tabBtn(activeTab === "doctor")} onClick={() => setActiveTab("doctor")}>🏥 Doctor</button>
-          <button style={styles.tabBtn(activeTab === "phases")} onClick={() => setActiveTab("phases")}>🌙 Phases</button>
+          <button style={styles.tabBtn(activeTab === "period")} onClick={() => setActiveTab("period")}><Calendar size={14} style={{ marginRight: 4 }} /> Period</button>
+          <button style={styles.tabBtn(activeTab === "symptoms")} onClick={() => setActiveTab("symptoms")}><Activity size={14} style={{ marginRight: 4 }} /> Symptoms</button>
+          <button style={styles.tabBtn(activeTab === "lifestyle")} onClick={() => setActiveTab("lifestyle")}><Leaf size={14} style={{ marginRight: 4 }} /> Lifestyle</button>
+          <button style={styles.tabBtn(activeTab === "medications")} onClick={() => setActiveTab("medications")}><Pill size={14} style={{ marginRight: 4 }} /> Meds</button>
+          <button style={styles.tabBtn(activeTab === "doctor")} onClick={() => setActiveTab("doctor")}><Stethoscope size={14} style={{ marginRight: 4 }} /> Doctor</button>
+          <button style={styles.tabBtn(activeTab === "phases")} onClick={() => setActiveTab("phases")}><Moon size={14} style={{ marginRight: 4 }} /> Phases</button>
         </div>
 
         {/* Legend */}
@@ -1164,12 +1169,12 @@ function cycleStartForDate(date) {
           {/* Left Column */}
           <div style={styles.leftCard}>
             <div style={styles.cardHeader}>
-              {activeTab === "period" && "📅 Add Your Cycle"}
-              {activeTab === "symptoms" && "💭 Log Symptoms"}
-              {activeTab === "lifestyle" && "🥗 Lifestyle Log"}
-              {activeTab === "medications" && "💊 Medications"}
-              {activeTab === "doctor" && "🏥 Doctor Visits"}
-              {activeTab === "phases" && "🌙 Cycle Phases"}
+              {activeTab === "period" && <><Calendar size={16} style={{ marginRight: 6 }} /> Add Your Cycle</>}
+              {activeTab === "symptoms" && <><Activity size={16} style={{ marginRight: 6 }} /> Log Symptoms</>}
+              {activeTab === "lifestyle" && <><Leaf size={16} style={{ marginRight: 6 }} /> Lifestyle Log</>}
+              {activeTab === "medications" && <><Pill size={16} style={{ marginRight: 6 }} /> Medications</>}
+              {activeTab === "doctor" && <><Stethoscope size={16} style={{ marginRight: 6 }} /> Doctor Visits</>}
+              {activeTab === "phases" && <><Moon size={16} style={{ marginRight: 6 }} /> Cycle Phases</>}
             </div>
             <div style={styles.cardBody}>
               {renderTabContent()}
@@ -1178,7 +1183,7 @@ function cycleStartForDate(date) {
 
           {/* Right Column - Calendar */}
           <div style={styles.rightCard}>
-            <div style={styles.cardHeader}>📅 Calendar</div>
+            <div style={styles.cardHeader}><Calendar size={16} style={{ marginRight: 6 }} /> Calendar</div>
             <div style={styles.cardBody}>
               <div style={styles.calendarHeader}>
                 <button style={styles.navBtn} onClick={() => setViewDate(d => new Date(d.getFullYear(), d.getMonth() - 1, 1))}>←</button>
@@ -1218,12 +1223,12 @@ function cycleStartForDate(date) {
 
               {getTodayLog() && (
                 <div style={styles.infoBox}>
-                  <div style={{ fontSize: 12, fontWeight: 600 }}>📝 Today's Log</div>
+                  <div style={{ fontSize: 12, fontWeight: 600 }}><FileText size={14} style={{ marginRight: 6 }} /> Today's Log</div>
                   {getTodayLog().symptoms?.length > 0 && (
                     <div style={{ fontSize: 10, marginTop: 4 }}>✓ {getTodayLog().symptoms.slice(0, 4).join(", ")}</div>
                   )}
                   {getTodayLog().note && (
-                    <div style={{ fontSize: 10, marginTop: 2, color: theme.muted }}>📝 {getTodayLog().note.substring(0, 60)}</div>
+                    <div style={{ fontSize: 10, marginTop: 2, color: theme.muted }}><FileText size={10} style={{ marginRight: 4 }} /> {getTodayLog().note.substring(0, 60)}</div>
                   )}
                 </div>
               )}
@@ -1233,7 +1238,7 @@ function cycleStartForDate(date) {
 
         {/* Switch to Non-Menstruators */}
         <div style={{ marginBottom: 24, padding: 16, background: theme.chip, borderRadius: 20, textAlign: "center" }}>
-          <p style={{ marginBottom: 12, fontSize: 13 }}>🌸 Want to learn about Menstrual Health?</p>
+          <p style={{ marginBottom: 12, fontSize: 13 }}><Heart size={14} style={{ marginRight: 6 }} /> Want to learn about Menstrual Health?</p>
           <button 
             style={{ padding: "10px 24px", borderRadius: 100, background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`, border: "none", color: "white", cursor: "pointer" }}
             onClick={() => {
@@ -1254,7 +1259,7 @@ function cycleStartForDate(date) {
           onMouseEnter={(e) => e.currentTarget.style.transform = "translateY(-4px)"}
           onMouseLeave={(e) => e.currentTarget.style.transform = "translateY(0)"}
         >
-          <div style={styles.chatbotIcon}>💬</div>
+          <div style={styles.chatbotIcon}><MessageCircle size={32} color={theme.accent} /></div>
           <div style={styles.chatbotTitle}>Need help understanding your cycle?</div>
           <div style={styles.chatbotDesc}>
             Chat with our friendly AI assistant about period tracking, symptoms, cycle phases, or anything else you're curious about.
@@ -1265,7 +1270,7 @@ function cycleStartForDate(date) {
             onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
             onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
           >
-            💬 Chat with CycleCare Assistant →
+            <MessageCircle size={14} style={{ marginRight: 6 }} /> Chat with CycleCare Assistant →
           </button>
         </div>
 
@@ -1286,7 +1291,7 @@ function cycleStartForDate(date) {
           onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
         >
-          <div style={{ fontSize: 48, marginBottom: 12 }}>🛍️</div>
+          <div style={{ marginBottom: 12 }}><ShoppingBag size={48} color={theme.accent} /></div>
           <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Shop Period Care Essentials</div>
           <div style={{ fontSize: 13, color: theme.muted, marginBottom: 16, maxWidth: 500, margin: "0 auto 16px auto" }}>
             Find pads, cups, heating pads, chocolates, and more – all in one place.

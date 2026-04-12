@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Activity, Calendar, Clock, Droplets, Utensils, Pill, Stethoscope,
+  MessageCircle, ShoppingBag, AlertCircle, Heart, FileText,
+  Lightbulb, TrendingUp, Moon, Sun, FlaskConical, ArrowRight
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 
 export default function PCOSPage() {
@@ -583,7 +588,7 @@ export default function PCOSPage() {
         return (
           <div style={styles.grid2}>
             <div style={styles.card}>
-              <div style={styles.cardHeader}>💡 Understanding PCOS / PCOD</div>
+              <div style={styles.cardHeader}><Lightbulb size={16} style={{ marginRight: 6 }} /> Understanding PCOS / PCOD</div>
               <div style={styles.cardBody}>
                 <p style={{ fontSize: 13, lineHeight: 1.5, marginBottom: 12 }}>
                   Polycystic Ovary Syndrome (PCOS) / Polycystic Ovary Disease (PCOD) is a hormonal disorder common among women of reproductive age. It affects how the ovaries work and can impact overall health.
@@ -619,16 +624,16 @@ export default function PCOSPage() {
             
 
             <div style={styles.card}>
-              <div style={styles.cardHeader}>📋 Quick Actions</div>
+              <div style={styles.cardHeader}><FileText size={16} style={{ marginRight: 6 }} /> Quick Actions</div>
               <div style={styles.cardBody}>
                 <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   <button style={styles.btnPrimary} onClick={() => setActiveTab("cycles")}>➕ Log a Cycle</button>
-                  <button style={styles.btnSecondary} onClick={() => setActiveTab("symptoms")}>📝 Log Daily Symptoms</button>
-                  <button style={styles.btnSecondary} onClick={() => setActiveTab("medications")}>💊 Add Medication</button>
-                  <button style={styles.btnSecondary} onClick={() => setActiveTab("doctor")}>🏥 Record Doctor Visit</button>
+                  <button style={styles.btnSecondary} onClick={() => setActiveTab("symptoms")}><FileText size={14} style={{ marginRight: 6 }} /> Log Daily Symptoms</button>
+                  <button style={styles.btnSecondary} onClick={() => setActiveTab("medications")}><Pill size={14} style={{ marginRight: 6 }} /> Add Medication</button>
+                  <button style={styles.btnSecondary} onClick={() => setActiveTab("doctor")}><Stethoscope size={14} style={{ marginRight: 6 }} /> Record Doctor Visit</button>
                 </div>
                 <div style={styles.infoBox}>
-                  <div style={{ fontSize: 12, fontWeight: 600 }}>📊 Did you know?</div>
+                  <div style={{ fontSize: 12, fontWeight: 600 }}><Activity size={14} style={{ marginRight: 6 }} /> Did you know?</div>
                   <div style={{ fontSize: 11, marginTop: 4 }}>
                     Tracking PCOS/PCOD symptoms can help identify triggers and effective management strategies. You're already taking the first step toward better health!
                   </div>
@@ -644,11 +649,11 @@ export default function PCOSPage() {
             <div style={styles.card}>
               <div style={styles.cardHeader}>➕ Add Cycle</div>
               <div style={styles.cardBody}>
-                <div style={styles.label}>📅 Period Start Date</div>
+                <div style={styles.label}><Calendar size={14} style={{ marginRight: 6 }} /> Period Start Date</div>
                 <input type="date" style={styles.input} value={newCycle.startDate} onChange={(e) => setNewCycle({ ...newCycle, startDate: e.target.value })} />
-                <div style={styles.label}>📅 Period End Date</div>
+                <div style={styles.label}><Calendar size={14} style={{ marginRight: 6 }} /> Period End Date</div>
                 <input type="date" style={styles.input} value={newCycle.endDate} onChange={(e) => setNewCycle({ ...newCycle, endDate: e.target.value })} />
-                <div style={styles.label}>🩸 Flow Type</div>
+                <div style={styles.label}><Droplets size={14} style={{ marginRight: 6 }} /> Flow Type</div>
                 <select style={styles.select} value={newCycle.flowType} onChange={(e) => setNewCycle({ ...newCycle, flowType: e.target.value })}>
                   {flowOptions.map(opt => <option key={opt} value={opt.toLowerCase()}>{opt}</option>)}
                 </select>
@@ -657,7 +662,7 @@ export default function PCOSPage() {
             </div>
 
             <div style={styles.card}>
-              <div style={styles.cardHeader}>📅 Cycle History</div>
+              <div style={styles.cardHeader}><Calendar size={16} style={{ marginRight: 6 }} /> Cycle History</div>
               <div style={styles.cardBody}>
                 <div style={styles.list}>
                   {cycles.length === 0 ? (
@@ -681,7 +686,7 @@ export default function PCOSPage() {
         return (
           <div style={styles.grid2}>
             <div style={styles.card}>
-              <div style={styles.cardHeader}>📝 Log Today's Symptoms</div>
+              <div style={styles.cardHeader}><FileText size={16} style={{ marginRight: 6 }} /> Log Today's Symptoms</div>
               <div style={styles.cardBody}>
                 <div style={styles.symptomGrid}>
                   {commonSymptoms.map(symptom => (
@@ -711,7 +716,7 @@ export default function PCOSPage() {
             </div>
 
             <div style={styles.card}>
-              <div style={styles.cardHeader}>📋 Recent Logs</div>
+              <div style={styles.cardHeader}><FileText size={16} style={{ marginRight: 6 }} /> Recent Logs</div>
               <div style={styles.cardBody}>
                 <div style={styles.list}>
                   {dailyLog.length === 0 ? (
@@ -735,27 +740,27 @@ export default function PCOSPage() {
         return (
           <div style={styles.grid2}>
             <div style={styles.card}>
-              <div style={styles.cardHeader}>🥗 Log Today's Lifestyle</div>
+              <div style={styles.cardHeader}><Utensils size={16} style={{ marginRight: 6 }} /> Log Today's Lifestyle</div>
               <div style={styles.cardBody}>
-                <div style={styles.label}>🏃 Exercise</div>
+                <div style={styles.label}><Activity size={14} style={{ marginRight: 6 }} /> Exercise</div>
                 <select style={styles.select} value={lifestyle.exercise} onChange={(e) => setLifestyle({ ...lifestyle, exercise: e.target.value })}>
                   <option value="">Select</option>
                   {lifestyleOptions.exercise.map(opt => <option key={opt}>{opt}</option>)}
                 </select>
 
-                <div style={styles.label}>😴 Sleep</div>
+                <div style={styles.label}><Moon size={14} style={{ marginRight: 6 }} /> Sleep</div>
                 <select style={styles.select} value={lifestyle.sleep} onChange={(e) => setLifestyle({ ...lifestyle, sleep: e.target.value })}>
                   <option value="">Select</option>
                   {lifestyleOptions.sleep.map(opt => <option key={opt}>{opt}</option>)}
                 </select>
 
-                <div style={styles.label}>😰 Stress Level</div>
+                <div style={styles.label}><Activity size={14} style={{ marginRight: 6 }} /> Stress Level</div>
                 <select style={styles.select} value={lifestyle.stress} onChange={(e) => setLifestyle({ ...lifestyle, stress: e.target.value })}>
                   <option value="">Select</option>
                   {lifestyleOptions.stress.map(opt => <option key={opt}>{opt}</option>)}
                 </select>
 
-                <div style={styles.label}>🍽️ Meals</div>
+                <div style={styles.label}><Utensils size={14} style={{ marginRight: 6 }} /> Meals</div>
                 <input
                   type="text"
                   style={styles.input}
@@ -769,7 +774,7 @@ export default function PCOSPage() {
             </div>
 
             <div style={styles.card}>
-              <div style={styles.cardHeader}>📋 Recent Lifestyle Logs</div>
+              <div style={styles.cardHeader}><FileText size={16} style={{ marginRight: 6 }} /> Recent Lifestyle Logs</div>
               <div style={styles.cardBody}>
                 <div style={styles.list}>
                   {dailyLog.length === 0 ? (
@@ -785,7 +790,7 @@ export default function PCOSPage() {
                         </div>
                         {log.lifestyle?.meals && (
                           <div style={{ fontSize: 11, marginTop: 2, color: theme.muted }}>
-                            🍽️ {log.lifestyle.meals.substring(0, 80)}
+                            <Utensils size={12} style={{ marginRight: 4 }} /> {log.lifestyle.meals.substring(0, 80)}
                           </div>
                         )}
                       </div>
@@ -801,9 +806,9 @@ export default function PCOSPage() {
         return (
           <div style={styles.grid2}>
             <div style={styles.card}>
-              <div style={styles.cardHeader}>💊 Add Medication/Supplement</div>
+              <div style={styles.cardHeader}><Pill size={16} style={{ marginRight: 6 }} /> Add Medication/Supplement</div>
               <div style={styles.cardBody}>
-                <div style={styles.label}>💊 Medication Name</div>
+                <div style={styles.label}><Pill size={14} style={{ marginRight: 6 }} /> Medication Name</div>
                 <input type="text" style={styles.input} placeholder="Medication name" value={newMed.name} onChange={(e) => setNewMed({ ...newMed, name: e.target.value })} />
                 <div style={styles.label}>📏 Dosage</div>
                 <input type="text" style={styles.input} placeholder="Dosage (e.g., 500mg)" value={newMed.dosage} onChange={(e) => setNewMed({ ...newMed, dosage: e.target.value })} />
@@ -814,7 +819,7 @@ export default function PCOSPage() {
             </div>
 
             <div style={styles.card}>
-              <div style={styles.cardHeader}>📋 My Medications</div>
+              <div style={styles.cardHeader}><FileText size={16} style={{ marginRight: 6 }} /> My Medications</div>
               <div style={styles.cardBody}>
                 <div style={styles.list}>
                   {medications.length === 0 ? (
@@ -838,13 +843,13 @@ export default function PCOSPage() {
             <div style={styles.grid2}>
               {/* Left card – Add Visit */}
               <div style={styles.card}>
-                <div style={styles.cardHeader}>🏥 Record Doctor Visit</div>
+                <div style={styles.cardHeader}><Stethoscope size={16} style={{ marginRight: 6 }} /> Record Doctor Visit</div>
                 <div style={styles.cardBody}>
-                  <div style={styles.label}>📅 Visit Date</div>
+                  <div style={styles.label}><Calendar size={14} style={{ marginRight: 6 }} /> Visit Date</div>
                   <input type="date" style={styles.input} value={newVisit.date} onChange={(e) => setNewVisit({ ...newVisit, date: e.target.value })} />
-                  <div style={styles.label}>👨‍⚕️ Doctor's Name</div>
+                  <div style={styles.label}><Stethoscope size={14} style={{ marginRight: 6 }} /> Doctor's Name</div>
                   <input type="text" style={styles.input} placeholder="Doctor's name" value={newVisit.doctor} onChange={(e) => setNewVisit({ ...newVisit, doctor: e.target.value })} />
-                  <div style={styles.label}>📝 Notes</div>
+                  <div style={styles.label}><FileText size={14} style={{ marginRight: 6 }} /> Notes</div>
                   <textarea style={styles.textarea} placeholder="Notes from visit" value={newVisit.notes} onChange={(e) => setNewVisit({ ...newVisit, notes: e.target.value })} />
                   <div style={styles.label}>🔬 Tests Ordered / Results</div>
                   <textarea style={styles.textarea} placeholder="Tests ordered / results" value={newVisit.tests} onChange={(e) => setNewVisit({ ...newVisit, tests: e.target.value })} />
@@ -854,7 +859,7 @@ export default function PCOSPage() {
 
               {/* Right card – Visit History */}
               <div style={styles.card}>
-                <div style={styles.cardHeader}>📋 Visit History</div>
+                <div style={styles.cardHeader}><FileText size={16} style={{ marginRight: 6 }} /> Visit History</div>
                 <div style={styles.cardBody}>
                   <div style={styles.list}>
                     {visits.length === 0 ? (
@@ -898,7 +903,7 @@ export default function PCOSPage() {
 
         {/* Hero */}
         <div style={styles.hero}>
-          <span style={styles.badge}>🌸 PCOS/PCOD Management</span>
+          <span style={styles.badge}><Heart size={12} style={{ marginRight: 6 }} /> PCOS/PCOD Management</span>
           <h1 style={styles.title}>Track Your PCOS/PCOD Journey</h1>
           <p style={styles.subtitle}>Designed for irregular cycles. Track symptoms, medications, and lifestyle factors.</p>
         </div>
@@ -925,12 +930,12 @@ export default function PCOSPage() {
 
         {/* Tabs */}
         <div style={styles.tabs}>
-          <button style={styles.tabBtn(activeTab === "overview")} onClick={() => setActiveTab("overview")}>📊 Overview</button>
-          <button style={styles.tabBtn(activeTab === "cycles")} onClick={() => setActiveTab("cycles")}>📅 Cycles</button>
-          <button style={styles.tabBtn(activeTab === "symptoms")} onClick={() => setActiveTab("symptoms")}>💭 Symptoms</button>
-          <button style={styles.tabBtn(activeTab === "lifestyle")} onClick={() => setActiveTab("lifestyle")}>🥗 Lifestyle</button>
-          <button style={styles.tabBtn(activeTab === "medications")} onClick={() => setActiveTab("medications")}>💊 Meds</button>
-          <button style={styles.tabBtn(activeTab === "doctor")} onClick={() => setActiveTab("doctor")}>🏥 Doctor</button>
+          <button style={styles.tabBtn(activeTab === "overview")} onClick={() => setActiveTab("overview")}><Activity size={14} style={{ marginRight: 6 }} /> Overview</button>
+          <button style={styles.tabBtn(activeTab === "cycles")} onClick={() => setActiveTab("cycles")}><Calendar size={14} style={{ marginRight: 6 }} /> Cycles</button>
+          <button style={styles.tabBtn(activeTab === "symptoms")} onClick={() => setActiveTab("symptoms")}><Activity size={14} style={{ marginRight: 6 }} /> Symptoms</button>
+          <button style={styles.tabBtn(activeTab === "lifestyle")} onClick={() => setActiveTab("lifestyle")}><Utensils size={14} style={{ marginRight: 6 }} /> Lifestyle</button>
+          <button style={styles.tabBtn(activeTab === "medications")} onClick={() => setActiveTab("medications")}><Pill size={14} style={{ marginRight: 6 }} /> Meds</button>
+          <button style={styles.tabBtn(activeTab === "doctor")} onClick={() => setActiveTab("doctor")}><Stethoscope size={14} style={{ marginRight: 6 }} /> Doctor</button>
         </div>
 
         {/* Tab Content */}
@@ -938,7 +943,7 @@ export default function PCOSPage() {
 
         {/* Switch to Non-Menstruators */}
         <div style={{ marginBottom: 24, padding: 16, background: theme.chip, borderRadius: 20, textAlign: "center" }}>
-          <p style={{ marginBottom: 12, fontSize: 13 }}>🌸 Want to learn about Menstrual Health?</p>
+          <p style={{ marginBottom: 12, fontSize: 13 }}><Heart size={14} style={{ marginRight: 6 }} /> Want to learn about Menstrual Health?</p>
           <button 
             style={{ padding: "10px 24px", borderRadius: 100, background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`, border: "none", color: "white", cursor: "pointer" }}
             onClick={() => {
@@ -954,13 +959,13 @@ export default function PCOSPage() {
 
         {/* Chatbot Section */}
         <div style={styles.chatbotSection} onClick={goToChatbot}>
-          <div style={styles.chatbotIcon}>💬</div>
+          <div style={styles.chatbotIcon}><MessageCircle size={32} color={theme.accent} /></div>
           <div style={styles.chatbotTitle}>Still have questions about PCOS/PCOD?</div>
           <div style={styles.chatbotDesc}>
             Chat with our friendly AI assistant about PCOS/PCOD symptoms, medications, lifestyle changes, or anything else you're curious about.
           </div>
           <button style={styles.chatbotBtn} onClick={goToChatbot}>
-            💬 Chat with CycleCare Assistant →
+            <MessageCircle size={14} style={{ marginRight: 6 }} /> Chat with CycleCare Assistant →
           </button>
         </div>
 
@@ -981,7 +986,7 @@ export default function PCOSPage() {
           onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
         >
-          <div style={{ fontSize: 48, marginBottom: 12 }}>🛍️</div>
+          <div style={{ marginBottom: 12 }}><ShoppingBag size={48} color={theme.accent} /></div>
           <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Shop Period Care Essentials</div>
           <div style={{ fontSize: 13, color: theme.muted, marginBottom: 16, maxWidth: 500, margin: "0 auto 16px auto" }}>
             Find pads, cups, heating pads, chocolates, and more – all in one place.

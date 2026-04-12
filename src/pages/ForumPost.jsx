@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  MessageCircle, ArrowLeft, Send, Heart, MessageSquare, Clock, User
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 
 const categoryColors = {

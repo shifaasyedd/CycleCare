@@ -1,5 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  Droplets, Activity, Leaf, Heart, ShoppingBag, Sparkles,
+  FlaskConical, Moon, Sun, Coffee, Utensils, Smile, Frown,
+  AlertCircle, CheckCircle, ArrowRight
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 
 export default function Shopping() {
@@ -48,7 +53,7 @@ export default function Shopping() {
   // ---------- Product data (no numbering, just clean names) ----------
   const categories = [
     {
-      icon: "🩸",
+      icon: <Droplets size={20} />,
       name: "The Essentials: Hygiene & Protection",
       items: [
         { name: "Regular Day Pads", desc: "For medium flow – comfortable and secure.", query: "regular day sanitary pads" },
@@ -69,7 +74,7 @@ export default function Shopping() {
       ]
     },
     {
-      icon: "💪",
+      icon: <Activity size={20} />,
       name: "Pain Relief & Physical Health",
       items: [
         { name: "Electric Heating Pad", desc: "Deep abdominal heat for stubborn cramps.", query: "electric heating pad for cramps" },
@@ -90,7 +95,7 @@ export default function Shopping() {
       ]
     },
     {
-      icon: "🍫",
+      icon: <Leaf size={20} />,
       name: "Nutrition & Cravings",
       items: [
         { name: "Dark Chocolate (70%+)", desc: "High in magnesium, mood‑boosting.", query: "dark chocolate 70 percent cocoa" },
@@ -111,7 +116,7 @@ export default function Shopping() {
       ]
     },
     {
-      icon: "😴",
+      icon: <Moon size={20} />,
       name: "Comfort & Sleep",
       items: [
         { name: "Oversized Hoodie", desc: "Maximum comfort and hides bloating.", query: "oversized hoodie women" },
@@ -127,7 +132,7 @@ export default function Shopping() {
       ]
     },
     {
-      icon: "🎁",
+      icon: <ShoppingBag size={20} />,
       name: "Cute Gifts & Mental Health",
       items: [
         { name: "Plushie Heating Pad", desc: "Microwaveable stuffed animal for comfort.", query: "microwavable plush heating pad" },
@@ -347,7 +352,7 @@ export default function Shopping() {
         <Navbar />
 
         <div style={styles.hero}>
-          <h1 style={styles.title}>🛍️ The Complete Period Care Shop</h1>
+          <h1 style={styles.title}><ShoppingBag size={28} style={{ marginRight: 10 }} /> The Complete Period Care Shop</h1>
           <p style={styles.subtitle}>
             Click any product to find it on Google Shopping – safe, private, and convenient.
           </p>

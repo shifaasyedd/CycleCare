@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
+import {
+  MessageCircle, Moon, Sun, Send, Bot, User, ArrowLeft, AlertCircle,
+  Sparkles, Phone, Mail, MapPin, Clock
+} from "lucide-react";
 
 export default function Chatbot() {
   const [message, setMessage] = useState("");
@@ -415,7 +419,7 @@ export default function Chatbot() {
           <div className="chat-header" style={S.header}>
             <div style={S.headerLeft}>
               <h1 className="chat-title" style={S.title}>
-                <span>💬</span> CycleCare Chatbot
+                <MessageCircle size={24} style={{ marginRight: 8 }} /> CycleCare Chatbot
               </h1>
               <p style={S.subtitle}>
                 Hi {userName || "there"}! Ask about periods, cramps, symptoms, mood changes, and support in a calm, safe space.
@@ -432,7 +436,7 @@ export default function Chatbot() {
                 aria-label="Toggle dark mode"
                 title="Toggle dark mode"
               >
-                <span style={{ fontSize: 14 }}>{dark ? "🌙" : "☀️"}</span>
+                {dark ? <Moon size={14} /> : <Sun size={14} />}
                 <span>{dark ? "Dark" : "Light"}</span>
               </div>
 
@@ -446,17 +450,17 @@ export default function Chatbot() {
           <div className="chat-area" style={S.chatArea}>
             {chat.length === 0 && (
               <div style={S.emptyState}>
-                <div style={{ fontSize: "56px", marginBottom: "16px" }}>💬</div>
+                <div style={{ marginBottom: "16px" }}><MessageCircle size={56} color={theme.accent} /></div>
                 <div style={{ fontWeight: "700", fontSize: "18px", marginBottom: "12px", color: theme.accent }}>
                   Ask me anything about menstrual health
                 </div>
                 <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px", marginTop: "16px" }}>
-                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>🩸 Periods</span>
-                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>⚡ Cramps</span>
-                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>💭 Mood swings</span>
-                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>🧘 Self care</span>
-                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>🧼 Hygiene</span>
-                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>💗 Emotional support</span>
+                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>Periods</span>
+                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>Cramps</span>
+                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>Mood swings</span>
+                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>Self care</span>
+                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>Hygiene</span>
+                  <span style={{ background: theme.chip, padding: "4px 12px", borderRadius: "20px", fontSize: "12px" }}>Emotional support</span>
                 </div>
               </div>
             )}
@@ -504,7 +508,7 @@ export default function Chatbot() {
             </div>
 
             <div style={S.disclaimer}>
-              ⚠️ This chatbot provides general information about menstrual
+              <AlertCircle size={14} style={{ marginRight: 6 }} /> This chatbot provides general information about menstrual
               health and support. It should not be relied upon as medical
               advice. Please consult a qualified healthcare professional for any
               serious or personal health concerns.

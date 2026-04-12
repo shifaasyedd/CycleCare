@@ -1,5 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Heart, Droplets, Activity, Calendar, Lightbulb, MessageCircle,
+  ShoppingBag, AlertCircle, Sparkles, Moon, Sun, Check, X,
+  HelpCircle, ClipboardList, TrendingUp, ArrowRight, Trash2,
+  Sparkle, Info, Video, Phone
+} from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 import Navbar from "../components/Navbar";
 
@@ -168,7 +174,7 @@ export default function GirlsAwareness() {
     });
     
     if (correctCount === 5) {
-      return "🌟 Amazing! You got all 5 correct! You're well-prepared to understand periods. Keep learning and feel confident!";
+      return "✨ Amazing! You got all 5 correct! You're well-prepared to understand periods. Keep learning and feel confident!";
     } else if (correctCount >= 3) {
       return `📚 Great job! You got ${correctCount}/5 correct. You're on the right track! Review the explanations to learn even more.`;
     } else {
@@ -526,7 +532,7 @@ export default function GirlsAwareness() {
 
         {/* Hero Section */}
         <div style={styles.hero}>
-          <span style={styles.badge}>🌸 For Non-Menstruators</span>
+          <span style={styles.badge}><Heart size={12} style={{ marginRight: 6 }} /> For Non-Menstruators</span>
           <h1 style={styles.title}>Periods, explained simply and safely</h1>
           <p style={styles.subtitle}>
             This page is for girls who want awareness, confidence, and clear information about menstrual health. 
@@ -536,18 +542,18 @@ export default function GirlsAwareness() {
 
         {/* Video Tutorials Section */}
         <div style={styles.sectionBlock}>
-          <h2 style={styles.sectionTitle}>📺 Learning About Period Products</h2>
+          <h2 style={styles.sectionTitle}><Video size={18} style={{ marginRight: 8 }} /> Learning About Period Products</h2>
           <p style={styles.sectionDesc}>Watch these videos to understand different period products so you'll feel prepared when your period starts.</p>
           
           <div style={styles.productTabs}>
             <button style={styles.productTab(selectedProduct === "pad")} onClick={() => setSelectedProduct("pad")}>
-              🩸 Pad
+              <Droplets size={14} style={{ marginRight: 6 }} /> Pad
             </button>
             <button style={styles.productTab(selectedProduct === "tampon")} onClick={() => setSelectedProduct("tampon")}>
-              📍 Tampon
+              <Activity size={14} style={{ marginRight: 6 }} /> Tampon
             </button>
             <button style={styles.productTab(selectedProduct === "cup")} onClick={() => setSelectedProduct("cup")}>
-              🥤 Menstrual Cup
+              <Heart size={14} style={{ marginRight: 6 }} /> Menstrual Cup
             </button>
           </div>
 
@@ -615,7 +621,7 @@ export default function GirlsAwareness() {
                   return (
                     <div key={idx} style={{ marginBottom: 12 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span>{isCorrect ? "✅" : "❌"}</span>
+                        {isCorrect ? <Check size={16} color={theme.green} /> : <X size={16} color={theme.red} />}
                         <span style={{ fontWeight: 500 }}>{item.question}</span>
                       </div>
                       <div style={{ fontSize: 13, color: theme.muted, marginLeft: 28, marginTop: 4 }}>
@@ -633,7 +639,7 @@ export default function GirlsAwareness() {
         {/* What is a Period Section */}
         <div style={styles.grid2}>
           <div style={styles.sectionBlock}>
-            <h2 style={styles.sectionTitle}>🩸 What is a period?</h2>
+            <h2 style={styles.sectionTitle}><Droplets size={18} style={{ marginRight: 8 }} /> What is a period?</h2>
             <p style={styles.sectionDesc}>
               A period is the monthly shedding of the uterus lining. It's a natural part of growing up and reproductive health. 
               Most people start their period between ages 9-15, and it usually comes every 21-35 days.
@@ -645,34 +651,34 @@ export default function GirlsAwareness() {
           </div>
 
           <div style={styles.sectionBlock}>
-            <h2 style={styles.sectionTitle}>🌟 Period Emergency Kit</h2>
+            <h2 style={styles.sectionTitle}><Sparkles size={18} style={{ marginRight: 8 }} /> Period Emergency Kit</h2>
             <p style={styles.sectionDesc}>It's good to be prepared! Keep these items in your bag for peace of mind:</p>
             <ul style={styles.list}>
-              <li style={styles.li}>🩸 2-3 pads / panty liners</li>
-              <li style={styles.li}>🩲 Spare underwear</li>
-              <li style={styles.li}>🧻 Small wipes / tissues</li>
-              <li style={styles.li}>🗑️ Small bag for disposal</li>
-              <li style={styles.li}>📱 Phone to call for help if needed</li>
-              <li style={styles.li}>🎒 A small pouch to keep everything together</li>
+              <li style={styles.li}><Droplets size={14} style={{ marginRight: 6 }} /> 2-3 pads / panty liners</li>
+              <li style={styles.li}>Spare underwear</li>
+              <li style={styles.li}>Small wipes / tissues</li>
+              <li style={styles.li}><Trash2 size={14} style={{ marginRight: 6 }} /> Small bag for disposal</li>
+              <li style={styles.li}><Phone size={14} style={{ marginRight: 6 }} /> Phone to call for help if needed</li>
+              <li style={styles.li}><ShoppingBag size={14} style={{ marginRight: 6 }} /> A small pouch to keep everything together</li>
             </ul>
           </div>
         </div>
 
         {/* Myth-Buster Cards */}
         <div style={styles.sectionBlock}>
-          <h2 style={styles.sectionTitle}>🔮 Myth-Buster Cards</h2>
+          <h2 style={styles.sectionTitle}><Sparkle size={18} style={{ marginRight: 8 }} /> Myth-Buster Cards</h2>
           <p style={styles.sectionDesc}>Click on any card to reveal the truth!</p>
           <div style={styles.mythGrid}>
             {myths.map((item, index) => (
               <div key={index} style={styles.flipCard} onClick={() => toggleFlip(index)}>
                 {!flipped[index] ? (
                   <>
-                    <div style={{ fontWeight: 700, marginBottom: 8, color: theme.accent }}>❌ Myth</div>
+                    <div style={{ fontWeight: 700, marginBottom: 8, color: theme.accent }}><X size={14} style={{ marginRight: 6 }} /> Myth</div>
                     <div>{item.myth}</div>
                   </>
                 ) : (
                   <>
-                    <div style={{ fontWeight: 700, marginBottom: 8, color: theme.green }}>✅ Fact</div>
+                    <div style={{ fontWeight: 700, marginBottom: 8, color: theme.green }}><Check size={14} style={{ marginRight: 6 }} /> Fact</div>
                     <div>{item.fact}</div>
                   </>
                 )}
@@ -683,14 +689,14 @@ export default function GirlsAwareness() {
 
         {/* Mood & Symptom Help */}
         <div style={styles.sectionBlock}>
-          <h2 style={styles.sectionTitle}>💭 Understanding Period Symptoms</h2>
+          <h2 style={styles.sectionTitle}><MessageCircle size={18} style={{ marginRight: 8 }} /> Understanding Period Symptoms</h2>
           <p style={styles.sectionDesc}>Click on any symptom to learn how to manage it when your period starts:</p>
-          <div style={styles.symptomGrid}>
-            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("cramps")}>⚡ Cramps</button>
-            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("fatigue")}>😴 Fatigue</button>
-            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("mood")}>💭 Mood Swings</button>
-            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("headache")}>🤕 Headache</button>
-            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("bloating")}>🫧 Bloating</button>
+            <div style={styles.symptomGrid}>
+            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("cramps")}>Cramps</button>
+            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("fatigue")}>Fatigue</button>
+            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("mood")}>Mood Swings</button>
+            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("headache")}>Headache</button>
+            <button style={styles.symptomBtn} onClick={() => setSelectedSymptom("bloating")}>Bloating</button>
           </div>
           {selectedSymptom && (
             <div style={styles.resultBox}>
@@ -703,24 +709,24 @@ export default function GirlsAwareness() {
         {/* Do's and Don'ts */}
         <div style={styles.dosDontsGrid}>
           <div style={styles.sectionBlock}>
-            <h2 style={styles.sectionTitle}>✅ Do's</h2>
+            <h2 style={styles.sectionTitle}><Check size={18} style={{ marginRight: 8 }} /> Do's</h2>
             <ul style={styles.list}>
-              <li style={styles.li}>✅ Learn about periods before they start</li>
-              <li style={styles.li}>✅ Talk to a trusted adult about any questions</li>
-              <li style={styles.li}>✅ Keep a small emergency kit in your bag</li>
-              <li style={styles.li}>✅ Be kind to yourself during your period</li>
-              <li style={styles.li}>✅ Ask questions without shame</li>
+              <li style={styles.li}><Check size={14} style={{ marginRight: 6 }} /> Learn about periods before they start</li>
+              <li style={styles.li}><Check size={14} style={{ marginRight: 6 }} /> Talk to a trusted adult about any questions</li>
+              <li style={styles.li}><Check size={14} style={{ marginRight: 6 }} /> Keep a small emergency kit in your bag</li>
+              <li style={styles.li}><Check size={14} style={{ marginRight: 6 }} /> Be kind to yourself during your period</li>
+              <li style={styles.li}><Check size={14} style={{ marginRight: 6 }} /> Ask questions without shame</li>
             </ul>
           </div>
 
           <div style={styles.sectionBlock}>
-            <h2 style={styles.sectionTitle}>❌ Don'ts</h2>
+            <h2 style={styles.sectionTitle}><X size={18} style={{ marginRight: 8 }} /> Don'ts</h2>
             <ul style={styles.list}>
-              <li style={styles.li}>❌ Don't believe myths without checking facts</li>
-              <li style={styles.li}>❌ Don't feel embarrassed — periods are natural</li>
-              <li style={styles.li}>❌ Don't ignore severe pain or unusual symptoms</li>
-              <li style={styles.li}>❌ Don't be afraid to ask for help</li>
-              <li style={styles.li}>❌ Don't compare your experience to others</li>
+              <li style={styles.li}><X size={14} style={{ marginRight: 6 }} /> Don't believe myths without checking facts</li>
+              <li style={styles.li}><X size={14} style={{ marginRight: 6 }} /> Don't feel embarrassed — periods are natural</li>
+              <li style={styles.li}><X size={14} style={{ marginRight: 6 }} /> Don't ignore severe pain or unusual symptoms</li>
+              <li style={styles.li}><X size={14} style={{ marginRight: 6 }} /> Don't be afraid to ask for help</li>
+              <li style={styles.li}><X size={14} style={{ marginRight: 6 }} /> Don't compare your experience to others</li>
             </ul>
           </div>
         </div>
@@ -728,28 +734,28 @@ export default function GirlsAwareness() {
         {/* When to Ask for Help */}
         <div style={styles.grid2}>
           <div style={styles.sectionBlock}>
-            <h2 style={styles.sectionTitle}>🆘 When to ask for help</h2>
+            <h2 style={styles.sectionTitle}><AlertCircle size={18} style={{ marginRight: 8 }} /> When to ask for help</h2>
             <p style={styles.sectionDesc}>
               It's important to know when to talk to a trusted adult or doctor:
             </p>
             <ul style={styles.list}>
-              <li style={styles.li}>🩸 If you haven't started your period by age 16</li>
-              <li style={styles.li}>🩸 If periods are extremely painful</li>
-              <li style={styles.li}>🩸 If bleeding is very heavy</li>
-              <li style={styles.li}>🩸 If you feel dizzy, weak, or faint</li>
-              <li style={styles.li}>🩸 If you have any questions or worries</li>
+              <li style={styles.li}><Droplets size={14} style={{ marginRight: 6 }} /> If you haven't started your period by age 16</li>
+              <li style={styles.li}><Droplets size={14} style={{ marginRight: 6 }} /> If periods are extremely painful</li>
+              <li style={styles.li}><Droplets size={14} style={{ marginRight: 6 }} /> If bleeding is very heavy</li>
+              <li style={styles.li}><Droplets size={14} style={{ marginRight: 6 }} /> If you feel dizzy, weak, or faint</li>
+              <li style={styles.li}><Droplets size={14} style={{ marginRight: 6 }} /> If you have any questions or worries</li>
             </ul>
           </div>
 
           <div style={styles.sectionBlock}>
-            <h2 style={styles.sectionTitle}>💖 Important Reminder</h2>
+            <h2 style={styles.sectionTitle}><Heart size={18} style={{ marginRight: 8 }} /> Important Reminder</h2>
             <p style={styles.sectionDesc}>
               Everybody's body is different. There's no "normal" way to experience periods — what matters is what's normal for YOU. 
               This page is for awareness and education. Always talk to a trusted adult or healthcare provider if something doesn't feel right.
             </p>
             <div style={{ marginTop: 16, padding: 12, background: theme.chip, borderRadius: 12 }}>
               <p style={{ fontSize: 13, textAlign: "center" }}>
-                🌸 You're not alone. Millions of people go through this — and you've got this! 🌸
+                <Heart size={14} style={{ marginRight: 6 }} /> You're not alone. Millions of people go through this — and you've got this! <Heart size={14} style={{ marginLeft: 6 }} />
               </p>
             </div>
           </div>
@@ -757,7 +763,7 @@ export default function GirlsAwareness() {
 
         {/* FAQ Section */}
         <div style={styles.sectionBlock}>
-          <h2 style={styles.sectionTitle}>❓ Frequently Asked Questions</h2>
+          <h2 style={styles.sectionTitle}><HelpCircle size={18} style={{ marginRight: 8 }} /> Frequently Asked Questions</h2>
           <div style={styles.faqGrid}>
             {faqs.map((item, index) => (
               <div key={index} style={styles.faqItem}>
@@ -770,7 +776,7 @@ export default function GirlsAwareness() {
 
         {/* Switch to Menstruators */}
         <div style={{ marginBottom: 24, padding: 16, background: theme.chip, borderRadius: 20, textAlign: "center" }}>
-          <p style={{ marginBottom: 12, fontSize: 13 }}>🌸 Started your period?</p>
+          <p style={{ marginBottom: 12, fontSize: 13 }}><Heart size={14} style={{ marginRight: 6 }} /> Started your period?</p>
           <button 
             style={{ padding: "10px 24px", borderRadius: 100, background: `linear-gradient(135deg, ${theme.gradientStart}, ${theme.gradientEnd})`, border: "none", color: "white", cursor: "pointer" }}
             onClick={() => {
@@ -786,7 +792,7 @@ export default function GirlsAwareness() {
 
         {/* Chatbot Section */}
         <div style={styles.chatSection}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>💬</div>
+          <div style={{ marginBottom: 16 }}><MessageCircle size={48} color={theme.accent} /></div>
           <h2 style={styles.chatTitle}>Still have questions?</h2>
           <p style={styles.chatDesc}>
             Chat with our friendly AI assistant! Ask anything about periods, symptoms, products, or anything else you're curious about.
@@ -797,7 +803,7 @@ export default function GirlsAwareness() {
             onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.02)"}
             onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
           >
-            💬 Chat with CycleCare Assistant →
+            <MessageCircle size={14} style={{ marginRight: 6 }} /> Chat with CycleCare Assistant →
           </button>
         </div>
 

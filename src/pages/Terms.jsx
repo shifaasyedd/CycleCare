@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { Check, AlertCircle, FileText, User, Shield } from "lucide-react";
 import Navbar from "../components/Navbar";
 
 export default function Terms() {
@@ -218,7 +219,7 @@ export default function Terms() {
           {/* Section 1: Acceptance */}
           <div style={styles.section}>
             <div style={styles.sectionTitle}>
-              <span style={styles.sectionIcon}>✅</span>
+              <span style={styles.sectionIcon}><Check size={18} /></span>
               <span>Acceptance of Terms</span>
             </div>
             <p style={styles.sectionText}>
@@ -234,7 +235,7 @@ export default function Terms() {
           {/* Section 2: User Accounts */}
           <div style={styles.section}>
             <div style={styles.sectionTitle}>
-              <span style={styles.sectionIcon}>👤</span>
+              <span style={styles.sectionIcon}><User size={18} /></span>
               <span>User Accounts</span>
             </div>
             <p style={styles.sectionText}>
@@ -261,7 +262,7 @@ export default function Terms() {
           {/* Section 3: User Data & Privacy */}
           <div style={styles.section}>
             <div style={styles.sectionTitle}>
-              <span style={styles.sectionIcon}>🔒</span>
+              <span style={styles.sectionIcon}><Shield size={18} /></span>
               <span>User Data & Privacy</span>
             </div>
             <p style={styles.sectionText}>
@@ -279,7 +280,7 @@ export default function Terms() {
           {/* Section 4: Medical Disclaimer */}
           <div style={styles.section}>
             <div style={styles.sectionTitle}>
-              <span style={styles.sectionIcon}>⚠️</span>
+              <span style={styles.sectionIcon}><AlertCircle size={18} /></span>
               <span>Medical Disclaimer</span>
             </div>
             <p style={styles.sectionText}>
@@ -297,7 +298,7 @@ export default function Terms() {
           {/* Section 5: User Responsibilities */}
           <div style={styles.section}>
             <div style={styles.sectionTitle}>
-              <span style={styles.sectionIcon}>📋</span>
+              <span style={styles.sectionIcon}><FileText size={18} /></span>
               <span>User Responsibilities</span>
             </div>
             <p style={styles.sectionText}>As a user of CycleCare, you agree to:</p>

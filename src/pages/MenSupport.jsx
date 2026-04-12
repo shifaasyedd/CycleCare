@@ -1,5 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Heart, Droplets, Activity, Calendar, Lightbulb, MessageCircle,
+  ShoppingBag, AlertCircle, Sparkles, Moon, Sun, Scale, Flame,
+  FlaskConical, PawPrint, X, Check, HelpCircle, ClipboardList,
+  TrendingUp, ArrowRight, Pill
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 
 export default function MenSupport() {
@@ -92,7 +98,7 @@ export default function MenSupport() {
     menstruation: {
       name: "Menstruation",
       days: "Days 1-5",
-      icon: "🩸",
+      icon: <Droplets size={20} />,
       vibe: "Low energy, rest needed",
       tips: [
         "Offer heating pad without asking",
@@ -104,7 +110,7 @@ export default function MenSupport() {
     follicular: {
       name: "Follicular",
       days: "Days 6-14",
-      icon: "💙",
+      icon: <Activity size={20} />,
       vibe: "Energy rising, creative",
       tips: [
         "Plan fun activities",
@@ -128,7 +134,7 @@ export default function MenSupport() {
     luteal: {
       name: "Luteal",
       days: "Days 18-28",
-      icon: "🌸",
+      icon: <Heart size={20} />,
       vibe: "Lower energy, sensitive",
       tips: [
         "Extra patience",
@@ -142,10 +148,10 @@ export default function MenSupport() {
   const currentPhase = cyclePhases[selectedPhase];
 
   const quickTips = [
-    { title: "👂 Listen First", desc: "Don't try to fix. Just listen and say: 'That sounds really hard. I'm here.'" },
-    { title: "🎁 Small Gestures Matter", desc: "Heating pad, tea, or taking over chores speaks louder than words." },
-    { title: "🤝 Ask, Don't Assume", desc: "Simply ask: 'What would help right now?' It shows you care." },
-    { title: "📚 Learn on Your Own", desc: "Use this guide! Don't make them educate you about their body." },
+    { title: "Listen First", desc: "Don't try to fix. Just listen and say: 'That sounds really hard. I'm here.'", icon: <MessageCircle size={16} /> },
+    { title: "Small Gestures Matter", desc: "Heating pad, tea, or taking over chores speaks louder than words.", icon: <Heart size={16} /> },
+    { title: "Ask, Don't Assume", desc: "Simply ask: 'What would help right now?' It shows you care.", icon: <HelpCircle size={16} /> },
+    { title: "Learn on Your Own", desc: "Use this guide! Don't make them educate you about their body.", icon: <Activity size={16} /> },
   ];
 
   const flashCards = [
@@ -205,12 +211,12 @@ export default function MenSupport() {
   ];
 
   const pcosSigns = [
-    { sign: "Irregular or absent periods", emoji: "📅" },
-    { sign: "Difficulty conceiving", emoji: "👶" },
-    { sign: "Acne or hair thinning", emoji: "✨" },
-    { sign: "Weight changes", emoji: "⚖️" },
-    { sign: "Excess hair growth", emoji: "🌸" },
-    { sign: "Mood changes", emoji: "💭" },
+    { sign: "Irregular or absent periods", emoji: <Calendar size={14} /> },
+    { sign: "Difficulty conceiving", emoji: <Heart size={14} /> },
+    { sign: "Acne or hair thinning", emoji: <Sparkles size={14} /> },
+    { sign: "Weight changes", emoji: <Scale size={14} /> },
+    { sign: "Excess hair growth", emoji: <Heart size={14} /> },
+    { sign: "Mood changes", emoji: <Activity size={14} /> },
   ];
 
   const pcosTips = [
@@ -222,23 +228,23 @@ export default function MenSupport() {
   ];
 
   const comfortKit = [
-    { item: "Heating Pad / Hot Water Bottle", icon: "🔥" },
-    { item: "Pain Relief (ibuprofen)", icon: "💊" },
-    { item: "Herbal Tea", icon: "🍵" },
-    { item: "Dark Chocolate", icon: "🍫" },
-    { item: "Comfort Snacks", icon: "🍿" },
-    { item: "Period Products", icon: "🩸" },
-    { item: "Cozy Blanket/Socks", icon: "🧦" },
-    { item: "Scented Candle", icon: "🕯️" },
+    { item: "Heating Pad / Hot Water Bottle", icon: <Flame size={16} /> },
+    { item: "Pain Relief (ibuprofen)", icon: <Pill size={16} /> },
+    { item: "Herbal Tea", icon: <Activity size={16} /> },
+    { item: "Dark Chocolate", icon: <Heart size={16} /> },
+    { item: "Comfort Snacks", icon: <Heart size={16} /> },
+    { item: "Period Products", icon: <Droplets size={16} /> },
+    { item: "Cozy Blanket/Socks", icon: <Heart size={16} /> },
+    { item: "Scented Candle", icon: <Flame size={16} /> },
   ];
 
   const productCards = [
-    { icon: "🔥", title: "Heating Pad", text: "Provides warmth to relax cramped muscles and ease abdominal pain." },
-    { icon: "🩸", title: "Sanitary Pads", text: "External absorbent product that sticks to underwear. Easy to use." },
-    { icon: "🌸", title: "Menstrual Cup", text: "Reusable silicone cup that collects blood. Eco-friendly." },
-    { icon: "📍", title: "Tampons", text: "Internal absorbent product. Great for swimming." },
-    { icon: "💊", title: "Pain Relief", text: "Over-the-counter medications like ibuprofen help with cramps." },
-    { icon: "👙", title: "Period Underwear", text: "Absorbent underwear that can be worn alone or as backup." },
+    { icon: <Flame size={20} />, title: "Heating Pad", text: "Provides warmth to relax cramped muscles and ease abdominal pain." },
+    { icon: <Droplets size={20} />, title: "Sanitary Pads", text: "External absorbent product that sticks to underwear. Easy to use." },
+    { icon: <Heart size={20} />, title: "Menstrual Cup", text: "Reusable silicone cup that collects blood. Eco-friendly." },
+    { icon: <Activity size={20} />, title: "Tampons", text: "Internal absorbent product. Great for swimming." },
+    { icon: <Pill size={20} />, title: "Pain Relief", text: "Over-the-counter medications like ibuprofen help with cramps." },
+    { icon: <Heart size={20} />, title: "Period Underwear", text: "Absorbent underwear that can be worn alone or as backup." },
   ];
 
   const emergencyResponses = [
@@ -455,18 +461,18 @@ export default function MenSupport() {
           <h1 style={styles.title}>Understand. Support. Show Up.</h1>
           <p style={styles.subtitle}>It's not about having all the answers. It's about showing up with an open heart and willingness to learn.</p>
           <div style={styles.btnRow}>
-            <button style={styles.btnPrimary} onClick={() => navigate("/chatbot")}>💬 Ask Questions Anonymously</button>
+            <button style={styles.btnPrimary} onClick={() => navigate("/chatbot")}><MessageCircle size={14} style={{ marginRight: 6 }} /> Ask Questions Anonymously</button>
             <button style={styles.btnOutline} onClick={() => navigate("/category")}>← Back</button>
           </div>
         </div>
 
         {/* Quick Tips */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>💡 Quick Tips</h2>
+          <h2 style={styles.sectionTitle}><Lightbulb size={18} style={{ marginRight: 8 }} /> Quick Tips</h2>
           <div style={styles.grid4}>
             {quickTips.map((tip, i) => (
               <div key={i} style={styles.tipCard}>
-                <div style={styles.tipTitle}>{tip.title}</div>
+                <div style={styles.tipTitle}>{tip.icon} {tip.title}</div>
                 <div style={styles.tipDesc}>{tip.desc}</div>
               </div>
             ))}
@@ -475,7 +481,7 @@ export default function MenSupport() {
 
         {/* Cycle Support Chart */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>📊 How to Support Throughout the Cycle</h2>
+          <h2 style={styles.sectionTitle}><TrendingUp size={18} style={{ marginRight: 8 }} /> How to Support Throughout the Cycle</h2>
           <p style={styles.sectionDesc}>Select a phase to see what helps</p>
           <div style={styles.phaseSelector}>
             {Object.keys(cyclePhases).map(phase => (
@@ -510,7 +516,7 @@ export default function MenSupport() {
                   </>
                 ) : (
                   <>
-                    <div style={{ fontWeight: 700, color: theme.accent, marginBottom: 12 }}>💡 What helps</div>
+                    <div style={{ fontWeight: 700, color: theme.accent, marginBottom: 12 }}><Lightbulb size={14} style={{ marginRight: 6 }} /> What helps</div>
                     <div style={{ fontSize: 13, lineHeight: 1.5 }}>{item.back}</div>
                   </>
                 )}
@@ -521,7 +527,7 @@ export default function MenSupport() {
 
         {/* What to Say */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>💬 What to Say (Actual Scripts)</h2>
+          <h2 style={styles.sectionTitle}><MessageCircle size={18} style={{ marginRight: 8 }} /> What to Say (Actual Scripts)</h2>
           <div style={styles.grid2}>
             {whatToSay.map((item, i) => (
               <div key={i} style={styles.scriptCard}>
@@ -539,7 +545,7 @@ export default function MenSupport() {
             <div key={idx} style={styles.scenarioCard} onClick={() => { setActiveScenario(activeScenario === idx ? null : idx); markSectionViewed("scenarios"); }}>
               <div style={styles.scenarioTitle}>{scenario.title}</div>
               <div style={styles.scenarioSituation}>{scenario.situation}</div>
-              {activeScenario === idx && <div style={styles.scenarioHelpful}>💡 <strong>What would help:</strong> {scenario.helpful}</div>}
+              {activeScenario === idx && <div style={styles.scenarioHelpful}><Lightbulb size={14} style={{ marginRight: 6 }} /> <strong>What would help:</strong> {scenario.helpful}</div>}
               {activeScenario !== idx && <div style={{ fontSize: 12, color: theme.muted, marginTop: 8 }}>Tap for guidance →</div>}
             </div>
           ))}
@@ -547,18 +553,18 @@ export default function MenSupport() {
 
         {/* What NOT to Say */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🚫 What NOT to Say → Better Alternatives</h2>
+          <h2 style={styles.sectionTitle}><X size={18} style={{ marginRight: 8 }} /> What NOT to Say → Better Alternatives</h2>
           {alternatives.map((alt, idx) => (
             <div key={idx} style={styles.alternativeCard} onMouseEnter={() => markSectionViewed("alternatives")}>
-              <div style={{ color: theme.accent, textDecoration: "line-through" }}>❌ {alt.avoid}</div>
-              <div style={{ color: theme.green, marginTop: 6 }}>✅ Instead: "{alt.instead}"</div>
+              <div style={{ color: theme.accent, textDecoration: "line-through" }}><X size={14} style={{ marginRight: 6 }} /> {alt.avoid}</div>
+              <div style={{ color: theme.green, marginTop: 6 }}><Check size={14} style={{ marginRight: 6 }} /> Instead: "{alt.instead}"</div>
             </div>
           ))}
         </div>
 
         {/* Helpful Products */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🩸 Helpful Products to Know</h2>
+          <h2 style={styles.sectionTitle}><Droplets size={18} style={{ marginRight: 8 }} /> Helpful Products to Know</h2>
           <p style={styles.sectionDesc}>Understanding these basics makes it easier to support practically.</p>
           <div style={styles.productGrid}>
             {productCards.map((item, index) => (
@@ -574,7 +580,7 @@ export default function MenSupport() {
         {/* Comfort Kit */}
         <div style={styles.section}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }} onClick={() => setShowKit(!showKit)}>
-            <h2 style={styles.sectionTitle}>🎁 The Comfort Kit</h2>
+            <h2 style={styles.sectionTitle}><ShoppingBag size={18} style={{ marginRight: 8 }} /> The Comfort Kit</h2>
             <span>{showKit ? "▼" : "▶"}</span>
           </div>
           {showKit && (
@@ -591,7 +597,7 @@ export default function MenSupport() {
 
         {/* Understanding PCOS/PCOD */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🌸 Understanding PCOS & PCOD</h2>
+          <h2 style={styles.sectionTitle}><Heart size={18} style={{ marginRight: 8 }} /> Understanding PCOS & PCOD</h2>
           <p style={styles.sectionDesc}>A common hormonal condition affecting 1 in 10 women. Here's what you should know:</p>
           <div style={styles.pcosSignGrid}>
             {pcosSigns.map((sign, i) => (
@@ -613,11 +619,11 @@ export default function MenSupport() {
 
         {/* Emergency Preparedness */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🆘 Emergency Preparedness</h2>
+          <h2 style={styles.sectionTitle}><AlertCircle size={18} style={{ marginRight: 8 }} /> Emergency Preparedness</h2>
           {emergencyResponses.map((item, idx) => (
             <div key={idx} style={styles.alternativeCard} onMouseEnter={() => markSectionViewed("emergency")}>
-              <div style={{ fontWeight: 700 }}>⚠️ {item.situation}</div>
-              <div style={{ fontSize: 13, marginTop: 6 }}>💡 {item.response}</div>
+              <div style={{ fontWeight: 700 }}><AlertCircle size={14} style={{ marginRight: 6 }} /> {item.situation}</div>
+              <div style={{ fontSize: 13, marginTop: 6 }}><Lightbulb size={14} style={{ marginRight: 6 }} /> {item.response}</div>
             </div>
           ))}
         </div>
@@ -652,13 +658,13 @@ export default function MenSupport() {
 
         {/* Confidence Check */}
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}>🌟 Confidence Check</h2>
+          <h2 style={styles.sectionTitle}><Sparkles size={18} style={{ marginRight: 8 }} /> Confidence Check</h2>
           <p style={styles.sectionDesc}>How confident do you feel about supporting someone through their menstrual health journey?</p>
           <div style={styles.confidenceButtons}>
-            <button style={styles.confidenceBtn} onClick={() => { setConfidenceLevel(1); markSectionViewed("confidence"); }}>😕 Not confident</button>
-            <button style={styles.confidenceBtn} onClick={() => { setConfidenceLevel(2); markSectionViewed("confidence"); }}>🙂 Somewhat</button>
-            <button style={styles.confidenceBtn} onClick={() => { setConfidenceLevel(3); markSectionViewed("confidence"); }}>😊 Confident</button>
-            <button style={styles.confidenceBtn} onClick={() => { setConfidenceLevel(4); markSectionViewed("confidence"); }}>💪 Very confident</button>
+            <button style={styles.confidenceBtn} onClick={() => { setConfidenceLevel(1); markSectionViewed("confidence"); }}>Not confident</button>
+            <button style={styles.confidenceBtn} onClick={() => { setConfidenceLevel(2); markSectionViewed("confidence"); }}>Somewhat</button>
+            <button style={styles.confidenceBtn} onClick={() => { setConfidenceLevel(3); markSectionViewed("confidence"); }}>Confident</button>
+            <button style={styles.confidenceBtn} onClick={() => { setConfidenceLevel(4); markSectionViewed("confidence"); }}>Very confident</button>
           </div>
           {confidenceLevel && (
             <div style={{ textAlign: "center", marginTop: 16 }}>
@@ -666,7 +672,7 @@ export default function MenSupport() {
             </div>
           )}
           <div style={{ marginTop: 20, textAlign: "center" }}>
-            <button style={styles.btnPrimary} onClick={() => navigate("/chatbot")}>💬 Still have questions? Chat with us</button>
+            <button style={styles.btnPrimary} onClick={() => navigate("/chatbot")}><MessageCircle size={14} style={{ marginRight: 6 }} /> Still have questions? Chat with us</button>
           </div>
         </div>
 
@@ -687,7 +693,7 @@ export default function MenSupport() {
           onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
         >
-          <div style={{ fontSize: 48, marginBottom: 12 }}>🛍️</div>
+          <div style={{ marginBottom: 12 }}><ShoppingBag size={48} color={theme.accent} /></div>
           <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Shop Period Care Essentials</div>
           <div style={{ fontSize: 13, color: theme.muted, marginBottom: 16, maxWidth: 500, margin: "0 auto 16px auto" }}>
             Find pads, cups, heating pads, chocolates, and more – all in one place.

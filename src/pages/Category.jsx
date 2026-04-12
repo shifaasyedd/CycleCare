@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Heart, Droplets, Activity, Calendar, Lightbulb, MessageCircle,
+  ShoppingBag, AlertCircle, Sparkles, Users, ArrowRight
+} from "lucide-react";
 import logo from "../assets/cyclecare-logo.png";
 import Navbar from "../components/Navbar";
 
@@ -70,10 +74,10 @@ export default function Category() {
 
   // eslint-disable-next-line no-unused-vars
   const getRoleIcon = (role) => {
-    if (role === "men") return "👨";
-    if (role === "girls") return "👧";
-    if (role === "women") return "👩";
-    return "❓";
+    if (role === "men") return "Male";
+    if (role === "girls") return "Female";
+    if (role === "women") return "Female";
+    return "?";
   };
 
   const choose = async (role) => {
@@ -444,7 +448,7 @@ export default function Category() {
 
         {/* Hero Section */}
         <div style={styles.hero}>
-          <span style={styles.badge}>✨ Welcome to CycleCare</span>
+          <span style={styles.badge}><Sparkles size={14} style={{ marginRight: 6 }} /> Welcome to CycleCare</span>
           <h1 style={styles.title}>
             Who are you using
             <br />
@@ -459,7 +463,7 @@ export default function Category() {
         {selectedRole && (
           <div style={styles.warningBanner}>
             <div style={styles.warningText}>
-              ⚠️ <span style={styles.warningHighlight}>Your category is set to "{getRoleName(selectedRole)}"</span>
+              <AlertCircle size={14} style={{ marginRight: 6 }} /> <span style={styles.warningHighlight}>Your category is set to "{getRoleName(selectedRole)}"</span>
               <br />
               This choice is permanent. To change, you must delete your account and sign up with a new email.
             </div>
@@ -469,19 +473,19 @@ export default function Category() {
         {/* Category Cards */}
         <div style={styles.grid}>
           <CategoryCard
-            icon="👨"
+            icon="Men"
             title="Men"
             desc="Learn what the menstrual cycle is, why phases happen, and how to support menstruators with respect and understanding."
             role="men"
           />
           <CategoryCard
-            icon="👧"
+            icon="Women"
             title="Non-Menstruators"
             desc="Awareness-first learning for young girls who haven't started menstruating yet. Simple explanations, myths vs facts, and confidence-building information to prepare you for what's ahead."
             role="girls"
           />
           <CategoryCard
-            icon="👩"
+            icon="Women"
             title="Menstruators"
             desc="For girls and women who menstruate. Track your periods, see cycle phases on calendar, log symptoms, and get accurate predictions based on your unique cycle."
             role="women"
@@ -499,12 +503,12 @@ export default function Category() {
               <div style={styles.featureDetail}>Information tailored to your journey</div>
             </div>
             <div style={styles.featureItem}>
-              <div style={styles.featureIcon}>📱</div>
+              <div style={styles.featureIcon}><Activity size={20} color={theme.accent} /></div>
               <div style={styles.featureName}>Easy tracking tools</div>
               <div style={styles.featureDetail}>Simple logging and calendar views for menstruators</div>
             </div>
             <div style={styles.featureItem}>
-              <div style={styles.featureIcon}>🔮</div>
+              <div style={styles.featureIcon}><Sparkles size={20} color={theme.accent} /></div>
               <div style={styles.featureName}>Smart predictions</div>
               <div style={styles.featureDetail}>Accurate period and cycle estimates</div>
             </div>

@@ -4,6 +4,12 @@ import {
   PieChart, Pie, Cell, Tooltip, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid, LineChart, Line,
 } from "recharts";
+import {
+  Activity, Calendar, Clock, Droplets, Utensils, Pill, Stethoscope,
+  MessageCircle, ShoppingBag, AlertCircle, Heart, FileText,
+  Lightbulb, TrendingUp, Moon, Sun, FlaskConical, Leaf,
+  RefreshCcw, Sparkles, CheckCircle, AlertTriangle, Info, Thermometer
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 
 export default function Dashboard() {
@@ -156,10 +162,10 @@ export default function Dashboard() {
   };
 
   const insightTypeIcon = (type) => {
-    if (type === "success") return "✅";
-    if (type === "warning") return "⚠️";
-    if (type === "tip") return "💡";
-    return "ℹ️";
+    if (type === "success") return <CheckCircle size={16} color={theme.green} />;
+    if (type === "warning") return <AlertTriangle size={16} color={theme.yellow} />;
+    if (type === "tip") return <Lightbulb size={16} color={theme.blue} />;
+    return <Info size={16} color={theme.accent} />;
   };
 
   // ---------- Styles ----------
@@ -265,7 +271,7 @@ export default function Dashboard() {
 
         {hasNoData ? (
           <div style={{ ...styles.hero, marginTop: 24 }}>
-            <div style={{ fontSize: 48, marginBottom: 12 }}>🌸</div>
+            <Heart size={48} color={theme.accent} style={{ marginBottom: 12 }} />
             <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>No data yet</h2>
             <p style={styles.subtitle}>Start tracking your cycles to see personalized insights here.</p>
             <button style={styles.refreshBtn} onClick={() => navigate("/tracker")}>
@@ -277,7 +283,7 @@ export default function Dashboard() {
             {/* Prediction */}
             {insights?.prediction && (
               <div style={{ ...styles.predictionCard, marginTop: 32 }}>
-                <div style={styles.predictionLabel}>🔮 Next Period Predicted</div>
+                <div style={styles.predictionLabel}><Sparkles size={14} style={{ marginRight: 6 }} /> Next Period Predicted</div>
                 <div style={styles.predictionValue}>
                   {new Date(insights.prediction).toLocaleDateString("en-US", { month: "long", day: "numeric" })}
                 </div>
@@ -300,29 +306,29 @@ export default function Dashboard() {
                 <div style={styles.statLabel}>Total Cycles</div>
               </div>
               <div style={styles.statCard}>
-                <div style={styles.statIcon}>📅</div>
+                <Calendar size={28} color={theme.accent} style={{ marginBottom: 8 }} />
                 <div style={styles.statValue}>{data.stats.avgCycleLength || "—"}</div>
                 <div style={styles.statLabel}>Avg Cycle Length</div>
                 <div style={styles.statSub}>days</div>
               </div>
               <div style={styles.statCard}>
-                <div style={styles.statIcon}>💧</div>
+                <Droplets size={28} color={theme.accent} style={{ marginBottom: 8 }} />
                 <div style={styles.statValue}>{data.stats.avgPeriodLength || "—"}</div>
                 <div style={styles.statLabel}>Avg Period Length</div>
                 <div style={styles.statSub}>days</div>
               </div>
               <div style={styles.statCard}>
-                <div style={styles.statIcon}>📝</div>
+                <FileText size={28} color={theme.accent} style={{ marginBottom: 8 }} />
                 <div style={styles.statValue}>{data.logsCount}</div>
                 <div style={styles.statLabel}>Daily Logs</div>
               </div>
               <div style={styles.statCard}>
-                <div style={styles.statIcon}>💊</div>
+                <Pill size={28} color={theme.accent} style={{ marginBottom: 8 }} />
                 <div style={styles.statValue}>{data.medications}</div>
                 <div style={styles.statLabel}>Medications</div>
               </div>
               <div style={styles.statCard}>
-                <div style={styles.statIcon}>🩺</div>
+                <Stethoscope size={28} color={theme.accent} style={{ marginBottom: 8 }} />
                 <div style={styles.statValue}>{data.doctorVisits}</div>
                 <div style={styles.statLabel}>Doctor Visits</div>
               </div>
@@ -331,7 +337,7 @@ export default function Dashboard() {
             {/* AI Insights */}
             {insights?.insights && insights.insights.length > 0 && (
               <>
-                <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>💡 AI Insights</h2>
+                <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}><Lightbulb size={20} style={{ marginRight: 8 }} /> AI Insights</h2>
                 <div style={styles.insightsGrid}>
                   {insights.insights.map((ins, idx) => {
                     const color = insightTypeColor(ins.type);
@@ -388,7 +394,7 @@ export default function Dashboard() {
               </div>
 
               <div style={styles.chartCard}>
-                <div style={styles.chartTitle}>🌡️ Top Symptoms</div>
+                <div style={styles.chartTitle}><Thermometer size={18} style={{ marginRight: 8 }} /> Top Symptoms</div>
                 {symptomChartData.length === 0 ? (
                   <div style={styles.emptyState}>No symptoms logged yet</div>
                 ) : (
@@ -422,10 +428,10 @@ export default function Dashboard() {
             )}
 
             {/* Lifestyle */}
-            <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}>🌿 Lifestyle Patterns</h2>
+            <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 16 }}><Leaf size={20} style={{ marginRight: 8 }} /> Lifestyle Patterns</h2>
             <div style={styles.lifestyleGrid}>
               <div style={styles.lifestyleCard}>
-                <div style={styles.lifestyleTitle}>😴 Sleep</div>
+                <div style={styles.lifestyleTitle}><Moon size={16} style={{ marginRight: 6 }} /> Sleep</div>
                 {lifestyleData.sleep.length === 0 ? (
                   <div style={styles.emptyState}>No data</div>
                 ) : (
@@ -438,7 +444,7 @@ export default function Dashboard() {
                 )}
               </div>
               <div style={styles.lifestyleCard}>
-                <div style={styles.lifestyleTitle}>🧘 Stress</div>
+                <div style={styles.lifestyleTitle}><Activity size={16} style={{ marginRight: 6 }} /> Stress</div>
                 {lifestyleData.stress.length === 0 ? (
                   <div style={styles.emptyState}>No data</div>
                 ) : (
@@ -451,7 +457,7 @@ export default function Dashboard() {
                 )}
               </div>
               <div style={styles.lifestyleCard}>
-                <div style={styles.lifestyleTitle}>🏃 Exercise</div>
+                <div style={styles.lifestyleTitle}><Activity size={16} style={{ marginRight: 6 }} /> Exercise</div>
                 {lifestyleData.exercise.length === 0 ? (
                   <div style={styles.emptyState}>No data</div>
                 ) : (

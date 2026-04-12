@@ -1,5 +1,9 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  MessageCircle, Plus, Search, Clock, User, ArrowLeft, Send,
+  Heart, MessageSquare
+} from "lucide-react";
 import Navbar from "../components/Navbar";
 
 const CATEGORIES = ["General", "Health Tips", "Support", "Questions"];

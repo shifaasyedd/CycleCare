@@ -5,6 +5,7 @@ import {
   XAxis, YAxis, CartesianGrid, Area, AreaChart,
   BarChart, Bar,
 } from "recharts";
+import { Users, Calendar, Activity, FileText, MessageCircle, Stethoscope, Pill, TrendingUp, UserCheck, RefreshCcw } from "lucide-react";
 import Navbar from "../components/Navbar";
 
 export default function Admin() {
@@ -270,19 +271,19 @@ export default function Admin() {
           <>
             {/* Primary Stats */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, marginBottom: 24 }}>
-              <StatCard icon="👥" value={stats.totalUsers} label="Total Users" color={t.text} bgColor={t.accentSoft} />
-              <StatCard icon="🟢" value={stats.activeToday} label="Active Today" color={t.green} bgColor={t.greenSoft} subtext={`${Math.round((stats.activeToday / (stats.totalUsers || 1)) * 100)}%`} />
-              <StatCard icon="📅" value={stats.activeThisWeek} label="Active This Week" color={t.blue} bgColor={t.blueSoft} />
-              <StatCard icon="📊" value={stats.activeThisMonth} label="Active This Month" color={t.purple} bgColor={t.purpleSoft} />
+              <StatCard icon={<Users size={20} />} value={stats.totalUsers} label="Total Users" color={t.text} bgColor={t.accentSoft} />
+              <StatCard icon={<UserCheck size={20} />} value={stats.activeToday} label="Active Today" color={t.green} bgColor={t.greenSoft} subtext={`${Math.round((stats.activeToday / (stats.totalUsers || 1)) * 100)}%`} />
+              <StatCard icon={<Calendar size={20} />} value={stats.activeThisWeek} label="Active This Week" color={t.blue} bgColor={t.blueSoft} />
+              <StatCard icon={<Activity size={20} />} value={stats.activeThisMonth} label="Active This Month" color={t.purple} bgColor={t.purpleSoft} />
             </div>
 
             {/* Secondary Stats */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 16, marginBottom: 28 }}>
-              <StatCard icon="🔄" value={stats.totalCycles} label="Cycles Tracked" color={t.accent} bgColor={t.accentSoft} />
-              <StatCard icon="📝" value={stats.totalLogs} label="Daily Logs" color={t.blue} bgColor={t.blueSoft} />
-              <StatCard icon="💬" value={stats.totalMessages} label="Chat Messages" color={t.purple} bgColor={t.purpleSoft} />
-              <StatCard icon="🏥" value={stats.totalVisits} label="Doctor Visits" color={t.cyan} bgColor={t.cyanSoft} />
-              <StatCard icon="💊" value={stats.totalMedications} label="Medications" color={t.amber} bgColor={t.amberSoft} />
+              <StatCard icon={<RefreshCcw size={20} />} value={stats.totalCycles} label="Cycles Tracked" color={t.accent} bgColor={t.accentSoft} />
+              <StatCard icon={<FileText size={20} />} value={stats.totalLogs} label="Daily Logs" color={t.blue} bgColor={t.blueSoft} />
+              <StatCard icon={<MessageCircle size={20} />} value={stats.totalMessages} label="Chat Messages" color={t.purple} bgColor={t.purpleSoft} />
+              <StatCard icon={<Stethoscope size={20} />} value={stats.totalVisits} label="Doctor Visits" color={t.cyan} bgColor={t.cyanSoft} />
+              <StatCard icon={<Pill size={20} />} value={stats.totalMedications} label="Medications" color={t.amber} bgColor={t.amberSoft} />
             </div>
 
             {/* Charts Row 1 */}
@@ -371,9 +372,9 @@ export default function Admin() {
           <>
             {/* Health summary stat */}
             <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 28 }}>
-              <StatCard icon="🔄" value={stats.avgCycleLength ? `${stats.avgCycleLength} days` : "N/A"} label="Avg Cycle Length" color={t.accent} bgColor={t.accentSoft} />
-              <StatCard icon="📝" value={stats.totalLogs} label="Total Symptom Logs" color={t.blue} bgColor={t.blueSoft} />
-              <StatCard icon="🏥" value={stats.totalVisits} label="Doctor Visits Logged" color={t.cyan} bgColor={t.cyanSoft} />
+              <StatCard icon={<RefreshCcw size={20} />} value={stats.avgCycleLength ? `${stats.avgCycleLength} days` : "N/A"} label="Avg Cycle Length" color={t.accent} bgColor={t.accentSoft} />
+              <StatCard icon={<FileText size={20} />} value={stats.totalLogs} label="Total Symptom Logs" color={t.blue} bgColor={t.blueSoft} />
+              <StatCard icon={<Stethoscope size={20} />} value={stats.totalVisits} label="Doctor Visits Logged" color={t.cyan} bgColor={t.cyanSoft} />
             </div>
 
             {/* Top Symptoms */}
