@@ -265,7 +265,10 @@ export default function Dashboard() {
               <div style={{ ...styles.predictionCard, marginTop: 32 }}>
                 <div style={styles.predictionLabel}><Sparkles size={14} style={{ marginRight: 6 }} /> Next Period Predicted</div>
                 <div style={styles.predictionValue}>
-                  {new Date(insights.prediction).toLocaleDateString("en-US", { month: "long", day: "numeric" })}
+                  {(() => {
+                    const [y, m, d] = insights.prediction.split('-').map(Number);
+                    return new Date(y, m - 1, d).toLocaleDateString("en-US", { month: "long", day: "numeric" });
+                  })()}
                 </div>
                 <div style={styles.predictionSub}>
                   {daysUntilNext > 0

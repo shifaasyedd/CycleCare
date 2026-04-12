@@ -154,8 +154,11 @@ router.get('/insights', auth, async (req, res) => {
 
     // Get last period start
     const lastPeriodStart = new Date(cycles[0].startDate);
-    const nextPeriodDate = new Date(lastPeriodStart);
-    nextPeriodDate.setDate(nextPeriodDate.getDate() + avgCycleLength);
+    // Handle timezone - use local date parts to avoid UTC conversion issues
+    const lastYear = lastPeriodStart.getFullYear();
+    const lastMonth = lastPeriodStart.getMonth();
+    const lastDay = lastPeriodStart.getDate();
+    const nextPeriodDate = new Date(lastYear, lastMonth, lastDay + avgCycleLength);
 
     // Common symptoms from logs
     const allSymptoms = [];
@@ -203,10 +206,15 @@ Keep responses concise, supportive, and medically appropriate. Format as JSON wi
           };
         }
 
+        const predYear = nextPeriodDate.getFullYear();
+        const predMonth = String(nextPeriodDate.getMonth() + 1).padStart(2, '0');
+        const predDay = String(nextPeriodDate.getDate()).padStart(2, '0');
+        const predictionStr = `${predYear}-${predMonth}-${predDay}`;
+        
         return res.json({
           success: true,
           data: {
-            prediction: nextPeriodDate.toISOString(),
+            prediction: predictionStr,
             avgCycleLength,
             ...parsed,
           }
@@ -239,10 +247,14 @@ Keep responses concise, supportive, and medically appropriate. Format as JSON wi
       insights.push({ type: 'tip', title: 'Flow Tip', message: 'Heavy flow days? Stay hydrated and consider iron-rich foods.' });
     }
 
+    const fbYear = nextPeriodDate.getFullYear();
+    const fbMonth = String(nextPeriodDate.getMonth() + 1).padStart(2, '0');
+    const fbDay = String(nextPeriodDate.getDate()).padStart(2, '0');
+    
     res.json({
       success: true,
       data: {
-        prediction: nextPeriodDate.toISOString(),
+        prediction: `${fbYear}-${fbMonth}-${fbDay}`,
         avgCycleLength,
         insights,
         recommendation: 'Keep tracking daily to improve prediction accuracy.',
