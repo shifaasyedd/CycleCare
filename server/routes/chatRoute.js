@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const OpenAI = require("openai");
+const Message = require("../models/Message");
 
 const openai = new OpenAI({
   baseURL: "https://openrouter.ai/api/v1",
@@ -39,9 +40,14 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ reply: "Please send a message." });
     }
 
+    // Save user message
+    await Message.create({ sender: "user", message: userMessage });
+
     // Quick greeting (skip AI for speed)
     if (["hi", "hello", "hey"].includes(userMessage.toLowerCase())) {
-      return res.json({ reply: getFallbackReply("hi") });
+      const reply = getFallbackReply("hi");
+      await Message.create({ sender: "bot", message: reply });
+      return res.json({ reply });
     }
 
     // Build messages with conversation history (last 8 turns for context)
@@ -76,6 +82,8 @@ router.post("/", async (req, res) => {
 
       const aiReply = completion.choices?.[0]?.message?.content;
       if (aiReply && aiReply.trim()) {
+        // Save bot response
+        await Message.create({ sender: "bot", message: aiReply });
         return res.json({ reply: aiReply });
       } else {
         throw new Error("Empty response from AI model");
@@ -86,7 +94,9 @@ router.post("/", async (req, res) => {
     }
 
     // Fallback if AI fails
-    return res.json({ reply: getFallbackReply(userMessage) });
+    const fallbackReply = getFallbackReply(userMessage);
+    await Message.create({ sender: "bot", message: fallbackReply });
+    return res.json({ reply: fallbackReply });
   } catch (error) {
     console.error("Server error:", error);
     res.status(500).json({ reply: "Server error. Please try again." });

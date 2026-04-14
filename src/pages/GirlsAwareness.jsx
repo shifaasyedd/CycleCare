@@ -922,7 +922,7 @@ export default function GirlsAwareness() {
           onMouseEnter={(e) => (e.currentTarget.style.transform = "translateY(-4px)")}
           onMouseLeave={(e) => (e.currentTarget.style.transform = "translateY(0)")}
         >
-          <div style={{ fontSize: 48, marginBottom: 12 }}>🛍️</div>
+          <div style={{ fontSize: 48, marginBottom: 12 }}>🛍</div>
           <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Shop Period Care Essentials</div>
           <div style={{ fontSize: 13, color: theme.muted, marginBottom: 16, maxWidth: 500, margin: "0 auto 16px auto" }}>
             Find pads, cups, heating pads, chocolates, and more – all in one place.
