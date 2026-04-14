@@ -109,11 +109,12 @@ router.get('/users', protect, isAdmin, async (req, res) => {
 router.get('/stats', protect, isAdmin, async (req, res) => {
   try {
     // Core user stats
-    const [totalUsers, men, girls, women] = await Promise.all([
+    const [totalUsers, men, girls, women, notSelected] = await Promise.all([
       User.countDocuments(),
       User.countDocuments({ role: 'men' }),
       User.countDocuments({ role: 'girls' }),
       User.countDocuments({ role: 'women' }),
+      User.countDocuments({ role: 'not_selected' }),
     ]);
 
     const todayStart = new Date();
