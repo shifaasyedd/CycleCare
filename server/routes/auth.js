@@ -52,8 +52,11 @@ router.post('/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
 
+        console.log('Register attempt - Email:', email, 'Name:', name);
+
         const userExists = await User.findOne({ email });
         if (userExists) {
+            console.log('User already exists:', email);
             return res.status(400).json({ success: false, error: 'User already exists' });
         }
 
@@ -64,6 +67,8 @@ router.post('/register', async (req, res) => {
             password,
             isVerified: true,
         });
+
+        console.log('User created successfully:', user.email, 'Role:', user.role);
 
         // Generate JWT token for immediate login
         const token = generateToken(user._id);
@@ -78,6 +83,7 @@ router.post('/register', async (req, res) => {
             user: { id: user._id, name: user.name, email: user.email }
         });
     } catch (error) {
+        console.error('Register error:', error);
         res.status(400).json({ success: false, error: error.message });
     }
 });
@@ -87,13 +93,20 @@ router.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        console.log('Login attempt - Email:', email);
+
         const user = await User.findOne({ email }).select('+password');
         if (!user) {
+            console.log('User not found:', email);
             return res.status(401).json({ success: false, error: 'Invalid credentials' });
         }
 
+        console.log('User found:', user.email, 'Has password:', !!user.password);
+
         // No verification check – all users are verified
         const isMatch = await user.matchPassword(password);
+        console.log('Password match:', isMatch);
+        
         if (!isMatch) {
             return res.status(401).json({ success: false, error: 'Invalid credentials' });
         }
@@ -104,6 +117,7 @@ router.post('/login', async (req, res) => {
             user: { id: user._id, name: user.name, email: user.email }
         });
     } catch (error) {
+        console.error('Login error:', error);
         res.status(400).json({ success: false, error: error.message });
     }
 });

@@ -84,6 +84,7 @@ router.get('/verify', protect, async (req, res) => {
 router.get('/users', protect, isAdmin, async (req, res) => {
   try {
     const users = await User.find({}).select('-password');
+    console.log('All users sample roles:', users.slice(0, 5).map(u => ({ email: u.email, role: u.role })));
     const usersWithStats = await Promise.all(users.map(async (user) => {
       const cyclesCount = await Cycle.countDocuments({ user: user._id });
       const logsCount = await DailyLog.countDocuments({ user: user._id });
@@ -108,6 +109,12 @@ router.get('/users', protect, isAdmin, async (req, res) => {
 // GET /api/admin/stats
 router.get('/stats', protect, isAdmin, async (req, res) => {
   try {
+    // Debug: Get all roles distribution
+    const roleDistribution = await User.aggregate([
+      { $group: { _id: "$role", count: { $sum: 1 } } }
+    ]);
+    console.log('Role distribution:', roleDistribution);
+    
     // Core user stats
     const [totalUsers, men, girls, women, notSelected] = await Promise.all([
       User.countDocuments(),
@@ -116,6 +123,8 @@ router.get('/stats', protect, isAdmin, async (req, res) => {
       User.countDocuments({ role: 'women' }),
       User.countDocuments({ role: 'not_selected' }),
     ]);
+
+    console.log('Role counts - Men:', men, 'Girls:', girls, 'Women:', women, 'NotSelected:', notSelected);
 
     const todayStart = new Date();
     todayStart.setHours(0,0,0,0);
