@@ -11,7 +11,7 @@ import Navbar from "../components/Navbar";
 export default function MenSupport() {
   const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [activeSection, setActiveSection] = useState("hero");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [flipped, setFlipped] = useState({});
   const [activeScenario, setActiveScenario] = useState(null);
   // eslint-disable-next-line no-unused-vars

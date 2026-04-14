@@ -13,7 +13,7 @@ export default function GirlsAwareness() {
   const navigate = useNavigate();
   const [dark, setDark] = useState(localStorage.getItem("cyclecare_theme") === "dark");
   const [activeSection, setActiveSection] = useState("hero");
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [quiz, setQuiz] = useState({
     q1: "",
     q2: "",

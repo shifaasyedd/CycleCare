@@ -41,7 +41,7 @@ cron.schedule('0 9 * * *', async () => {
       today.setHours(0, 0, 0, 0);
       const daysUntil = Math.ceil((nextPeriod - today) / (1000 * 60 * 60 * 24));
 
-      if (daysUntil === 2) {
+      if (daysUntil === 1 || daysUntil === 2 || daysUntil === 3) {
         await sendPeriodReminder(user.email, user.name || user.email.split('@')[0], daysUntil);
       }
     }

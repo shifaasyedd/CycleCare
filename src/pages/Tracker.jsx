@@ -365,7 +365,10 @@ function cycleStartForDate(date) {
         setFlowType("medium");
         setNotes("");
         const newDate = new Date(data.data.startDate);
-        if (!isNaN(newDate.getTime())) setSelectedDate(newDate);
+        if (!isNaN(newDate.getTime())) {
+          setSelectedDate(newDate);
+          setViewDate(new Date(newDate.getFullYear(), newDate.getMonth(), 1));
+        }
         alert("Cycle saved! ✅");
       }else {
           alert("Error: " + data.error);

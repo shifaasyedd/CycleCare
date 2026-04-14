@@ -134,11 +134,12 @@ export default function Chatbot() {
 
       setChat((prev) => [...prev, botMsg]);
     } catch (error) {
+      console.error("Chat error:", error);
       setChat((prev) => [
         ...prev,
         {
           sender: "bot",
-          text: "Something went wrong. Please try again.",
+          text: "I apologize, but I'm having trouble responding right now. Please try again in a moment.",
         },
       ]);
     } finally {
