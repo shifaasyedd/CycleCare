@@ -262,6 +262,25 @@ const startsSorted = useMemo(() => {
     [theme]
   );
 
+function getPeriodDates() {
+  const periodDates = [];
+  for (const cycle of entries) {
+    if (cycle.startDate && cycle.periodLen) {
+      const start = new Date(cycle.startDate);
+      for (let i = 0; i < cycle.periodLen; i++) {
+        const d = new Date(start);
+        d.setDate(d.getDate() + i);
+        periodDates.push(toISO(d));
+      }
+    }
+  }
+  return periodDates;
+}
+
+function isPeriodDate(date) {
+  return getPeriodDates().includes(toISO(date));
+}
+
 function cycleStartForDate(date) {
   if (!lastStart) return null;
   if (!(date instanceof Date) || isNaN(date.getTime())) return null;
@@ -1198,8 +1217,8 @@ function cycleStartForDate(date) {
               <div style={styles.calendarGrid}>
                 {month.days.map((d) => {
                   const inMonth = d.getMonth() === month.month;
-                  const info = phaseForDate(d);
-                  const bg = info ? phaseColors[info.phase] : null;
+                  const isPeriod = isPeriodDate(d);
+                  const bg = isPeriod ? phaseColors.Menstrual : null;
                   const isSelected = sameDay(d, selectedDate);
                   const isToday = sameDay(d, today);
                   return (

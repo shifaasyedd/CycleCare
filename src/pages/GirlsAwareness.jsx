@@ -591,8 +591,6 @@ export default function GirlsAwareness() {
 
   const scrollToSection = (id) => {
     setActiveSection(id);
-    const el = document.getElementById(`section-${id}`);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
