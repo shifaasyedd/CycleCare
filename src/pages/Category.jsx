@@ -33,9 +33,27 @@ export default function Category() {
   }, []);
 
   useEffect(() => {
-    const savedRole = localStorage.getItem("cyclecare_role");
-    if (savedRole) setSelectedRole(savedRole);
-
+    const loadUserData = async () => {
+      const token = localStorage.getItem("cyclecare_token");
+      if (!token) return;
+      
+      try {
+        const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+        const res = await fetch(`${apiUrl}/api/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.success && data.user?.role) {
+          localStorage.setItem("cyclecare_role", data.user.role);
+          setSelectedRole(data.user.role);
+        }
+      } catch (err) {
+        console.error("Error loading user:", err);
+      }
+    };
+    
+    loadUserData();
+    
     const userData = localStorage.getItem("cyclecare_user");
     if (userData) setUser(JSON.parse(userData));
   }, []);
@@ -138,11 +156,11 @@ export default function Category() {
       localStorage.setItem("cyclecare_role", role);
       setSelectedRole(role);
       
-      // Save role to database
-      try {
-        const token = localStorage.getItem("cyclecare_token");
-        const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
-        if (token) {
+      // Save role to database and wait
+      const token = localStorage.getItem("cyclecare_token");
+      const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      if (token) {
+        try {
           const response = await fetch(`${apiUrl}/api/auth/role`, {
             method: 'PUT',
             headers: {
@@ -152,10 +170,16 @@ export default function Category() {
             body: JSON.stringify({ role })
           });
           const data = await response.json();
-          if (!data.success) console.error("Failed to save role to database");
+          console.log("Role save response:", data);
+          if (data.success && data.user?.role) {
+            console.log("✓ Role saved to database:", data.user.role);
+            alert(`✅ Role saved as "${data.user.role}"!`);
+          } else {
+            console.log("Save failed or returned:", data);
+          }
+        } catch (err) {
+          console.error("Error saving role:", err);
         }
-      } catch (err) {
-        console.error("Error saving role:", err);
       }
       
       alert(`✅ You have successfully chosen "${getRoleName(role)}"!`);

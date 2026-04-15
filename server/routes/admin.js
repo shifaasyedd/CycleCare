@@ -84,7 +84,6 @@ router.get('/verify', protect, async (req, res) => {
 router.get('/users', protect, isAdmin, async (req, res) => {
   try {
     const users = await User.find({}).select('-password');
-    console.log('All users sample roles:', users.slice(0, 5).map(u => ({ email: u.email, role: u.role })));
     const usersWithStats = await Promise.all(users.map(async (user) => {
       const cyclesCount = await Cycle.countDocuments({ user: user._id });
       const logsCount = await DailyLog.countDocuments({ user: user._id });
