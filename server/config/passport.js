@@ -1,7 +1,8 @@
-const crypto = require('crypto');           // ✅ ADD THIS LINE
+const crypto = require('crypto');
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const User = require("../models/User");
+const { sendWelcomeEmail } = require("../utils/emailService");
 
 passport.use(
   new GoogleStrategy(
@@ -38,6 +39,7 @@ passport.use(
           password: crypto.randomBytes(20).toString('hex'),
         });
 
+        sendWelcomeEmail(userEmail, profile.displayName).catch(() => {});
         return done(null, user);
       } catch (err) {
         console.error("❌ Passport Google Strategy Error:", err);

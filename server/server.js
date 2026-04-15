@@ -1,5 +1,4 @@
 require("dotenv").config();
-require('./jobs/periodReminder');
 
 const initCronJobs = require('./utils/cronJobs');
 const express = require("express");

@@ -17,7 +17,7 @@ const sendWelcomeEmail = async (email, name) => {
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #FFF9FB; border-radius: 16px;">
         <h2 style="color: #E54C6F;">Hi ${name}, welcome to CycleCare! 💜</h2>
-        <p>You've successfully logged into your account. We're here to support your journey.</p>
+        <p>Your account has been created successfully. We're here to support your journey.</p>
         <p>You can now:</p>
         <ul>
           <li>Choose a Role-Based Journey</li>
