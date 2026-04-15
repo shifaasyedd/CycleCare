@@ -149,136 +149,21 @@ export default function Shopping() {
     }
   ];
 
-const productImages = {
-    // Sanitary Pads
-    "Regular Day Pads": "https://images.unsplash.com/photo-1596755769461-05684b7ad4e2?w=400&h=300&fit=crop",
-    "Overnight Pads": "https://images.unsplash.com/photo-1551232864-3e48980c7228?w=400&h=300&fit=crop",
-    "Panty Liners": "https://images.unsplash.com/photo-1595436065986-6067ee587b6e?w=400&h=300&fit=crop",
-    // Tampons
-    "Light Tampons": "https://images.unsplash.com/photo-1519494026892-80bbd2fa6b44?w=400&h=300&fit=crop",
-    "Super Tampons": "https://images.unsplash.com/photo-1606813907291-d1f30c5b07e7?w=400&h=300&fit=crop",
-    // Menstrual Products
-    "Menstrual Cup": "https://images.unsplash.com/photo-1544782896-8372d5c4f76d?w=400&h=300&fit=crop",
-    "Menstrual Disc": "https://images.unsplash.com/photo-1633158829585-23ba8f7c8caf?w=400&h=300&fit=crop",
-    "Period Underwear": "https://images.unsplash.com/photo-1556906782-2643f9c1e10a?w=400&h=300&fit=crop",
-    // Heating
-    "Electric Heating Pad": "https://images.unsplash.com/photo-1538102902303582065-wJi2tNqJ4w4?w=400&h=300&fit=crop",
-    "Microwavable Seed Sack": "https://images.unsplash.com/photo-1544161515-4ab46ce0cc62?w=400&h=300&fit=crop",
-    "Hot Water Bottle": "https://images.unsplash.com/photo-1605656960541-95347a9cc6f6?w=400&h=300&fit=crop",
-    "Adhesive Heat Patches": "https://images.unsplash.com/photo-1558618666-f447d1e7b3d7?w=400&h=300&fit=crop",
-    // Pain Relief
-    "Ibuprofen": "https://images.unsplash.com/photo-1554860514-4e054949ab29?w=400&h=300&fit=crop",
-    "TENS Machine": "https://images.unsplash.com/photo-1559757175-5700dde675bc?w=400&h=300&fit=crop",
-    "Ginger Chews": "https://images.unsplash.com/photo-1582169664915-4b5f7f94a5ae?w=400&h=300&fit=crop",
-    // Supplements
-    "Magnesium Supplements": "https://images.unsplash.com/photo-1550590392-cbf8a2f51fb1?w=400&h=300&fit=crop",
-    "Vitamin B6": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=400&h=300&fit=crop",
-    "Iron Supplements": "https://images.unsplash.com/photo-1553356084-58ede8e8a2d7?w=400&h=300&fit=crop",
-    "Omega‑3 Capsules": "https://images.unsplash.com/photo-1550590396-01c6c2cdd1da?w=400&h=300&fit=crop",
-    "Electrolyte Powder": "https://images.unsplash.com/photo-1584468664466-efd323d57e39?w=400&h=300&fit=crop",
-    // Essential Oils
-    "Essential Oil Roller": "https://images.unsplash.com/photo-1608579638275-d2e8c54e8f1c?w=400&h=300&fit=crop",
-    "Peppermint Oil": "https://images.unsplash.com/photo-1606005832452-cf770b2d7ad6?w=400&h=300&fit=crop",
-    // Foods
-    "Dark Chocolate": "https://images.unsplash.com/photo-1606312604171-950c1d06a977?w=400&h=300&fit=crop",
-    "Raspberry Leaf Tea": "https://images.unsplash.com/photo-1556679343-c1befa5a3fbb?w=400&h=300&fit=crop",
-    "Chamomile Tea": "https://images.unsplash.com/photo-1571504388575-9e62a302fb21?w=400&h=300&fit=crop",
-    "Peppermint Tea": "https://images.unsplash.com/photo-1597314461396-1d3c9ee3b403?w=400&h=300&fit=crop",
-    "Ginger Tea": "https://images.unsplash.com/photo-1513477892291-60b39ddc6fd8?w=400&h=300&fit=crop",
-    "Bananas": "https://images.unsplash.com/photo-1607623814075-fc4b3e8faf1e?w=400&h=300&fit=crop",
-    "Pumpkin Seeds": "https://images.unsplash.com/photo-1588613319737-26fc41ec8d27?w=400&h=300&fit=crop",
-    "Dried Apricots": "https://images.unsplash.com/photo-1563636619-e9143da1913f?w=400&h=300&fit=crop",
-    "Almonds": "https://images.unsplash.com/photo-1589995288056-1cac7c8a64a9?w=400&h=300&fit=crop",
-    "Honey": "https://images.unsplash.com/photo-1587049352846-4a222e784a38?w=400&h=300&fit=crop",
-    // Clothing
-    "Oversized Hoodie": "https://images.unsplash.com/photo-1556905055-eab7c57a5ee0?w=400&h=300&fit=crop",
-    "High‑Waisted Leggings": "https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=400&h=300&fit=crop",
-    "Fuzzy Socks": "https://images.unsplash.com/photo-1576568008026-8a4c65224979?w=400&h=300&fit=crop",
-    "Seamless Underwear": "https://images.unsplash.com/photo-1552902875-7e4c5c5c5c5c?w=400&h=300&fit=crop",
-    "Loose Joggers": "https://images.unsplash.com/photo-1556906782-2643f9c1e10a?w=400&h=300&fit=crop",
-    "House Slippers": "https://images.unsplash.com/photo-1526862156108-8328ef35a03c?w=400&h=300&fit=crop",
-    // Bedding
-    "Weighted Blanket": "https://images.unsplash.com/photo-1544452535-0238c4de6f76?w=400&h=300&fit=crop",
-    "Body Pillow": "https://images.unsplash.com/photo-1586350977773-b7b4b4d64e8f?w=400&h=300&fit=crop",
-    "Silk Pillowcase": "https://images.unsplash.com/photo-1584545487008-48e8c7285457?w=400&h=300&fit=crop",
-    "Dark Towel": "https://images.unsplash.com/photo-1584005527749-0e1a18ce817e?w=400&h=300&fit=crop",
-    // Self Care
-    "Plushie Heating Pad": "https://images.unsplash.com/photo-1518981340509-26516c8c727c?w=400&h=300&fit=crop",
-    "Cramp Socks": "https://images.unsplash.com/photo-1576568008026-8a4c65224979?w=400&h=300&fit=crop",
-    "Pimple Patches": "https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=400&h=300&fit=crop",
-    "Sheet Masks": "https://images.unsplash.com/photo-1576421453121-89cc1fc16bf0?w=400&h=300&fit=crop",
-    "Aesthetic Water Bottle": "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop",
-    "Scented Candle": "https://images.unsplash.com/photo-1603008201339-c9be2fb0e1f2?w=400&h=300&fit=crop",
-    "Flowers": "https://images.unsplash.com/photo-1490750967868-85c8b12fc7d5?w=400&h=300&fit=crop",
-    // Hygiene
-    "Menstrual Cup Sterilizer": "https://images.unsplash.com/photo-1605656960541-95347a9cc6f6?w=400&h=300&fit=crop",
-    "Biodegradable Wipes": "https://images.unsplash.com/photo-1556228720-1957be83d2ba?w=400&h=300&fit=crop",
-    "Portable Bidet": "https://images.unsplash.com/photo-1585314062340-f1a5a7ea932?w=400&h=300&fit=crop",
-    "Intimate pH‑Balanced Wash": "https://images.unsplash.com/photo-1556228578-8f2d8a5a44c7?w=400&h=300&fit=crop",
-    "Stain Remover Pen": "https://images.unsplash.com/photo-1552873519-16da1a75d33f?w=400&h=300&fit=crop",
-    "Disposal Bags": "https://images.unsplash.com/photo-1556228578-8f2d8a5a44c7?w=400&h=300&fit=crop",
-    // Bath
-    "Epsom Salts": "https://images.unsplash.com/photo-1620916566398-39f5333b8f51?w=400&h=300&fit=crop",
+  const hashString = (s) => {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+    return Math.abs(h);
   };
 
-  const getProductImage = (itemName) => {
-    if (productImages[itemName]) return productImages[itemName];
-    // Fallback based on keyword
-    const s = itemName.toLowerCase();
-    if (s.includes("pad") || s.includes("liner")) return productImages["Regular Day Pads"];
-    if (s.includes("tampon")) return productImages["Light Tampons"];
-    if (s.includes("cup") || s.includes("disc")) return productImages["Menstrual Cup"];
-    if (s.includes("heating") || s.includes("hot water")) return productImages["Electric Heating Pad"];
-    if (s.includes("chocolate")) return productImages["Dark Chocolate"];
-    if (s.includes("tea")) return productImages["Chamomile Tea"];
-    if (s.includes("banana")) return productImages["Bananas"];
-    if (s.includes("almond") || s.includes("seed") || s.includes("nut")) return productImages["Almonds"];
-    if (s.includes("hoodie") || s.includes("cloth")) return productImages["Oversized Hoodie"];
-    if (s.includes("sock")) return productImages["Fuzzy Socks"];
-    if (s.includes("blanket") || s.includes("pillow")) return productImages["Weighted Blanket"];
-    if (s.includes("candle")) return productImages["Scented Candle"];
-    if (s.includes("flower")) return productImages["Flowers"];
-    if (s.includes("bottle") || s.includes("water")) return productImages["Aesthetic Water Bottle"];
-    if (s.includes("mask")) return productImages["Sheet Masks"];
-    if (s.includes("oil") || s.includes("essential")) return productImages["Essential Oil Roller"];
-    if (s.includes("vitamin") || s.includes("supplement")) return productImages["Magnesium Supplements"];
-    if (s.includes("ibuprofen") || s.includes("pain")) return productImages["Ibuprofen"];
-    if (s.includes("ginger")) return productImages["Ginger Chews"];
-    return "https://images.unsplash.com/photo-1556906782-2643f9c1e10a?w=400&h=300&fit=crop";
+  const getProductImage = (query) => {
+    const keywords = query.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim().split(/\s+/).join(",");
+    const lock = hashString(query);
+    return `https://loremflickr.com/400/300/${encodeURIComponent(keywords)}?lock=${lock}`;
   };
 
-  // Map of common product keywords to Unsplash photo IDs
-  const unsplashIds = {
-    "pads": "1596755769461-05684b7ad4e2",
-    "tampon": "1626624369442-cd7af6081619",
-    "heating pad": "1538102902303582065-wJi2tNqJ4w4",
-    "hot water bottle": "1605656960541-95347a9cc6f6",
-    "chocolate": "1606312604171-950c1d06a977",
-    "tea": "1556679343-c1befa5a3fbb",
-    "banana": "1607623814075-fc4b3e8faf1e",
-    "almond": "1589995288056-1cac7c8a64a9",
-    "hoodie": "1556905055-eab7c57a5ee0",
-    "socks": "1576568008026-8a4c65224979",
-    "blanket": "1544452535-0238c4de6f76",
-    "pillowcase": "1584545487008-48e8c7285457",
-    "candle": "1603008201339-c9be2fb0e1f2",
-    "flowers": "1490750967868-85c8b12fc7d5",
-    "water bottle": "1602143407151-7111542de6e8",
-    "facemask": "1576421453121-89cc1fc16bf0",
-    "essential oil": "1608579638275-d2e8c54e8f1c",
-    "ibuprofen": "1554860514-4e054949ab29",
-    "electrolyte": "1584468664466-efd323d57e39",
-    "omega": "1550590396-01c6c2cdd1da",
-    "menstrual cup": "1613771337727-1c1edc1106e3",
-    "panty liner": "1584515931498-94d4de4f92fc",
-  };
-
-  const getUnsplashId = (query) => {
-    const q = query.toLowerCase();
-    for (const [key, id] of Object.entries(unsplashIds)) {
-      if (q.includes(key)) return id;
-    }
-    return "1596755769461-05684b7ad4e2";
+  const handleImgError = (e) => {
+    e.currentTarget.src = `https://picsum.photos/seed/${encodeURIComponent(e.currentTarget.alt)}/400/300`;
+    e.currentTarget.onerror = null;
   };
 
   const styles = {
@@ -512,9 +397,10 @@ const productImages = {
                   }}
                 >
                   <img
-                    src={getProductImage(item.name)}
+                    src={getProductImage(item.query)}
                     alt={item.name}
                     style={styles.productImage}
+                    onError={handleImgError}
                   />
                   <div style={styles.cardContent}>
                     <div style={styles.productName}>{item.name}</div>
