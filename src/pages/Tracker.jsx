@@ -263,15 +263,15 @@ const startsSorted = useMemo(() => {
   );
 
 function getPeriodDates() {
-  if (!entries || entries.length === 0) return [];
-  const latestCycle = entries[0];
   const periodDates = [];
-  if (latestCycle.startDate && latestCycle.periodLen) {
-    const start = new Date(latestCycle.startDate);
-    for (let i = 0; i < latestCycle.periodLen; i++) {
-      const d = new Date(start);
-      d.setDate(d.getDate() + i);
-      periodDates.push(toISO(d));
+  for (const cycle of entries) {
+    if (cycle.startDate && cycle.periodLen) {
+      const start = new Date(cycle.startDate);
+      for (let i = 0; i < cycle.periodLen; i++) {
+        const d = new Date(start);
+        d.setDate(d.getDate() + i);
+        periodDates.push(toISO(d));
+      }
     }
   }
   return periodDates;
@@ -284,8 +284,15 @@ function isPeriodDate(date) {
 function cycleStartForDate(date) {
   if (!entries || entries.length === 0) return null;
   if (!(date instanceof Date) || isNaN(date.getTime())) return null;
+  const dateTime = date.getTime();
   const latestStart = new Date(entries[0].startDate);
-  if (date.getTime() < latestStart.getTime()) return null;
+  if (dateTime < latestStart.getTime()) {
+    for (const cycle of entries) {
+      const cycleStart = new Date(cycle.startDate);
+      if (cycleStart.getTime() <= dateTime) return cycleStart;
+    }
+    return null;
+  }
   return latestStart;
 }
 
@@ -293,10 +300,16 @@ function cycleStartForDate(date) {
     if (!lastStart) return null;
     let s = cycleStartForDate(date);
     if (!s) return null;
+    const dateTime = date.getTime();
+    const latestStartTime = new Date(entries[0].startDate).getTime();
     let dayInCycle = diffDays(s, date) + 1;
-    while (dayInCycle > avgCycle) {
-      s = addDays(s, avgCycle);
-      dayInCycle = diffDays(s, date) + 1;
+    if (dateTime >= latestStartTime) {
+      while (dayInCycle > avgCycle) {
+        s = addDays(s, avgCycle);
+        dayInCycle = diffDays(s, date) + 1;
+      }
+    } else {
+      dayInCycle = Math.max(1, Math.min(dayInCycle, avgCycle));
     }
     const pLen = typicalPeriodLen;
     const ovulationDay = clamp(avgCycle - 14, 8, 25);
@@ -1209,8 +1222,9 @@ function cycleStartForDate(date) {
               <div style={styles.calendarGrid}>
                 {month.days.map((d) => {
                   const inMonth = d.getMonth() === month.month;
+                  const isPeriod = isPeriodDate(d);
                   const info = phaseForDate(d);
-                  const bg = info ? phaseColors[info.phase] : null;
+                  const bg = isPeriod ? phaseColors.Menstrual : (info ? phaseColors[info.phase] : null);
                   const isSelected = sameDay(d, selectedDate);
                   const isToday = sameDay(d, today);
                   return (
