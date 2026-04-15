@@ -264,15 +264,21 @@ export default function GirlsAwareness() {
       gap: 24,
     },
     sidebar: {
+      position: "fixed",
+      left: 0,
+      top: 80,
       width: sidebarOpen ? 240 : 0,
       minWidth: sidebarOpen ? 240 : 0,
+      maxHeight: "calc(100vh - 100px)",
       padding: "16px 0",
+      background: theme.bg,
       transition: "all 0.3s ease",
       overflow: "hidden",
+      zIndex: 100,
     },
     sidebarToggle: {
       position: "fixed",
-      left: sidebarOpen ? 220 : 10,
+      left: sidebarOpen ? 230 : 10,
       top: 100,
       zIndex: 101,
       padding: "8px 12px",
@@ -302,8 +308,10 @@ export default function GirlsAwareness() {
     }),
     contentArea: {
       flex: 1,
+      marginLeft: sidebarOpen ? 240 : 0,
       paddingRight: 24,
       paddingBottom: 40,
+      transition: "margin-left 0.3s ease",
     },
     container: { maxWidth: 1280, margin: "0 auto", padding: "0 24px" },
 
