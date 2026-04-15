@@ -133,12 +133,10 @@ router.get('/verify-email', async (req, res) => {
 router.put('/role', protect, async (req, res) => {
     try {
         const { role } = req.body;
-        console.log('PUT /role - user:', req.user.email, 'new role:', role);
         if (!['men', 'girls', 'women'].includes(role)) {
             return res.status(400).json({ success: false, error: 'Invalid role' });
         }
         const user = await User.findByIdAndUpdate(req.user._id, { role }, { new: true });
-        console.log('Role saved, user role is now:', user.role);
         res.json({ success: true, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
         res.status(500).json({ success: false, error: err.message });

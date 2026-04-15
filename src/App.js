@@ -48,6 +48,9 @@ function AppContent() {
                 isAdmin: user.email === "shifashoebsyed@gmail.com"
               })
             );
+            if (user.role) {
+              localStorage.setItem("cyclecare_role", user.role);
+            }
             localStorage.setItem(
               "cyclecare_is_admin",
               user.email === "shifashoebsyed@gmail.com" ? "true" : "false"
