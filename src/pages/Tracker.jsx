@@ -1217,8 +1217,8 @@ function cycleStartForDate(date) {
               <div style={styles.calendarGrid}>
                 {month.days.map((d) => {
                   const inMonth = d.getMonth() === month.month;
-                  const isPeriod = isPeriodDate(d);
-                  const bg = isPeriod ? phaseColors.Menstrual : null;
+                  const info = phaseForDate(d);
+                  const bg = info ? phaseColors[info.phase] : null;
                   const isSelected = sameDay(d, selectedDate);
                   const isToday = sameDay(d, today);
                   return (
