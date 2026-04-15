@@ -6,6 +6,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "@emailjs/nodejs": "^5.0.2",
     "axios": "^1.7.0",
     "node-cron": "^4.2.1",
     "nodemailer": "^8.0.4",
