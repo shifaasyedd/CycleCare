@@ -524,6 +524,10 @@ export default function MenSupport() {
 
   const scrollToSection = (id) => {
     setActiveSection(id);
+    const element = document.getElementById(`section-${id}`);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   return (
