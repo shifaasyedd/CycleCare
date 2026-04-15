@@ -263,15 +263,15 @@ const startsSorted = useMemo(() => {
   );
 
 function getPeriodDates() {
+  if (!entries || entries.length === 0) return [];
+  const latestCycle = entries[0];
   const periodDates = [];
-  for (const cycle of entries) {
-    if (cycle.startDate && cycle.periodLen) {
-      const start = new Date(cycle.startDate);
-      for (let i = 0; i < cycle.periodLen; i++) {
-        const d = new Date(start);
-        d.setDate(d.getDate() + i);
-        periodDates.push(toISO(d));
-      }
+  if (latestCycle.startDate && latestCycle.periodLen) {
+    const start = new Date(latestCycle.startDate);
+    for (let i = 0; i < latestCycle.periodLen; i++) {
+      const d = new Date(start);
+      d.setDate(d.getDate() + i);
+      periodDates.push(toISO(d));
     }
   }
   return periodDates;
@@ -282,19 +282,11 @@ function isPeriodDate(date) {
 }
 
 function cycleStartForDate(date) {
-  if (!lastStart) return null;
+  if (!entries || entries.length === 0) return null;
   if (!(date instanceof Date) || isNaN(date.getTime())) return null;
-  for (let i = 0; i < startsSorted.length; i++) {
-    if (startsSorted[i].getTime() <= date.getTime()) return startsSorted[i];
-  }
-  let s = new Date(lastStart);
-  let guard = 0;
-  while (s.getTime() > date.getTime() && guard < 24) {
-    s = addDays(s, -avgCycle);
-    if (!s) break;
-    guard++;
-  }
-  return s;
+  const latestStart = new Date(entries[0].startDate);
+  if (date.getTime() < latestStart.getTime()) return null;
+  return latestStart;
 }
 
   function phaseForDate(date) {
