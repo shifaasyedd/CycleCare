@@ -152,7 +152,13 @@ export default function Category() {
             body: JSON.stringify({ role })
           });
           const data = await response.json();
-          if (!data.success) console.error("Failed to save role to database");
+          console.log("Role save response:", data);
+          if (!data.success) {
+            console.error("Failed to save role to database:", data.error);
+            alert("Warning: Role may not have saved to database. Error: " + (data.error || "Unknown"));
+          }
+        } else {
+          console.warn("No token found - role saved locally only");
         }
       } catch (err) {
         console.error("Error saving role:", err);

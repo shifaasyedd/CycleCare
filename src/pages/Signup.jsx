@@ -100,6 +100,9 @@ export default function Signup() {
             isAdmin: false,
           })
         );
+        if (data.user?.role) {
+          localStorage.setItem("cyclecare_role", data.user.role);
+        }
         localStorage.setItem("cyclecare_is_admin", "false");
         localStorage.setItem("cyclecare_created_at", new Date().toISOString());
         alert("Account created successfully! 🎉");

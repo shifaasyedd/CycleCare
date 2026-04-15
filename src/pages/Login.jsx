@@ -135,6 +135,9 @@ export default function Login() {
               isAdmin: false,
             })
           );
+          if (data.user.role) {
+            localStorage.setItem("cyclecare_role", data.user.role);
+          }
           localStorage.setItem("cyclecare_is_admin", "false");
           window.dispatchEvent(new Event("authchange"));
           navigate("/category");

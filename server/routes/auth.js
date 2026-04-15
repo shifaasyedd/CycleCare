@@ -80,7 +80,7 @@ router.post('/register', async (req, res) => {
             success: true,
             message: 'Registration successful! You are now logged in.',
             token,
-            user: { id: user._id, name: user.name, email: user.email }
+            user: { id: user._id, name: user.name, email: user.email, role: user.role }
         });
     } catch (error) {
         console.error('Register error:', error);
@@ -114,7 +114,7 @@ router.post('/login', async (req, res) => {
         res.json({
             success: true,
             token: generateToken(user._id),
-            user: { id: user._id, name: user.name, email: user.email }
+            user: { id: user._id, name: user.name, email: user.email, role: user.role }
         });
     } catch (error) {
         console.error('Login error:', error);
@@ -133,12 +133,16 @@ router.get('/verify-email', async (req, res) => {
 router.put('/role', protect, async (req, res) => {
     try {
         const { role } = req.body;
+        console.log('Role update request - User:', req.user.email, 'Role:', role, 'Body:', req.body);
         if (!['men', 'girls', 'women'].includes(role)) {
+            console.log('Invalid role:', role);
             return res.status(400).json({ success: false, error: 'Invalid role' });
         }
         const user = await User.findByIdAndUpdate(req.user._id, { role }, { new: true });
+        console.log('Role updated successfully - User:', user.email, 'New role:', user.role);
         res.json({ success: true, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
     } catch (err) {
+        console.error('Role update error:', err);
         res.status(500).json({ success: false, error: err.message });
     }
 });
