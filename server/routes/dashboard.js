@@ -167,58 +167,73 @@ router.get('/insights', auth, async (req, res) => {
     });
     const topSymptoms = [...new Set(allSymptoms)].slice(0, 5).join(', ');
 
+    const predYear = nextPeriodDate.getFullYear();
+    const predMonth = String(nextPeriodDate.getMonth() + 1).padStart(2, '0');
+    const predDay = String(nextPeriodDate.getDate()).padStart(2, '0');
+    const predictionStr = `${predYear}-${predMonth}-${predDay}`;
+
     // AI-generated insights
     if (openai && process.env.OPENROUTER_API_KEY) {
       try {
-        const prompt = `You are a menstrual health expert AI assistant. Based on the following user data:
+        const prompt = `You are a menstrual health expert. Based on this user's data, return ONLY a JSON object (no prose, no markdown fences) with this exact shape:
+{
+  "insights": [
+    { "type": "success" | "warning" | "tip" | "info", "title": "short title", "message": "1-2 sentence actionable insight" }
+  ],
+  "recommendation": "one sentence overall recommendation"
+}
+
+Include 3-4 items in the insights array. Keep each message under 200 characters, supportive, and medically appropriate. Do NOT include a prediction field — it is computed separately.
+
+User data:
 - Average cycle length: ${avgCycleLength} days
 - Last period started: ${lastPeriodStart.toDateString()}
 - Top symptoms tracked: ${topSymptoms || 'None'}
-- Total cycles logged: ${cycles.length}
-
-Provide:
-1. A prediction of next period date (if predictable)
-2. 3-4 actionable health insights about their cycle patterns
-3. Any pattern warnings if cycles seem irregular
-
-Keep responses concise, supportive, and medically appropriate. Format as JSON with keys: prediction, insights (array with type, title, message), recommendation.`;
+- Total cycles logged: ${cycles.length}`;
 
         const completion = await openai.chat.completions.create(
           {
             model: "google/gemini-3-flash-preview",
             messages: [{ role: "user", content: prompt }],
-            max_tokens: 300,
+            max_tokens: 1200,
+            response_format: { type: "json_object" },
           },
-          { timeout: 15000 }
+          { timeout: 20000 }
         );
 
-        let aiResponse = completion.choices[0].message.content;
-        // Clean up markdown code blocks if present
-        aiResponse = aiResponse.replace(/^```json\s*/i, "").replace(/^```\s*/i, "").replace(/```$/i, "").trim();
-        let parsed;
+        const raw = completion.choices[0].message.content || "";
+        const match = raw.match(/\{[\s\S]*\}/);
+        const jsonText = match ? match[0] : raw;
+
+        let parsed = null;
         try {
-          parsed = JSON.parse(aiResponse);
-        } catch {
-          // If still can't parse, just use the raw response as message
-          parsed = { 
-            insights: [{ type: 'info', title: 'Health Update', message: aiResponse.replace(/["\{\}\[\]]/g, "").replace(/,/g, ". ").trim() }], 
-            prediction: null 
-          };
+          parsed = JSON.parse(jsonText);
+        } catch (parseErr) {
+          console.error('AI Insights JSON parse failed:', parseErr.message, '— raw:', raw.slice(0, 200));
         }
 
-        const predYear = nextPeriodDate.getFullYear();
-        const predMonth = String(nextPeriodDate.getMonth() + 1).padStart(2, '0');
-        const predDay = String(nextPeriodDate.getDate()).padStart(2, '0');
-        const predictionStr = `${predYear}-${predMonth}-${predDay}`;
-        
-        return res.json({
-          success: true,
-          data: {
-            prediction: predictionStr,
-            avgCycleLength,
-            ...parsed,
-          }
-        });
+        const aiInsights = Array.isArray(parsed?.insights)
+          ? parsed.insights
+              .filter(i => i && typeof i === 'object' && i.title && i.message)
+              .map(i => ({
+                type: ['success', 'warning', 'tip', 'info'].includes(i.type) ? i.type : 'info',
+                title: String(i.title).slice(0, 80),
+                message: String(i.message).slice(0, 400),
+              }))
+          : [];
+
+        if (aiInsights.length > 0) {
+          return res.json({
+            success: true,
+            data: {
+              prediction: predictionStr,
+              avgCycleLength,
+              insights: aiInsights,
+              recommendation: typeof parsed?.recommendation === 'string' ? parsed.recommendation : undefined,
+            }
+          });
+        }
+        // No valid insights parsed — fall through to rule-based fallback
       } catch (aiError) {
         console.error('AI Insights Error:', aiError.message);
       }
@@ -247,14 +262,10 @@ Keep responses concise, supportive, and medically appropriate. Format as JSON wi
       insights.push({ type: 'tip', title: 'Flow Tip', message: 'Heavy flow days? Stay hydrated and consider iron-rich foods.' });
     }
 
-    const fbYear = nextPeriodDate.getFullYear();
-    const fbMonth = String(nextPeriodDate.getMonth() + 1).padStart(2, '0');
-    const fbDay = String(nextPeriodDate.getDate()).padStart(2, '0');
-    
     res.json({
       success: true,
       data: {
-        prediction: `${fbYear}-${fbMonth}-${fbDay}`,
+        prediction: predictionStr,
         avgCycleLength,
         insights,
         recommendation: 'Keep tracking daily to improve prediction accuracy.',

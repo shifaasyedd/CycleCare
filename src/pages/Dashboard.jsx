@@ -170,23 +170,13 @@ export default function Dashboard() {
 
   const cleanMessage = (msg) => {
     if (!msg) return "";
-    let text = typeof msg === "string" ? msg : String(msg);
-    try {
-      const parsed = JSON.parse(text);
-      if (typeof parsed === "object" && parsed !== null) {
-        const values = Object.values(parsed).filter(v => v && typeof v !== "object");
-        if (values.length > 0) return values.join(". ");
-        return Object.entries(parsed)
-          .filter(([, v]) => v && typeof v !== "object")
-          .map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`)
-          .join(". ");
-      }
-    } catch {
-      text = text.replace(/^\[?\{[}\]]?$/g, "").replace(/\\"/g, '"').trim();
-      if (text.length < 5) return msg;
+    if (typeof msg === "string") return msg.trim();
+    if (typeof msg === "object") {
+      return Object.values(msg)
+        .filter(v => v && typeof v !== "object")
+        .join(". ");
     }
-    const cleaned = text.replace(/^[\[\{].*?[\]\}]$/g, "").replace(/"\s*[,;]\s*"/g, ". ").replace(/\\n/g, " ").replace(/[{}"\[\]]/g, "");
-    return cleaned.length > 10 ? cleaned.trim() : text.trim();
+    return String(msg);
   };
 
   const styles = {
