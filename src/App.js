@@ -48,7 +48,7 @@ function AppContent() {
                 isAdmin: user.email === "shifashoebsyed@gmail.com"
               })
             );
-            if (user.role) {
+            if (user.role && ["men", "girls", "women"].includes(user.role)) {
               localStorage.setItem("cyclecare_role", user.role);
             }
             localStorage.setItem(

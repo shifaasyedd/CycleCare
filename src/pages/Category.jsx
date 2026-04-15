@@ -107,13 +107,16 @@ export default function Category() {
       return;
     }
     
-    localStorage.setItem("cyclecare_role", role);
-    setSelectedRole(role);
-    
     const token = localStorage.getItem("cyclecare_token");
     const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
-    if (token) {
-      await fetch(`${apiUrl}/api/auth/role`, {
+    
+    if (!token) {
+      alert("Error: Not logged in. Please login first.");
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${apiUrl}/api/auth/role`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -121,9 +124,19 @@ export default function Category() {
         },
         body: JSON.stringify({ role })
       });
+      
+      const data = await response.json();
+      if (data.success) {
+        localStorage.setItem("cyclecare_role", role);
+        setSelectedRole(role);
+        alert(`✅ You have chosen "${getRoleName(role)}"!`);
+      } else {
+        alert("Error saving: " + (data.error || "Try again"));
+      }
+    } catch (err) {
+      console.error("Save role error:", err);
+      alert("Error: " + err.message);
     }
-    
-    alert(`✅ You have chosen "${getRoleName(role)}"!`);
     
     if (role === "women") navigate("/tracker");
     else if (role === "girls") navigate("/girls-awareness");

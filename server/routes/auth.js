@@ -136,9 +136,11 @@ router.put('/role', protect, async (req, res) => {
         if (!['men', 'girls', 'women'].includes(role)) {
             return res.status(400).json({ success: false, error: 'Invalid role' });
         }
-        const user = await User.findByIdAndUpdate(req.user._id, { role }, { new: true });
-        res.json({ success: true, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+        await User.updateOne({ _id: req.user._id }, { $set: { role } });
+        const updatedUser = await User.findById(req.user._id);
+        res.json({ success: true, user: { id: updatedUser._id, name: updatedUser.name, email: updatedUser.email, role: updatedUser.role } });
     } catch (err) {
+        console.error('PUT /role error:', err);
         res.status(500).json({ success: false, error: err.message });
     }
 });

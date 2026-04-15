@@ -17,12 +17,14 @@ const sendWelcomeEmail = async (email, name) => {
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #FFF9FB; border-radius: 16px;">
         <h2 style="color: #E54C6F;">Hi ${name}, welcome to CycleCare! 💜</h2>
-        <p>You've successfully logged into your account. We're here to support your menstrual health journey.</p>
+        <p>You've successfully logged into your account. We're here to support your journey.</p>
         <p>You can now:</p>
         <ul>
-          <li>📆 Track your periods and symptoms</li>
-          <li>💬 Chat with our AI assistant</li>
-          <li>📧 Receive period reminders (2 days before)</li>
+          <li>Choose a Role-Based Journey</li>
+          <li>Educational content & support guides</li>
+          <li>Track Health Data (Cycles, Symptoms, Lifestyle, Medications, Doctor Visits)</li>
+          <li>Get AI-Powered Insights & Chat Support</li>
+          <li>Participate in Community & Admin Oversight</li>
         </ul>
         <a href="https://thecyclecare.vercel.app/category" style="display: inline-block; padding: 10px 20px; background-color: #E54C6F; color: white; text-decoration: none; border-radius: 25px;">Go to Dashboard</a>
         <hr style="margin: 20px 0; border-color: #FFD4DF;" />
