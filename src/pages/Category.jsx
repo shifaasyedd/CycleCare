@@ -94,71 +94,40 @@ export default function Category() {
   };
 
   const choose = async (role) => {
+    if (!role || !["men", "girls", "women"].includes(role)) {
+      return;
+    }
+    
     const existingRole = localStorage.getItem("cyclecare_role");
     
-    if (existingRole && existingRole !== role) {
-      const confirmChange = window.confirm(
-        `⚠️ IMPORTANT: You have already chosen "${getRoleName(existingRole)}" as your category.\n\n` +
-        `Changing your category will require you to DELETE your account and sign up with a new email address.\n\n` +
-        `Are you sure you want to proceed? This will log you out.`
-      );
-      
-      if (confirmChange) {
-        localStorage.removeItem("cyclecare_role");
-        localStorage.removeItem("cyclecare_user");
-        localStorage.removeItem("cyclecare_logged_in");
-        localStorage.removeItem("cyclecare_cycles_v2");
-        localStorage.removeItem("cyclecare_daily_logs");
-        localStorage.removeItem("cyclecare_medications");
-        localStorage.removeItem("cyclecare_visits");
-        localStorage.removeItem("pcos_cycles");
-        localStorage.removeItem("pcos_daily");
-        localStorage.removeItem("pcos_medications");
-        localStorage.removeItem("pcos_visits");
-        
-        alert(`Your account has been deleted. Please sign up again with a new email address to choose "${getRoleName(role)}".`);
-        navigate("/signup");
-      }
-      return;
-    }
-    
-    if (existingRole && existingRole === role) {
+    if (existingRole === role) {
       if (role === "women") navigate("/tracker");
       else if (role === "girls") navigate("/girls-awareness");
       else if (role === "men") navigate("/men-support");
       return;
     }
     
-    const confirmSelection = window.confirm(
-      `You are about to choose "${getRoleName(role)}" as your category.\n\n` +
-      `⚠️ IMPORTANT: This choice is PERMANENT for this account.\n\n` +
-      `If you want to change this later, you will need to delete your account and sign up with a new email address.\n\n` +
-      `Are you sure you want to proceed?`
-    );
+    localStorage.setItem("cyclecare_role", role);
+    setSelectedRole(role);
     
-    if (confirmSelection) {
-      localStorage.setItem("cyclecare_role", role);
-      setSelectedRole(role);
-      
-      const token = localStorage.getItem("cyclecare_token");
-      const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
-      if (token) {
-        await fetch(`${apiUrl}/api/auth/role`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ role })
-        });
-      }
-      
-      alert(`✅ You have successfully chosen "${getRoleName(role)}"!`);
-      
-      if (role === "women") navigate("/tracker");
-      else if (role === "girls") navigate("/girls-awareness");
-      else if (role === "men") navigate("/men-support");
+    const token = localStorage.getItem("cyclecare_token");
+    const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+    if (token) {
+      await fetch(`${apiUrl}/api/auth/role`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ role })
+      });
     }
+    
+    alert(`✅ You have chosen "${getRoleName(role)}"!`);
+    
+    if (role === "women") navigate("/tracker");
+    else if (role === "girls") navigate("/girls-awareness");
+    else if (role === "men") navigate("/men-support");
   };
 
   // eslint-disable-next-line no-unused-vars
