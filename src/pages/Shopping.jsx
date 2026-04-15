@@ -149,17 +149,75 @@ export default function Shopping() {
     }
   ];
 
-  const hashString = (s) => {
-    let h = 0;
-    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
-    return Math.abs(h);
+  const productImages = {
+    "regular day sanitary pads": "https://d2xfs8lg0s24uu.cloudfront.net/cdn/scdn/images/uploads/6485b_care-_-protect_14-ultra-pads-regular-x12_render-(1).png",
+    "overnight sanitary pads with wings": "https://i5.walmartimages.com/seo/Always-Maxi-Overnight-Pads-with-Wings-Size-5-Extra-Heavy-Overnight-Unscented-20-Count_15fbfbf6-aed2-4a31-88ba-7de35d00a730.42b2ee44c1e072bdc96b6678889f6efd.jpeg",
+    "panty liners": "https://laz-img-sg.alicdn.com/p/fbde3827334c5e097554f1fa2232468f.png",
+    "light absorbency tampons": "https://storage.googleapis.com/images-bks-prd-1385851.bks.prd.v8.commerce.mi9cloud.com/product-images/zoom/c5a1c5be-78ad-4c2e-9fa1-3fa3999ac691.jpeg",
+    "super tampons heavy flow": "https://mexmax.com/cdn/shop/files/181053_grande.webp?v=1696099276",
+    "menstrual cup reusable": "https://i5.walmartimages.com/seo/Multicolor-Soft-Menstrual-Cup-Silicone-Feminine-Hygiene-Period-Cup-Reusable-Cup_3164ae7e-a48c-4f05-8009-19f2e288e0df.3bd4cd57dcea5562cba58d31356fe2f2.jpeg",
+    "menstrual disc reusable": "https://m.media-amazon.com/images/I/71keUMd5ZKL._AC_.jpg",
+    "period underwear absorbent": "https://senziwash.com/wp-content/uploads/2023/06/Period-Panties-01-3.jpg",
+    "interlabial cloth pads": "https://lilhelperusa.com/cdn/shop/files/InterlabialPadsNT9A0476_1280x1280.jpg?v=1739834433",
+    "menstrual cup steamer sterilizer": "https://senzicare.com/wp-content/uploads/2024/08/cupsterilizercupwash-03-scaled.jpg",
+    "biodegradable feminine wipes": "https://cdn4.volusion.store/fuzcd-wxecg/v/vspfiles/photos/FEM002-2.jpg?v-cache=1643865380",
+    "portable bidet bottle": "https://i5.walmartimages.com/asr/e62021b6-89b1-4ed6-ba14-842296e3fdb0.6f8debc77ace1d9332878983d22e3a22.jpeg",
+    "scented sanitary disposal bags": "https://m.media-amazon.com/images/I/51uSzuLKdFL._AC_.jpg",
+    "pH balanced feminine wash": "https://www.online4pharmacy.com/media/catalog/product/v/a/vagisil_feminine_wash_-intimate_ph_balance_wash.jpg",
+    "stain remover pen for clothes": "https://i5.walmartimages.com/seo/Tide-To-Go-Instant-Laundry-Stain-Remover-Pen-and-Spot-Cleaner-Travel-and-Pocket-Size-Stain-Stick-0-33-fl-oz_37e62412-ac3a-4446-9dca-4a4ef9737dfb.a13515571ab5d37d6598a20dc66b353c.jpeg",
+    "electric heating pad for cramps": "https://m.media-amazon.com/images/I/81QEatB8CnL.jpg",
+    "microwavable heating pad flaxseed": "https://sc04.alicdn.com/kf/H2a145484f8ab43faa14f4e6796178822S/225383505/H2a145484f8ab43faa14f4e6796178822S.jpg",
+    "adhesive heat patches for period pain": "https://m.media-amazon.com/images/I/811jPjT9H8L.jpg",
+    "hot water bottle": "https://5.imimg.com/data5/SELLER/Default/2025/12/571730857/BR/WD/ZQ/257449572/hot-water-rubber-bottles-1000x1000.jpg",
+    "ibuprofen for period cramps": "https://www.webstaurantstore.com/images/products/extra_large/462645/1734720.jpg",
+    "TENS unit for period cramps": "https://carex.com/cdn/shop/files/AccuReliefPeriodPainTENSUnitwithHeatLifestyleImage_4_Cropped_1200x1200.jpg?v=1753992223",
+    "Epsom salt bath": "https://seasalt.com/media/cache/attachment/filter/product_gallery_main/11c00c6d0bd6b875afe655d3c9d4f942/8700/5ed127a672909603319424.jpg",
+    "magnesium glycinate supplements": "https://m.media-amazon.com/images/I/81PKo5FGG4L.jpg",
+    "vitamin B6 supplements": "https://m.media-amazon.com/images/I/61ySNX2QNiL._AC_.jpg",
+    "iron supplements": "https://i5.walmartimages.com/asr/d786621c-b865-4707-a199-afe3dd79bbdf_1.314d0c028521322c5e09188733e2e709.jpeg",
+    "clary sage essential oil roller": "https://m.media-amazon.com/images/I/71QqKIY-jVL._AC_.jpg",
+    "peppermint essential oil": "https://m.media-amazon.com/images/I/61KqRNG4k5L._AC_SL1500_.jpg",
+    "ginger chews candy": "https://m.media-amazon.com/images/I/71CwzDJMsEL._SL1500_.jpg",
+    "electrolyte powder hydration": "https://www.gosupps.com/media/catalog/product/cache/25/image/1500x/040ec09b1e35df139433887a97daa66f/8/1/81cQwRUA3WL.jpg",
+    "fish oil omega 3 supplements": "https://i5.walmartimages.com/seo/Nature-Made-Extra-Strength-Omega-3-Fish-Oil-Supplements-2800-mg-Per-Serving-Softgels-60-Count_ed80f642-dcbb-42b4-bc8c-3903ae9d7ca8.55756e31f2761b71d312a0acd778bcce.jpeg",
+    "dark chocolate 70 percent cocoa": "https://i5.walmartimages.com/seo/Lindt-Dark-Chocolate-70-Cocoa-EXCELLENCE-Bar-3-5-oz-Exceptional-Flavor-1-Bar_3fef76e9-c969-4a45-b578-5ebce1043e9c.f3aab98c684c563c3cf8782ef6099256.jpeg",
+    "raspberry leaf tea": "https://m.media-amazon.com/images/I/71J0mQZuKHL._AC_SL1500_.jpg",
+    "chamomile tea": "https://cdnimg.webstaurantstore.com/images/products/large/848744/2949152.jpg",
+    "peppermint tea": "https://i5.walmartimages.com/seo/Twinings-Pure-Peppermint-Herbal-Tea-Bags-Caffeine-Free-50-Count-Box_b4d9faaa-fc7a-40ca-9df9-1f43b2f33165.73143d7f41e24383f911de296ccf2cd2.jpeg",
+    "ginger tea bags": "https://i5.walmartimages.com/asr/cf28269d-add9-41b4-b62f-0da603cd8c24.839b0b50b8033248d9b43843c8fec181.jpeg",
+    "bananas": "https://c8.alamy.com/comp/PRFTN4/bunch-of-fresh-ripe-banana-fruits-isolated-on-white-background-PRFTN4.jpg",
+    "pumpkin seeds": "https://i5.walmartimages.com/seo/Pumpkin-Seeds-With-Sea-Salt-Sprouted-Organic-22-Oz-Bag-Keto-Vegan-Gluten-Free-Snacks-Superfood_828ed63c-4073-4dbb-a93e-72758ed5142c.d8201bb447627449f4c44bcfa2b78500.jpeg",
+    "dried apricots": "https://131818403.cdn6.editmysite.com/uploads/1/3/1/8/131818403/HGUI4AQYMLXDWP6TUAIIN5BO.jpeg",
+    "almonds walnuts mix": "https://img.drz.lazcdn.com/static/lk/p/3f23dd07d18b6a19ada5f2e2da295083.jpg_720x720q80.jpg",
+    "whole grain crackers": "https://m.media-amazon.com/images/I/81gmGABuxML.jpg",
+    "nut butter packets": "https://i5.walmartimages.com/asr/1b7ecbd5-5229-445c-b9dc-749698db0ce1.b7d049e3a447ae8867ddbbd25ec6475a.jpeg",
+    "fruit infuser water bottle": "https://ueeshop.ly200-cdn.com/u_file/UPAU/UPAU869/2207/products/27/eecb8cb726.jpg?x-oss-process=image/resize,m_lfit,h_800,w_800",
+    "healthy instant soup mix": "https://healthyheartmarket.com/cdn/shop/products/bobs-red-mill-vegi-soup-mix-non-gmo-sodium-free-28-oz-healthy-heart-market_1200x.jpg?v=1582770160",
+    "raw honey": "https://static.vecteezy.com/system/resources/previews/022/590/879/non_2x/honey-label-design-and-honey-jar-label-natural-pure-honey-bee-new-honey-jar-bottle-label-product-sticker-design-creative-and-modern-packaging-gold-honey-black-label-organic-honey-food-tag-vector.jpg",
+    "multivitamin gummies": "https://www.nutrigums.co.uk/cdn/shop/products/2-250ml-Womens-Multi_1000x.jpg?v=1678195920",
+    "oversized hoodie women": "https://m.media-amazon.com/images/I/81H96aUSYJL._AC_SL1500_.jpg",
+    "high waisted leggings": "https://i5.walmartimages.com/seo/FUNING-4-Pack-Leggings-with-Pockets-for-Women-High-Waist-Tummy-Control-Workout-Yoga-Pants_a5a2a4af-d913-423d-bec4-6e78d62261d8.3820ca15f41daa89f7c7837e5f2d1fa9.jpeg",
+    "fuzzy warm socks": "https://m.media-amazon.com/images/I/81u+Zg+EJEL._AC_UL1500_.jpg",
+    "seamless underwear women": "https://ageofbeautyph.store/cdn/shop/files/viber_image_2024-01-16_01-22-43-353.jpg?v=1710223250&width=1445",
+    "weighted blanket": "https://pisces.bbystatic.com/image2/BestBuy_US/images/products/bbb17816-f2c7-4f85-a92d-4c8afc329eed.jpg;maxHeight=1920;maxWidth=900?format=webp",
+    "body pillow for side sleeping": "https://m.media-amazon.com/images/I/61Q5zuwp10L._AC_SL1500_.jpg",
+    "dark colored towel": "https://i5.walmartimages.com/asr/8e0c01a0-609b-41c5-8289-31085958e7d3_1.ac5d312c572ba94298e4ccbe10686bc5.jpeg",
+    "silk pillowcase": "https://www.ubersilk.com/wp-content/uploads/2018/12/Moonbeam-Sleep-Pure-Mulberry-Silk-Pillowcase.jpg",
+    "loose fit joggers women": "https://i5.walmartimages.com/seo/Dewadbow-Women-Ladies-Gym-Sport-Jogger-Harem-Pants-Sweatpants-Loose-Pants-Baggy-Trousers_fc35c67e-8fcd-480d-bee3-55d57e03daab.91a55415a3d859d9300a9caa774ba224.jpeg",
+    "house slippers fuzzy": "https://m.media-amazon.com/images/I/71eTNUfoRBL._AC_UL1500_.jpg",
+    "microwavable plush heating pad": "https://m.media-amazon.com/images/I/71ESgAoIBdL._AC_SL1500_.jpg",
+    "funny period socks": "https://i5.walmartimages.com/seo/PUTUO-Mens-Warm-Floor-Socks-Thick-and-Cozy-Mid-Tube-Slipper-Socks-Soft-Fuzzy-Thermal-Socks-for-Spring-Autumn-and-Winter-Ideal-Gift-for-Men_20fd5897-2ee4-4175-a676-c8d065a10d8c.a1b91a0aa6613f9657857b326f4b1352.jpeg",
+    "hydrocolloid pimple patches": "https://natuderma.com/wp-content/uploads/2023/06/Ultra-Thin-Acne-pimples-patches-natuderma-min.png",
+    "hydrating sheet face mask": "https://m.media-amazon.com/images/I/81Qv7rYfT0L._SL1500_.jpg",
+    "period tracker journal": "https://mrsneat.net/cdn/shop/files/PeriodSymptomTrackerPrintable_3.jpg?v=1725675697&width=1346",
+    "aesthetic water bottle with time marker": "https://img.buzzfeed.com/store-an-image-prod-us-east-1/S_FpC3gR7.png?output-format=jpg&downsize=650:*&output-format=auto&output-quality=auto",
+    "silk scrunchies": "https://m.media-amazon.com/images/I/81ElHDNQ3NL._AC_.jpg",
+    "soy scented candle": "https://digitalcontent.api.tesco.com/v2/media/ghs/aa07a69b-6305-449b-b217-c840f264990b/0a5cef76-70db-409f-9fcf-d38756238e51_532107140.jpeg?h=960&w=960",
+    "blind bag surprise toy": "https://www.instacart.com/image-server/1200x1200/www.instacart.com/assets/domains/product-image/file/large_5ed3172c-3605-4a76-8146-0e378ec7f798.jpeg",
+    "fresh bouquet flowers": "https://art-flowerss.com/wp-content/uploads/2025/02/Maggie-Bouquet.jpg",
   };
 
-  const getProductImage = (query) => {
-    const keywords = query.toLowerCase().replace(/[^a-z0-9 ]/g, "").trim().split(/\s+/).join(",");
-    const lock = hashString(query);
-    return `https://loremflickr.com/400/300/${encodeURIComponent(keywords)}?lock=${lock}`;
-  };
+  const getProductImage = (query) => productImages[query] || `https://picsum.photos/seed/${encodeURIComponent(query)}/400/300`;
 
   const handleImgError = (e) => {
     e.currentTarget.src = `https://picsum.photos/seed/${encodeURIComponent(e.currentTarget.alt)}/400/300`;
