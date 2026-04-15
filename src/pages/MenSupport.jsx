@@ -524,10 +524,12 @@ export default function MenSupport() {
 
   const scrollToSection = (id) => {
     setActiveSection(id);
-    const element = document.getElementById(`section-${id}`);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    setTimeout(() => {
+      const element = document.getElementById(`section-${id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 50);
   };
 
   return (
@@ -605,7 +607,7 @@ export default function MenSupport() {
         </div>
 
         {/* Understanding Mood Swings - Flash Cards */}
-        <div style={styles.section}>
+        <div id="section-mood" style={styles.section}>
           <h2 style={styles.sectionTitle}>🧠 Understanding Mood Changes</h2>
           <p style={styles.sectionDesc}>Click each card to learn how to respond better</p>
           <div style={styles.flashGrid}>
@@ -629,7 +631,7 @@ export default function MenSupport() {
         </div>
 
         {/* What to Say */}
-        <div style={styles.section}>
+        <div id="section-say" style={styles.section}>
           <h2 style={styles.sectionTitle}><MessageCircle size={18} style={{ marginRight: 8 }} /> What to Say (Actual Scripts)</h2>
           <div style={styles.grid2}>
             {whatToSay.map((item, i) => (
@@ -642,7 +644,7 @@ export default function MenSupport() {
         </div>
 
         {/* Real-Life Scenarios */}
-        <div style={styles.section}>
+        <div id="section-scenarios" style={styles.section}>
           <h2 style={styles.sectionTitle}>📖 Real-Life Scenarios</h2>
           {scenarios.map((scenario, idx) => (
             <div key={idx} style={styles.scenarioCard} onClick={() => { setActiveScenario(activeScenario === idx ? null : idx); markSectionViewed("scenarios"); }}>
@@ -655,7 +657,7 @@ export default function MenSupport() {
         </div>
 
         {/* What NOT to Say */}
-        <div style={styles.section}>
+        <div id="section-donts" style={styles.section}>
           <h2 style={styles.sectionTitle}><X size={18} style={{ marginRight: 8 }} /> What NOT to Say → Better Alternatives</h2>
           {alternatives.map((alt, idx) => (
             <div key={idx} style={styles.alternativeCard} onMouseEnter={() => markSectionViewed("alternatives")}>
@@ -666,7 +668,7 @@ export default function MenSupport() {
         </div>
 
         {/* Helpful Products */}
-        <div style={styles.section}>
+        <div id="section-products" style={styles.section}>
           <h2 style={styles.sectionTitle}><Droplets size={18} style={{ marginRight: 8 }} /> Helpful Products to Know</h2>
           <p style={styles.sectionDesc}>Understanding these basics makes it easier to support practically.</p>
           <div style={styles.productGrid}>
@@ -681,7 +683,7 @@ export default function MenSupport() {
         </div>
 
         {/* Comfort Kit */}
-        <div style={styles.section}>
+        <div id="section-kit" style={styles.section}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", cursor: "pointer" }} onClick={() => setShowKit(!showKit)}>
             <h2 style={styles.sectionTitle}><ShoppingBag size={18} style={{ marginRight: 8 }} /> The Comfort Kit</h2>
             <span>{showKit ? "▼" : "▶"}</span>
@@ -699,7 +701,7 @@ export default function MenSupport() {
         </div>
 
         {/* Understanding PCOS/PCOD */}
-        <div style={styles.section}>
+        <div id="section-pcos" style={styles.section}>
           <h2 style={styles.sectionTitle}><Heart size={18} style={{ marginRight: 8 }} /> Understanding PCOS & PCOD</h2>
           <p style={styles.sectionDesc}>A common hormonal condition affecting 1 in 10 women. Here's what you should know:</p>
           <div style={styles.pcosSignGrid}>
@@ -721,7 +723,7 @@ export default function MenSupport() {
         </div>
 
         {/* Emergency Preparedness */}
-        <div style={styles.section}>
+        <div id="section-emergency" style={styles.section}>
           <h2 style={styles.sectionTitle}><AlertCircle size={18} style={{ marginRight: 8 }} /> Emergency Preparedness</h2>
           {emergencyResponses.map((item, idx) => (
             <div key={idx} style={styles.alternativeCard} onMouseEnter={() => markSectionViewed("emergency")}>
@@ -732,7 +734,7 @@ export default function MenSupport() {
         </div>
 
         {/* Shareable Takeaways + Personal Notes */}
-        <div style={styles.grid2}>
+        <div id="section-notes" style={styles.grid2}>
           <div style={styles.section}>
             <h2 style={styles.sectionTitle}>📌 Key Takeaways</h2>
             <ul style={{ paddingLeft: 20 }}>
@@ -760,7 +762,7 @@ export default function MenSupport() {
         </div>
 
         {/* Confidence Check */}
-        <div style={styles.section}>
+        <div id="section-confidence" style={styles.section}>
           <h2 style={styles.sectionTitle}><Sparkles size={18} style={{ marginRight: 8 }} /> Confidence Check</h2>
           <p style={styles.sectionDesc}>How confident do you feel about supporting someone through their menstrual health journey?</p>
           <div style={styles.confidenceButtons}>

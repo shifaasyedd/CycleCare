@@ -599,10 +599,12 @@ export default function GirlsAwareness() {
 
   const scrollToSection = (id) => {
     setActiveSection(id);
-    const element = document.getElementById(`section-${id}`);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    setTimeout(() => {
+      const element = document.getElementById(`section-${id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 50);
   };
 
   return (
@@ -798,7 +800,7 @@ export default function GirlsAwareness() {
         </div>
 
         {/* Mood & Symptom Help */}
-        <div style={styles.sectionBlock}>
+        <div id="section-symptoms" style={styles.sectionBlock}>
           <h2 style={styles.sectionTitle}><MessageCircle size={18} style={{ marginRight: 8 }} /> Understanding Period Symptoms</h2>
           <p style={styles.sectionDesc}>Click on any symptom to learn how to manage it when your period starts:</p>
             <div style={styles.symptomGrid}>
@@ -817,7 +819,7 @@ export default function GirlsAwareness() {
         </div>
 
         {/* Do's and Don'ts */}
-        <div style={styles.dosDontsGrid}>
+        <div id="section-dosdonts" style={styles.dosDontsGrid}>
           <div style={styles.sectionBlock}>
             <h2 style={styles.sectionTitle}><Check size={18} style={{ marginRight: 8 }} /> Do's</h2>
             <ul style={styles.list}>
@@ -842,7 +844,7 @@ export default function GirlsAwareness() {
         </div>
 
         {/* When to Ask for Help */}
-        <div style={styles.grid2}>
+        <div id="section-help" style={styles.grid2}>
           <div style={styles.sectionBlock}>
             <h2 style={styles.sectionTitle}><AlertCircle size={18} style={{ marginRight: 8 }} /> When to ask for help</h2>
             <p style={styles.sectionDesc}>
@@ -872,7 +874,7 @@ export default function GirlsAwareness() {
         </div>
 
         {/* FAQ Section */}
-        <div style={styles.sectionBlock}>
+        <div id="section-faq" style={styles.sectionBlock}>
           <h2 style={styles.sectionTitle}><HelpCircle size={18} style={{ marginRight: 8 }} /> Frequently Asked Questions</h2>
           <div style={styles.faqGrid}>
             {faqs.map((item, index) => (
