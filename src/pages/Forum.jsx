@@ -98,15 +98,16 @@ export default function Forum() {
   const fetchPosts = useCallback(async () => {
     setLoading(true);
     try {
-      const token = getToken();
-      if (!token) { navigate("/login"); return; }
       const url = activeCategory ? `${API_URL}?category=${encodeURIComponent(activeCategory)}` : API_URL;
-      const res = await fetch(url, { headers: getHeaders() });
+      const res = await fetch(url);
       const data = await res.json();
       if (data.success) setPosts(data.posts);
-    } catch { /* ignore */ } finally { setLoading(false); }
+      else alert(data.error || "Failed to load posts");
+    } catch (err) { 
+      console.error("Error fetching posts:", err);
+    } finally { setLoading(false); }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [API_URL, activeCategory, navigate]);
+  }, [API_URL, activeCategory]);
 
   useEffect(() => { fetchPosts(); }, [fetchPosts]);
 
@@ -117,11 +118,10 @@ export default function Forum() {
     try {
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: getHeaders(),
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newPost),
       });
       const data = await res.json();
-      console.log("Create post response:", data);
       if (data.success) {
         setPosts(prev => [data.post, ...prev]);
         setShowCreate(false);

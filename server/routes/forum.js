@@ -11,7 +11,7 @@ const forumAccess = async (req, res, next) => {
 };
 
 // GET /api/forum — list posts (newest first), optional ?category= filter
-router.get('/', protect, forumAccess, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const filter = {};
     if (req.query.category) filter.category = req.query.category;
@@ -42,7 +42,7 @@ router.get('/', protect, forumAccess, async (req, res) => {
 });
 
 // GET /api/forum/:id — single post with comments
-router.get('/:id', protect, forumAccess, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.id)
       .populate('user', 'name')
@@ -54,12 +54,25 @@ router.get('/:id', protect, forumAccess, async (req, res) => {
   }
 });
 
-// POST /api/forum — create a post
-router.post('/', protect, forumAccess, async (req, res) => {
+// POST /api/forum — create a post (optional auth)
+router.post('/', async (req, res) => {
   try {
     const { title, body, category } = req.body;
+    
+    // Try to get user from token if provided
+    let userId = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer')) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(authHeader.split(' ')[1], process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+        if (user) userId = user._id;
+      } catch (e) { /* ignore token errors */ }
+    }
+    
     const post = await ForumPost.create({
-      user: req.user._id,
+      user: userId,
       title,
       body,
       category: category || 'General',
@@ -71,17 +84,32 @@ router.post('/', protect, forumAccess, async (req, res) => {
   }
 });
 
-// PUT /api/forum/:id/like — toggle like
-router.put('/:id/like', protect, forumAccess, async (req, res) => {
+// PUT /api/forum/:id/like — toggle like (optional auth)
+router.put('/:id/like', async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.id);
     if (!post) return res.status(404).json({ success: false, error: 'Post not found' });
 
-    const userId = req.user._id.toString();
-    const idx = post.likes.findIndex(id => id.toString() === userId);
+    // Optional auth - allow liking without login
+    let userId = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer')) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(authHeader.split(' ')[1], process.env.JWT_SECRET);
+        userId = decoded.id;
+      } catch (e) { /* ignore */ }
+    }
+
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Please login to like posts' });
+    }
+
+    const userIdStr = userId.toString();
+    const idx = post.likes.findIndex(id => id.toString() === userIdStr);
 
     if (idx === -1) {
-      post.likes.push(req.user._id);
+      post.likes.push(userId);
     } else {
       post.likes.splice(idx, 1);
     }
@@ -93,13 +121,29 @@ router.put('/:id/like', protect, forumAccess, async (req, res) => {
   }
 });
 
-// POST /api/forum/:id/comments — add comment
-router.post('/:id/comments', protect, forumAccess, async (req, res) => {
+// POST /api/forum/:id/comments — add comment (optional auth)
+router.post('/:id/comments', async (req, res) => {
   try {
     const post = await ForumPost.findById(req.params.id);
     if (!post) return res.status(404).json({ success: false, error: 'Post not found' });
 
-    post.comments.push({ user: req.user._id, body: req.body.body });
+    // Optional auth
+    let userId = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer')) {
+      try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(authHeader.split(' ')[1], process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+        if (user) userId = user._id;
+      } catch (e) { /* ignore */ }
+    }
+
+    if (!userId) {
+      return res.status(401).json({ success: false, error: 'Please login to comment' });
+    }
+
+    post.comments.push({ user: userId, body: req.body.body });
     await post.save();
 
     const populated = await post.populate('user', 'name');

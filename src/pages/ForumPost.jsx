@@ -35,12 +35,6 @@ export default function ForumPostPage() {
   const [user, setUser] = useState(null);
 
   const API_URL = `${process.env.REACT_APP_API_URL || "http://localhost:5000"}/api/forum`;
-  const getToken = () => localStorage.getItem("cyclecare_token");
-  const getHeaders = () => ({
-    Authorization: `Bearer ${getToken()}`,
-    "Content-Type": "application/json",
-    "x-user-role": localStorage.getItem("cyclecare_role") || "",
-  });
 
   useEffect(() => {
     const handler = () => setDark(localStorage.getItem("cyclecare_theme") === "dark");
@@ -92,9 +86,7 @@ export default function ForumPostPage() {
   const fetchPost = useCallback(async () => {
     setLoading(true);
     try {
-      const token = getToken();
-      if (!token) { navigate("/login"); return; }
-      const res = await fetch(`${API_URL}/${id}`, { headers: getHeaders() });
+      const res = await fetch(`${API_URL}/${id}`);
       const data = await res.json();
       if (data.success) setPost(data.post);
       else navigate("/forum");
@@ -106,19 +98,25 @@ export default function ForumPostPage() {
 
   const handleLike = async (e) => {
     e.stopPropagation();
+    const token = localStorage.getItem("cyclecare_token");
+    if (!token) { alert("Please login to like posts"); return; }
     try {
       const res = await fetch(`${API_URL}/${id}/like`, {
         method: "PUT",
-        headers: getHeaders(),
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) {
+        const user = JSON.parse(localStorage.getItem("cyclecare_user") || "{}");
+        const currentUserId = user.id || user._id;
         setPost(prev => ({
           ...prev,
           likes: data.liked
             ? [...(prev.likes || []), currentUserId]
             : (prev.likes || []).filter(lid => (lid?._id || lid) !== currentUserId),
         }));
+      } else if (data.error) {
+        alert(data.error);
       }
     } catch { /* ignore */ }
   };
@@ -126,27 +124,36 @@ export default function ForumPostPage() {
   const handleComment = async (e) => {
     e.preventDefault();
     if (!commentBody.trim()) return;
+    const token = localStorage.getItem("cyclecare_token");
+    if (!token) { alert("Please login to comment"); return; }
     setSubmitting(true);
     try {
       const res = await fetch(`${API_URL}/${id}/comments`, {
         method: "POST",
-        headers: getHeaders(),
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json" 
+        },
         body: JSON.stringify({ body: commentBody }),
       });
       const data = await res.json();
       if (data.success) {
         setPost(data.post);
         setCommentBody("");
+      } else if (data.error) {
+        alert(data.error);
       }
     } catch { /* ignore */ } finally { setSubmitting(false); }
   };
 
   const handleDeletePost = async () => {
+    const token = localStorage.getItem("cyclecare_token");
+    if (!token) { alert("Please login to delete posts"); return; }
     if (!window.confirm("Delete this post? This cannot be undone.")) return;
     try {
       const res = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
-        headers: getHeaders(),
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) navigate("/forum");
