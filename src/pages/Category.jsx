@@ -128,6 +128,7 @@ export default function Category() {
       const data = await response.json();
       if (data.success) {
         localStorage.setItem("cyclecare_role", role);
+        window.dispatchEvent(new Event("rolechange"));
         setSelectedRole(role);
         alert(`✅ You have chosen "${getRoleName(role)}"!`);
       } else {

@@ -6,14 +6,20 @@ export default function Navbar({ active }) {
   const navigate = useNavigate();
   const [dark, setDark] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("cyclecare_token"));
+  const [role, setRole] = useState(localStorage.getItem("cyclecare_role"));
 
   useEffect(() => {
-    const checkToken = () => setToken(localStorage.getItem("token"));
-    window.addEventListener("storage", checkToken);
-    window.addEventListener("authchange", checkToken);
+    const checkAuth = () => {
+      setToken(localStorage.getItem("cyclecare_token"));
+      setRole(localStorage.getItem("cyclecare_role"));
+    };
+    window.addEventListener("storage", checkAuth);
+    window.addEventListener("authchange", checkAuth);
+    window.addEventListener("rolechange", checkAuth);
     return () => {
-      window.removeEventListener("storage", checkToken);
-      window.removeEventListener("authchange", checkToken);
+      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("authchange", checkAuth);
+      window.removeEventListener("rolechange", checkAuth);
     };
   }, []);
 
@@ -61,7 +67,6 @@ export default function Navbar({ active }) {
 
   const isLoggedIn = token;
 
-  const role = localStorage.getItem("cyclecare_role");
   const isMenOrGirls = role === "men" || role === "girls";
   const isMenstrutors = role === "menstrutors" || role === "women";
 
