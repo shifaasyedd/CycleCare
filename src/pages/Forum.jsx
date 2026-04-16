@@ -118,7 +118,7 @@ export default function Forum() {
     try {
       const res = await fetch(API_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getHeaders(),
         body: JSON.stringify(newPost),
       });
       const data = await res.json();
