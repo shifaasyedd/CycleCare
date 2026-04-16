@@ -191,7 +191,7 @@ export default function GirlsAwareness() {
   const productVideos = {
     pad: {
       title: "How to Use a Sanitary Pad",
-      embedUrl: "https://www.youtube.com/embed/Bt69IYaeCqE",
+      embedUrl: "https://www.youtube.com/embed/J6bZsI1pi_o?si=cW4srBZExcEqgnZH",
       steps: [
         "Wash your hands thoroughly before and after",
         "Remove the pad from its wrapper",
@@ -204,7 +204,7 @@ export default function GirlsAwareness() {
     },
     tampon: {
       title: "How to Use a Tampon",
-      embedUrl: "https://www.youtube.com/embed/fz3rA4r1jJQ",
+      embedUrl: "https://youtu.be/6UykBMEEtRw?si=jU6_HPkGvHcTAnFM",
       steps: [
         "Wash your hands with soap and water",
         "Remove the tampon from its wrapper",
@@ -218,7 +218,7 @@ export default function GirlsAwareness() {
     },
     cup: {
       title: "How to Use a Menstrual Cup",
-      embedUrl: "https://www.youtube.com/embed/JaDp6O1c3lE",
+      embedUrl: "https://youtu.be/o9fPUfm-uYE?si=Cy2EVqAWEh2aarIK",
       steps: [
         "Wash your hands and sterilize the cup",
         "Fold the cup using a C-fold or punch-down fold",
