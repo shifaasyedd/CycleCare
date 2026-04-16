@@ -585,7 +585,7 @@ export default function MenSupport() {
         {/* Cycle Support Chart */}
         <div id="section-cycle"></div>
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}><TrendingUp size={18} style={{ marginRight: 8 }} /> How to Support Throughout the Cycle(Partner)</h2>
+          <h2 style={styles.sectionTitle}><TrendingUp size={18} style={{ marginRight: 8 }} />Understand cycle phases to support better!</h2>
           <p style={styles.sectionDesc}>Select a phase to see what helps</p>
           <div style={styles.phaseSelector}>
             {Object.keys(cyclePhases).map(phase => (
