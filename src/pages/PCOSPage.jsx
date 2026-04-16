@@ -897,7 +897,7 @@ export default function PCOSPage() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        <Navbar active="Categories" />
+        <Navbar active="PCOS/PCOD" />
 
         {/* Hero */}
         <div style={styles.hero}>

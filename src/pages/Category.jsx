@@ -432,7 +432,7 @@ export default function Category() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        <Navbar active="Categories" />
+        <Navbar active="Category" />
 
         {/* Hero Section */}
         <div style={styles.hero}>

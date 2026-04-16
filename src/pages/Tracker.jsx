@@ -1155,7 +1155,7 @@ function cycleStartForDate(date) {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        <Navbar active="Categories" />
+        <Navbar active="Tracker" />
 
         {/* Hero */}
         <div style={styles.hero}>

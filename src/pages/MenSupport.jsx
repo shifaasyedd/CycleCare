@@ -535,7 +535,7 @@ export default function MenSupport() {
   return (
     <div style={styles.page}>
       <div style={styles.container}>
-        <Navbar active="Categories" />
+        <Navbar active="Category" />
 
         {/* Sidebar */}
         <button style={styles.sidebarToggle} onClick={() => setSidebarOpen(!sidebarOpen)}>

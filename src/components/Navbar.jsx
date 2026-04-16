@@ -144,7 +144,8 @@ export default function Navbar({ active }) {
                 key={l.to}
                 onClick={() => {
                   if (l.label === "Logout") {
-                    localStorage.removeItem("token");
+                    localStorage.removeItem("cyclecare_token");
+                    localStorage.removeItem("cyclecare_role");
                     navigate("/login");
                   } else {
                     navigate(l.to);
