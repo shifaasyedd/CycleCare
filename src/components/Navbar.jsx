@@ -77,9 +77,9 @@ export default function Navbar({ active }) {
       ? [
           { to: "/", label: "Home" },
           { to: "/category", label: "Category" },
-          { to: "/dashboard", label: "Dashboard" },
           { to: "/tracker", label: "Tracker" },
           { to: "/pcos-tracker", label: "PCOS/PCOD" },
+          { to: "/dashboard", label: "Dashboard" },
           { to: "/forum", label: "Forum" },
           { to: "/profile", label: "Profile" },
         ]
