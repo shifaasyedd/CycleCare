@@ -162,10 +162,12 @@ export default function ForumPostPage() {
 
   const handleDeleteComment = async (commentId) => {
     if (!window.confirm("Delete this comment?")) return;
+    const token = localStorage.getItem("cyclecare_token");
+    if (!token) return;
     try {
       const res = await fetch(`${API_URL}/${id}/comments/${commentId}`, {
         method: "DELETE",
-        headers: getHeaders(),
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) {
