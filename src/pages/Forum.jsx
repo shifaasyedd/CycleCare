@@ -55,13 +55,7 @@ export default function Forum() {
   useEffect(() => {
     const u = localStorage.getItem("cyclecare_user");
     if (u) setUser(JSON.parse(u));
-    // Only women and girls can access the forum
-    const role = localStorage.getItem("cyclecare_role");
-    if (role && !["women", "girls"].includes(role)) {
-      alert("The forum is only available for Women and Non-Menstruators categories.");
-      navigate("/category");
-    }
-  }, [navigate]);
+  }, []);
 
   const t = useMemo(
     () => dark ? {

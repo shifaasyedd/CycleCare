@@ -51,10 +51,6 @@ export default function ForumPostPage() {
   useEffect(() => {
     const u = localStorage.getItem("cyclecare_user");
     if (u) setUser(JSON.parse(u));
-    const role = localStorage.getItem("cyclecare_role");
-    if (role && !["women", "girls"].includes(role)) {
-      navigate("/category");
-    }
   }, [navigate]);
 
   const t = useMemo(
