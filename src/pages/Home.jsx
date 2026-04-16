@@ -503,7 +503,6 @@ export default function Home() {
           <div style={styles.heroPreview}>
             <div style={styles.previewHeader}>
               <div>
-                <div style={styles.previewDate}>Today, April 9</div>
                 <div style={styles.previewTitle}>Cycle Overview</div>
               </div>
               <div style={styles.previewArrow}>
