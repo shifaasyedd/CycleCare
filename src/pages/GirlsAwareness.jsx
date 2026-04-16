@@ -218,7 +218,7 @@ export default function GirlsAwareness() {
     },
     cup: {
       title: "How to Use a Menstrual Cup",
-      embedUrl: "https://www.youtube.com/embed/o9fPUfm-uYE?si=PAzmA4rLCnGPQTXp",
+      embedUrl: "https://www.youtube.com/embed/mJPDM7Ni3ig?si=vAbURqLC4ATv6TP0",
       steps: [
         "Wash your hands and sterilize the cup",
         "Fold the cup using a C-fold or punch-down fold",
