@@ -586,7 +586,7 @@ export default function MenSupport() {
         <div id="section-cycle"></div>
         <div style={styles.section}>
           <h2 style={styles.sectionTitle}><TrendingUp size={18} style={{ marginRight: 8 }} />Understand cycle phases to support better!</h2>
-          <p style={styles.sectionDesc}>Select a phase to see what helps</p>
+          <p style={styles.sectionDesc}>Select a phase to know about it</p>
           <div style={styles.phaseSelector}>
             {Object.keys(cyclePhases).map(phase => (
               <button key={phase} style={styles.phaseBtn(selectedPhase === phase)} onClick={() => setSelectedPhase(phase)}>
