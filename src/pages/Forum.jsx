@@ -127,12 +127,18 @@ export default function Forum() {
         body: JSON.stringify(newPost),
       });
       const data = await res.json();
+      console.log("Create post response:", data);
       if (data.success) {
         setPosts(prev => [data.post, ...prev]);
         setShowCreate(false);
         setNewPost({ title: "", body: "", category: "General" });
+      } else {
+        alert(data.error || "Failed to create post");
       }
-    } catch { /* ignore */ } finally { setCreating(false); }
+    } catch (err) {
+      console.error("Error creating post:", err);
+      alert("Failed to create post. Please try again.");
+    } finally { setCreating(false); }
   };
 
   const currentUserId = user?.id || user?._id;
