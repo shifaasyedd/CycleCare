@@ -449,14 +449,6 @@ export default function Login() {
                   <span style={styles.helperText} onClick={() => setShow(!show)}>
                     {show ? "Hide password" : "Show password"}
                   </span>
-                  {!adminMode && (
-                    <span
-                      style={styles.helperText}
-                      onClick={() => alert("Password reset will be available soon! 💗")}
-                    >
-                      Forgot password?
-                    </span>
-                  )}
                 </div>
               </div>
 
