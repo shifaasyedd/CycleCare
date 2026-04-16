@@ -61,15 +61,36 @@ export default function Navbar({ active }) {
 
   const isLoggedIn = token;
 
+  const role = localStorage.getItem("cyclecare_role");
+  const isMenOrGirls = role === "men" || role === "girls";
+  const isMenstrutors = role === "menstrutors" || role === "women";
+
   const links = isLoggedIn
-    ? [
-        { to: "/", label: "Home" },
-        { to: "/dashboard", label: "Dashboard" },
-        { to: "/tracker", label: "Tracker" },
-        { to: "/pcos-tracker", label: "PCOS/PCOD" },
-        { to: "/forum", label: "Forum" },
-        { to: "/profile", label: "Profile" },
-      ]
+    ? isMenOrGirls
+      ? [
+          { to: "/", label: "Home" },
+          { to: "/category", label: "Category" },
+          { to: "/forum", label: "Forum" },
+          { to: "/profile", label: "Profile" },
+        ]
+      : isMenstrutors
+      ? [
+          { to: "/", label: "Home" },
+          { to: "/category", label: "Category" },
+          { to: "/dashboard", label: "Dashboard" },
+          { to: "/tracker", label: "Tracker" },
+          { to: "/pcos-tracker", label: "PCOS/PCOD" },
+          { to: "/forum", label: "Forum" },
+          { to: "/profile", label: "Profile" },
+        ]
+      : [
+          { to: "/", label: "Home" },
+          { to: "/dashboard", label: "Dashboard" },
+          { to: "/tracker", label: "Tracker" },
+          { to: "/pcos-tracker", label: "PCOS/PCOD" },
+          { to: "/forum", label: "Forum" },
+          { to: "/profile", label: "Profile" },
+        ]
     : [
         { to: "/", label: "Home" },
         { to: "/about", label: "About" },
