@@ -8,6 +8,25 @@ export default function Navbar({ active }) {
   const [token, setToken] = useState(localStorage.getItem("cyclecare_token"));
   const [role, setRole] = useState(localStorage.getItem("cyclecare_role"));
 
+  // Fetch role from DB to stay in sync
+  useEffect(() => {
+    const t = localStorage.getItem("cyclecare_token");
+    if (t) {
+      const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      fetch(`${apiUrl}/api/auth/me`, {
+        headers: { Authorization: `Bearer ${t}` },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.user?.role) {
+            localStorage.setItem("cyclecare_role", data.user.role);
+            setRole(data.user.role);
+          }
+        })
+        .catch(() => {});
+    }
+  }, []);
+
   useEffect(() => {
     const checkAuth = () => {
       setToken(localStorage.getItem("cyclecare_token"));
@@ -90,9 +109,7 @@ export default function Navbar({ active }) {
         ]
       : [
           { to: "/", label: "Home" },
-          { to: "/dashboard", label: "Dashboard" },
-          { to: "/tracker", label: "Tracker" },
-          { to: "/pcos-tracker", label: "PCOS/PCOD" },
+          { to: "/category", label: "Category" },
           { to: "/forum", label: "Forum" },
           { to: "/profile", label: "Profile" },
         ]
