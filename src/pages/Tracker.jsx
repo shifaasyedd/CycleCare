@@ -510,10 +510,26 @@ function cycleStartForDate(date) {
   };
 
   const phaseDescriptions = {
-    Menstrual: { emoji: "🩸", tip: "Heating pads, rest, hydration", color: theme.pink },
-    Follicular: { emoji: "🌱", tip: "Exercise, nutritious foods, set goals", color: theme.purple },
-    Ovulatory: { emoji: "🥚", tip: "Track fertility, enjoy peak energy", color: theme.yellow },
-    Luteal: { emoji: "🌙", tip: "Self-care, manage stress, rest", color: theme.blue },
+    Menstrual: { 
+      emoji: "🩸", 
+      tip: "Uterus sheds its lining because no pregnancy occurred", 
+      color: theme.pink 
+    },
+    Follicular: { 
+      emoji: "🌱", 
+      tip: "Ovaries grow follicles containing eggs; uterus rebuilds lining", 
+      color: theme.purple 
+    },
+    Ovulatory: { 
+      emoji: "🥚", 
+      tip: "Ovary releases a mature egg – the only fertile time of the cycle", 
+      color: theme.yellow 
+    },
+    Luteal: { 
+      emoji: "🌙", 
+      tip: "Hormones thicken the lining; if no pregnancy, levels drop and period starts", 
+      color: theme.blue 
+    },
   };
 
   const CARD_HEIGHT = "auto";

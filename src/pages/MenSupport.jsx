@@ -119,10 +119,10 @@ export default function MenSupport() {
       icon: <Droplets size={20} />,
       vibe: "Low energy, rest needed",
       tips: [
-        "Offer heating pad without asking",
-        "Bring favorite snacks",
-        "Handle chores/dinner",
-        "Movie night in",
+        "Uterus sheds its old lining because no pregnancy occurred",
+        "Blood, tissue, and mucus leave the body through the vagina",
+        "First day of bleeding = Day 1 of your cycle",
+        "Hormones estrogen & progesterone are at their lowest",
       ],
     },
     follicular: {
@@ -131,10 +131,10 @@ export default function MenSupport() {
       icon: <Activity size={20} />,
       vibe: "Energy rising, creative",
       tips: [
-        "Plan fun activities",
-        "Go on adventures",
-        "Share ideas together",
-        "Enjoy the good vibes",
+        "Brain sends a signal to ovaries to grow tiny sacs called follicles",
+        "Each follicle contains an immature egg",
+        "One follicle becomes dominant and matures an egg",
+        "Uterus starts rebuilding a soft, spongy lining for a possible pregnancy",
       ],
     },
     ovulation: {
@@ -143,10 +143,10 @@ export default function MenSupport() {
       icon: "☆",
       vibe: "Peak energy, confident",
       tips: [
-        "Deep conversations",
-        "Quality time together",
-        "Celebrate energy",
-        "Make plans together",
+        "A sudden hormone surge triggers release of a mature egg",
+        "Egg travels down the fallopian tube",
+        "The only time pregnancy can happen (egg lives ~24 hours)",
+        "Empty follicle turns into a structure that will produce progesterone",
       ],
     },
     luteal: {
@@ -155,14 +155,13 @@ export default function MenSupport() {
       icon: <Heart size={20} />,
       vibe: "Lower energy, sensitive",
       tips: [
-        "Extra patience",
-        "Don't take things personally",
-        "Offer gentle support",
-        "Low-key activities",
+        "The leftover follicle releases progesterone to thicken the uterine lining",
+        "If no pregnancy, progesterone drops and lining breaks down",
+        "This drop in hormones causes PMS symptoms",
+        "End of this phase triggers your next period (Day 1 again)",
       ],
     },
   };
-
   const currentPhase = cyclePhases[selectedPhase];
 
   const quickTips = [

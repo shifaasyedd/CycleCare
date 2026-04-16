@@ -403,7 +403,6 @@ export default function About() {
           <div style={styles.footerLinks}>
             <span style={styles.footerLink} onClick={() => navigate("/")}>Home</span>
             <span style={styles.footerLink} onClick={() => navigate("/contact")}>Contact</span>
-            <span style={styles.footerLink} onClick={() => navigate("/privacy")}>Privacy</span>
             <span style={styles.footerLink} onClick={() => navigate("/terms")}>Terms</span>
           </div>
         </footer>

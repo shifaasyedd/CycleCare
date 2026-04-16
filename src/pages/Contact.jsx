@@ -488,7 +488,6 @@ export default function Contact() {
           </div>
           <div style={styles.footerLinks}>
             <span style={styles.footerLink} onClick={() => navigate("/about")}>About</span>
-            <span style={styles.footerLink} onClick={() => navigate("/privacy")}>Privacy</span>
             <span style={styles.footerLink} onClick={() => navigate("/terms")}>Terms</span>
           </div>
         </footer>
