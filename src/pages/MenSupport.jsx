@@ -140,7 +140,7 @@ export default function MenSupport() {
     ovulation: {
       name: "Ovulation",
       days: "Days 15-17",
-      icon: "⭐",
+      icon: "☆",
       vibe: "Peak energy, confident",
       tips: [
         "Deep conversations",
@@ -229,12 +229,12 @@ export default function MenSupport() {
   ];
 
   const pcosSigns = [
-    { sign: "Irregular or absent periods", emoji: <Calendar size={14} /> },
-    { sign: "Difficulty conceiving", emoji: <Heart size={14} /> },
-    { sign: "Acne or hair thinning", emoji: <Sparkles size={14} /> },
-    { sign: "Weight changes", emoji: <Scale size={14} /> },
-    { sign: "Excess hair growth", emoji: <Heart size={14} /> },
-    { sign: "Mood changes", emoji: <Activity size={14} /> },
+    { sign: "Irregular or absent periods", emoji: <Calendar size={16} /> },
+    { sign: "Difficulty conceiving", emoji: <Pill size={16} /> },
+    { sign: "Acne or hair thinning", emoji: <Sparkles size={16} /> },
+    { sign: "Weight changes", emoji: <Scale size={16} /> },
+    { sign: "Excess hair growth", emoji: <Flame size={16} /> },
+    { sign: "Mood changes", emoji: <Activity size={16} /> },
   ];
 
   const pcosTips = [
@@ -586,7 +586,7 @@ export default function MenSupport() {
         {/* Cycle Support Chart */}
         <div id="section-cycle"></div>
         <div style={styles.section}>
-          <h2 style={styles.sectionTitle}><TrendingUp size={18} style={{ marginRight: 8 }} /> How to Support Throughout the Cycle</h2>
+          <h2 style={styles.sectionTitle}><TrendingUp size={18} style={{ marginRight: 8 }} /> How to Support Throughout the Cycle(Partner)</h2>
           <p style={styles.sectionDesc}>Select a phase to see what helps</p>
           <div style={styles.phaseSelector}>
             {Object.keys(cyclePhases).map(phase => (
