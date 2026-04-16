@@ -204,7 +204,7 @@ export default function GirlsAwareness() {
     },
     tampon: {
       title: "How to Use a Tampon",
-      embedUrl: "https://youtu.be/6UykBMEEtRw?si=jU6_HPkGvHcTAnFM",
+      embedUrl: "https://www.youtube.com/embed/6UykBMEEtRw?si=01Jf9QtH5_9wSqVl",
       steps: [
         "Wash your hands with soap and water",
         "Remove the tampon from its wrapper",
@@ -218,7 +218,7 @@ export default function GirlsAwareness() {
     },
     cup: {
       title: "How to Use a Menstrual Cup",
-      embedUrl: "https://youtu.be/o9fPUfm-uYE?si=Cy2EVqAWEh2aarIK",
+      embedUrl: "https://www.youtube.com/embed/o9fPUfm-uYE?si=PAzmA4rLCnGPQTXp",
       steps: [
         "Wash your hands and sterilize the cup",
         "Fold the cup using a C-fold or punch-down fold",
