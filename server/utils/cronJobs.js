@@ -4,7 +4,7 @@ const User = require('../models/User');
 const { sendPeriodReminder } = require('./emailService');
 
 const initCronJobs = () => {
-  cron.schedule('* * * * *', async () => {
+  cron.schedule('0 9 * * *', async () => {
     console.log('--- Checking for upcoming periods (predicted) ---');
     try {
       // Only send reminders to menstruators (women/girls roles)
