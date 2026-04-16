@@ -499,6 +499,62 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Hero preview card */}
+          <div style={styles.heroPreview}>
+            <div style={styles.previewHeader}>
+              <div>
+                <div style={styles.previewTitle}>Cycle Overview</div>
+              </div>
+              <div style={styles.previewArrow}>
+                <ArrowRight size={16} strokeWidth={2.2} />
+              </div>
+            </div>
+
+            <div style={styles.statsRow}>
+              <div style={styles.miniStat}>
+                <div style={styles.miniStatIconWrap}>
+                  <Droplet size={16} strokeWidth={2} />
+                </div>
+                <div style={styles.miniStatLabel}>Cycle Day</div>
+                <div style={styles.miniStatValue}>14</div>
+              </div>
+              <div style={styles.miniStat}>
+                <div style={styles.miniStatIconWrap}>
+                  <Calendar size={16} strokeWidth={2} />
+                </div>
+                <div style={styles.miniStatLabel}>Next In</div>
+                <div style={styles.miniStatValue}>13 d</div>
+              </div>
+              <div style={styles.miniStatHighlight}>
+                <div style={styles.miniStatIconWrap}>
+                  <Heart size={16} strokeWidth={2} />
+                </div>
+                <div style={styles.miniStatLabel}>Wellness</div>
+                <div style={styles.miniStatValue}>92</div>
+              </div>
+            </div>
+
+            <div style={styles.chartCard}>
+              <div style={styles.chartHeader}>
+                <div style={styles.chartTitle}>Cycle Length</div>
+                <div style={styles.chartTabs}>
+                  <div style={styles.chartTab(true)}>D</div>
+                  <div style={styles.chartTab(false)}>W</div>
+                  <div style={styles.chartTab(false)}>M</div>
+                  <div style={styles.chartTab(false)}>Y</div>
+                </div>
+              </div>
+              <div style={styles.sparkline}>
+                {sparkData.map((h, i) => (
+                  <div key={i} style={styles.sparkBar(h)} />
+                ))}
+              </div>
+              <div style={styles.chartFooter}>
+                Average <span style={styles.chartFooterValue}>28 days</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* Features */}
         <section style={styles.section}>
