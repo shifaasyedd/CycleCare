@@ -443,10 +443,6 @@ export default function Dashboard() {
                 )}
               </div>
             </div>
-
-            <div style={{ textAlign: "center", marginBottom: 24 }}>
-              <button style={styles.refreshBtn} onClick={fetchAll}>🔄 Refresh Data</button>
-            </div>
           </>
         )}
 
